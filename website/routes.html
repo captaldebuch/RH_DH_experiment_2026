@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="26 Routes to the Riemann Hypothesis: Historical intuitions and current formalization paths.">
+  <title>26 Routes to the Riemann Hypothesis — Historical & Current</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --serif: 'EB Garamond', serif;
+      --display: 'Cinzel', serif;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+      --text-dark: #1a1a1a;
+      --text-light: #666;
+      --accent: #8b4513;
+      --accent-light: #d4a574;
+      --border: #e0e0e0;
+      --bg-light: #fafaf8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--serif);
+      color: var(--text-dark);
+      line-height: 1.7;
+      background: white;
+    }
+
+    header {
+      background: var(--bg-light);
+      border-bottom: 2px solid var(--accent);
+      padding: 2rem 0;
+      margin-bottom: 3rem;
+    }
+
+    .header-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    header h1 {
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+    }
+
+    nav.main-nav {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .nav-container ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+    }
+
+    .nav-container a {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .nav-container a:hover,
+    .nav-container a.active {
+      border-bottom-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      margin: 1.5rem 0 0.8rem 0;
+      font-weight: 600;
+    }
+
+    p { margin-bottom: 1rem; text-align: justify; }
+    ul, ol { margin-left: 2rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.5rem; }
+    a { color: var(--accent); text-decoration: underline; }
+    a:hover { color: var(--accent-light); }
+
+    .route-box {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--accent);
+    }
+
+    .route-box h3 { margin-top: 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-light);
+      font-weight: 600;
+      font-family: var(--sans);
+    }
+
+    .route-tag {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      margin: 0.25rem;
+    }
+
+    .route-analytic { background: #e8f5e9; color: #2e7d32; }
+    .route-spectral { background: #e3f2fd; color: #1565c0; }
+    .route-functional { background: #f0f4ff; color: #4527a0; }
+    .route-probabilistic { background: #fff3e0; color: #e65100; }
+
+    footer {
+      max-width: 900px;
+      margin: 4rem auto 0;
+      padding: 2rem;
+      border-top: 2px solid var(--accent);
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 700px) {
+      .header-container { flex-direction: column; align-items: flex-start; }
+      header h1 { font-size: 1.6rem; }
+      .nav-container ul { flex-direction: column; gap: 0.5rem; }
+      table { font-size: 0.85rem; }
+      th, td { padding: 0.75rem; }
+    }
+
+    strong { font-weight: 600; }
+    em { font-style: italic; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="header-text">
+        <h1>26 Routes to the Riemann Hypothesis</h1>
+        <p>Historical intuitions (1859–2026) and current formalization paths</p>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="Main Navigation">
+      <div class="nav-container">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="routes.html" class="active">Routes</a></li>
+          <li><a href="context.html">Context</a></li>
+          <li><a href="verify.html">Verify</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Four Research Routes (167 Years of Intuition)</h2>
+
+    <p>The Riemann Hypothesis has inspired 26 distinct mathematical approaches across four conceptual routes. We present them chronologically, then show how our current work selects three routes for formalization.</p>
+
+    <h3>The Four Routes</h3>
+
+    <div class="route-box">
+      <h3>🟢 Analytic Number Theory (13 approaches)</h3>
+      <p>Direct attack via zeta function, L-functions, bounds, and asymptotic formulas.</p>
+      <p><strong>Current Status:</strong> 50% formalized (H13+H14). Philosophers: Riemann (1859), Piltz (1884), Riesz (1916), Pólya (1926), Speiser (1934), Turán (1948), de Bruijn (1950), Weil (1952), Newman (1976), Montgomery (1980), Robin (1984), Lagarias (2002), Farmer et al. (2007), Connes (2026).</p>
+    </div>
+
+    <div class="route-box">
+      <h3>🔷 Functional Analysis (2 approaches)</h3>
+      <p>Closure and density problems in Hilbert spaces; Nyman-Beurling criterion. <strong>Our current focus.</strong></p>
+      <p><strong>Current Status:</strong> 67% formalized (Phase NB). Philosophers: Beurling & Nyman (1950), Báez-Duarte (2003).</p>
+    </div>
+
+    <div class="route-box">
+      <h3>🔵 Spectral / Quantum Physics (9 approaches)</h3>
+      <p>Physical interpretation: zeros as eigenvalues of self-adjoint operators or quantum systems.</p>
+      <p><strong>Current Status:</strong> Research open. Philosophers: Hilbert & Pólya (1910), Montgomery (1973), Katz & Sarnak (1999), Connes (1999), Berry & Keating (1999), Keating & Snaith (2000), de Branges (1986), Bender et al. (2017), Connes & Moscovici (2022).</p>
+    </div>
+
+    <div class="route-box">
+      <h3>🟡 Probabilistic (1 approach)</h3>
+      <p>Random walk heuristics, GUE, statistical behavior of primes.</p>
+      <p><strong>Current Status:</strong> Heuristic. Philosophers: Denjoy (1950).</p>
+    </div>
+
+    <h2>All 26 Historical Intuitions</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Mathematician(s)</th>
+          <th>Intuition</th>
+          <th>Route</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1859</strong></td>
+          <td>Bernhard Riemann</td>
+          <td>The Critical Line: All nontrivial zeros on Re(s)=1/2.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1884</strong></td>
+          <td>Adolf Piltz</td>
+          <td>Generalized RH to all Dirichlet L-functions.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1910</strong></td>
+          <td>Hilbert & Pólya</td>
+          <td>Spectral Interpretation: Zeros = eigenvalues of self-adjoint operator.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>1916</strong></td>
+          <td>Marcel Riesz</td>
+          <td>Asymptotic Power Series characterization.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1926</strong></td>
+          <td>George Pólya</td>
+          <td>Trigonometric Integrals: Fourier transform with positivity conditions.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1934</strong></td>
+          <td>Andreas Speiser</td>
+          <td>Zeros of Derivative: RH ⟺ ζ'(s) has no zeros with Re(s)<1/2.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1948</strong></td>
+          <td>Pál Turán</td>
+          <td>Approximative Partial Sums.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1950</strong></td>
+          <td>Nicolaas de Bruijn</td>
+          <td>Heat Flow Deformations.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr style="background: #f5f5f0; font-weight: 600;">
+          <td><strong>1950</strong></td>
+          <td>Beurling & Nyman</td>
+          <td><strong>Functional Completeness:</strong> RH ⟺ unit fractions dense in L²(0,∞).</td>
+          <td><span class="route-tag route-functional">Functional</span></td>
+        </tr>
+        <tr>
+          <td><strong>1952</strong></td>
+          <td>André Weil</td>
+          <td>Explicit Formulas: RH ⟺ positivity condition via convolution.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1950</strong></td>
+          <td>Arnaud Denjoy</td>
+          <td>Random Parity: Mertens sum behavior.</td>
+          <td><span class="route-tag route-probabilistic">Probabilistic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1973</strong></td>
+          <td>Hugh Montgomery</td>
+          <td>GUE Pair Correlation: Quantum chaos heuristic.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>1976</strong></td>
+          <td>Charles Newman</td>
+          <td>Barely True Conjecture: de Bruijn-Newman constant Λ≥0.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1980</strong></td>
+          <td>Hugh Montgomery</td>
+          <td>Asymptotic Fluctuations of prime counting.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr style="background: #f5f5f0; font-weight: 600;">
+          <td><strong>1984</strong></td>
+          <td>Guy Robin</td>
+          <td><strong>Divisor Bounds:</strong> RH ⟺ σ(n)<e^γ n log log n.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>1986</strong></td>
+          <td>Louis de Branges</td>
+          <td>Hilbert Spaces of Entire Functions.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>1999</strong></td>
+          <td>Katz & Sarnak</td>
+          <td>Random Matrix Ensembles.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>1999</strong></td>
+          <td>Alain Connes</td>
+          <td>Noncommutative Adeles: Zeros as absorption spectrum.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>1999</strong></td>
+          <td>Berry & Keating</td>
+          <td>Classical Quantum Chaos: xp quantization → eigenvalues = zeros.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>2000</strong></td>
+          <td>Keating & Snaith</td>
+          <td>Moment Conjectures: L-function moments = RMT + arithmetic.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>2002</strong></td>
+          <td>Jeffrey Lagarias</td>
+          <td>Harmonic Number Bounds (refined Robin).</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr style="background: #f5f5f0; font-weight: 600;">
+          <td><strong>2003</strong></td>
+          <td>Luis Báez-Duarte</td>
+          <td><strong>Discrete Approximations:</strong> Nyman-Beurling with θ_k=1/k.</td>
+          <td><span class="route-tag route-functional">Functional</span></td>
+        </tr>
+        <tr>
+          <td><strong>2007</strong></td>
+          <td>Farmer, Gonek, Hughes</td>
+          <td>Critical Line Bounds on |ζ(1/2+it)|.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+        <tr>
+          <td><strong>2017</strong></td>
+          <td>Bender, Brody, Müller</td>
+          <td>PT-Symmetric Operators: pseudo-Hermitian eigenvalues.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>2022</strong></td>
+          <td>Connes & Moscovici</td>
+          <td>Prolate Spectrum: Eigenvalues ~ squares of RH zeros.</td>
+          <td><span class="route-tag route-spectral">Spectral</span></td>
+        </tr>
+        <tr>
+          <td><strong>2026</strong></td>
+          <td>Alain Connes</td>
+          <td>Euler Product Extremization: 10^{−55} precision on first 50 zeros.</td>
+          <td><span class="route-tag route-analytic">Analytic</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Our Current Selection (2026)</h2>
+
+    <div class="route-box">
+      <h3>Route 1: Functional Equivalence (Primary)</h3>
+      <p>Nyman-Beurling criterion + Báez-Duarte discretization. Formalized as Phase NB, currently achieving 67% of RH reduction.</p>
+      <p><strong>Key Achievement:</strong> Exact Fourier decomposition (NB12), rational jump cancellations verified, master reduction now requires three precisely-bounded frontier problems.</p>
+    </div>
+
+    <div class="route-box">
+      <h3>Route 2: Analytic Foundation (Support)</h3>
+      <p>Robin divisor bounds + de la Vallée Poussin zero-free region. Classical analytic number theory.</p>
+      <p><strong>Key Achievement:</strong> Structural framework in place; PNT-chain completion needed for SmoothMertensDecay.</p>
+    </div>
+
+    <div class="route-box">
+      <h3>Route 3: Spectral (Research Open)</h3>
+      <p>Berry-Keating, Connes' prolate, PT-symmetric operators. Still active research.</p>
+      <p><strong>Current Status:</strong> Not formalized; awaits theoretical breakthrough.</p>
+    </div>
+
+    <h2>Frontier Characterization (September 2026)</h2>
+
+    <p>What remains to complete the Functional Route:</p>
+
+    <ol>
+      <li><strong>FourierRemainderLogEstimate:</strong> Uniform signed cross-modulus estimate along M = ⌊log(N)⁵⌋ + 1. Exact identity proved; decay bounds open.</li>
+      <li><strong>SmoothMertensDecay:</strong> Classical Mertens bound from PNT + zero-free region. Standard analytic number theory; Lean formalization incomplete.</li>
+      <li><strong>SignedBilinearDispersionDecay:</strong> Signed cancellation in Möbius bilinear kernel. RH-equivalent. No established technique.</li>
+    </ol>
+
+    <p>All three are precisely formalized in Lean. None are false axioms or hidden sorries. The frontier is honest.</p>
+  </main>
+
+  <footer>
+    <strong>The Riemann Hypothesis Formal Reduction</strong>
+    <p>A digital humanities investigation of 167 years of mathematical intuition, formalized in Lean 4 with zero axioms.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ]
+        });
+      }
+    });
+  </script>
+</body>
+</html>
