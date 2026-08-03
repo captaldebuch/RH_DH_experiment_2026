@@ -1,0 +1,72 @@
+cff-version: 1.2.0
+title: "Nyman-Beurling Mellin Tools and Riemann Hypothesis Research Archive"
+message: "This audited research software does not claim a proof of the Riemann Hypothesis."
+type: software
+authors:
+  - family-names: "Fresquet"
+    given-names: "Xavier"
+    affiliation: "SCAI (Sorbonne Université, Paris-Abu Dhabi)"
+    email: "scai@sorbonne-universite.fr"
+
+contributors:
+  - family-names: "Biau"
+    given-names: "Gérard"
+    affiliation: "SCAI (Sorbonne Université)"
+
+date-released: 2026-08-01
+keywords:
+  - "Riemann Hypothesis"
+  - "Formalization Research"
+  - "Lean 4"
+  - "Number Theory"
+  - "Nyman-Beurling Criterion"
+  - "Spectral Truncation"
+
+license: "MIT"
+
+version: "0.1.0-audit"
+release-date: 2026-08-01
+
+description: >
+  A Lean 4 research archive containing a verified NBMellinTools package and
+  historical experiments around the Nyman-Beurling and Baez-Duarte criteria.
+  The active package proves a conditional implication from its
+  NymanBeurlingCriterion to a critical-strip RH proposition. It does not prove
+  the criterion, RH, an RH-to-H15 equivalence, or the historical Route C
+  WP1-WP7 pipeline. Route C material is retained for audit and contains open,
+  false, and vacuous legacy assumptions that are not part of the active build.
+
+references:
+  - authors:
+      - family-names: "Nyman"
+        given-names: "Bertil"
+    year: 1950
+    title: "On the One-Dimensional Translation Group and Semi-Bounded Canonical Systems of Differential Equations"
+    journal: "Acta Mathematica"
+    volume: 76
+    pages: "1-66"
+
+  - authors:
+      - family-names: "Beurling"
+        given-names: "Arne"
+    year: 1955
+    title: "A Closure Problem Related to the Riemann Zeta-Function"
+    journal: "Acta Mathematica"
+    volume: 98
+    pages: "155-203"
+
+  - authors:
+      - family-names: "Bettin"
+        given-names: "Sandro"
+      - family-names: "Conrey"
+        given-names: "Brian"
+    year: 2013
+    title: "From Approximate Functional Equations to Euler Products"
+    journal: "Proceedings of the London Mathematical Society"
+
+keywords_technical:
+  - Lean4
+  - Mathlib
+  - formal_verification
+  - number_theory
+  - spectral_methods

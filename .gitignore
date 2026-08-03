@@ -1,0 +1,45 @@
+# Lean/Lake build products and downloaded package caches
+.lake/
+lake-packages/
+*.olean
+*.ilean
+*.c
+*.o
+
+# Editor and operating-system metadata
+.DS_Store
+**/.DS_Store
+*~
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Website/package build products
+node_modules/
+dist/
+build/
+.next/
+
+# TeX auxiliary products (the manuscript source remains tracked)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Local logs and scratch products
+*.log
+*.tmp
+scratch/
