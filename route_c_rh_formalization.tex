@@ -95,7 +95,7 @@ with the exact relation $E_N = D_N^{\mathrm{norm}} + 2(R_N^{\mathrm{collision}} 
 
 \paragraph{MSC (2020):} 11M06, 11M26, 11M35, 68V15, 68V20.
 
-\paragraph{Supplementary Materials:} Code, documentation, and knowledge graph available at \url{https://github.com/xavierfresquet/riemann-github}. Full axiom audit, session logs, and verification artifacts publicly reproducible.
+\paragraph{Supplementary Materials:} Code, documentation, and knowledge graph available at \url{https://github.com/captaldebuch/RH_DH_experiment_2026}. Full axiom audit, session logs, and verification artifacts publicly reproducible.
 
 % =============================================================================
 \section{Introduction}
@@ -573,7 +573,7 @@ Stage 9c architecture is now crystalline: the frequency split, high-frequency ts
 All Lean 4 source code, documentation, and knowledge graph data are publicly available:
 
 \begin{itemize}[leftmargin=2em]
-  \item \textbf{GitHub Repository:} \url{https://github.com/xavierfresquet/riemann-github}
+  \item \textbf{GitHub Repository:} \url{https://github.com/captaldebuch/RH_DH_experiment_2026}
   \item \textbf{Knowledge Graph (JSON-LD):} \path{data/unified-complete-knowledge-graph.jsonld} (21,942 nodes, 15,338 relations)
   \item \textbf{Lean Build Status:} \texttt{lake build} produces 8,529 verified jobs (active build target)
   \item \textbf{Audit & Verification Documentation:} Complete audit trails in \path{docs/BBLS_*.md}, \path{docs/CODEX_SESSION_*.md}
@@ -595,9 +595,9 @@ Critical papers cited in formalization:
 To verify this work:
 
 \begin{enumerate}[label=\textbf{\arabic*.}]
-  \item Clone repository: \texttt{git clone https://github.com/xavierfresquet/riemann-github}
+  \item Clone repository: \texttt{git clone https://github.com/captaldebuch/RH_DH_experiment_2026.git}
   \item Install Lean 4 and Mathlib: \url{https://lean-lang.org/}
-  \item Build: \texttt{cd riemann-github \&\& lake build}
+  \item Build: \texttt{cd RH_DH_experiment_2026 \&\& lake build}
   \item Expected output: \texttt{Build completed successfully (8,520 jobs)}
   \item Axiom audit: \texttt{lake env lean --run scripts/axiom-check.lean}
   \item Expected result: \texttt{[propext, Classical.choice, Quot.sound]} (Mathlib only)
@@ -702,7 +702,7 @@ V.~I.~Vasyunin.
 
 Complete formalization, knowledge graph, and audit records:
 \begin{center}
-\url{https://github.com/xavierfresquet/riemann-formalization}
+\url{https://github.com/captaldebuch/RH_DH_experiment_2026}
 \end{center}
 
 \subsection{Structure}
@@ -716,8 +716,8 @@ Complete formalization, knowledge graph, and audit records:
 
 \subsection{Reproduction}
 \begin{verbatim}
-git clone https://github.com/xavierfresquet/riemann-formalization.git
-cd riemann-formalization
+git clone https://github.com/captaldebuch/RH_DH_experiment_2026.git
+cd RH_DH_experiment_2026
 lake build  # 8,524 jobs
 lake env lean proofs/NBMellinTools/Audit.lean  # Verify axioms
 \end{verbatim}
