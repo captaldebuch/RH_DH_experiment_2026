@@ -97,6 +97,25 @@ Status: 148 imported modules, 0 custom axioms
 | **NB12BBLSH15PostFEExternalShellCountingStopTest.lean** | Coprime-shell divisibility extraction and exact count `(p-1)/(p/gcd(p,qq'))+1` of admissible missing native residues | 180+ | ✅ |
 | **NB12BBLSH15PostFEExternalShellDensityDegeneracy.lean** | Exact multiplier-one criterion `p ∣ qq'`, full-support consequence, and an external `(6,2,3)` counterexample to uniform density saving | 100+ | ✅ |
 | **NB12BBLSH15PostFEActualSupportDegenerateSector.lean** | Exact signed split of the actual cross-modulus collision ledger into `p ∣ qq'` full-density and `p ∤ qq'` favorable sectors | 170+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateQuotientReindex.lean** | Actual dyadic support bounds and exact `qq'=pk` reindexing; the canonical quotient satisfies `Q < 2k` and `k < 4Q` | 170+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateQuotientLedger.lean** | Exact collection of the complete signed degenerate collision ledger by quotient fibers, with all correction-coupled atom correlations retained | 150+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateQuotientFrequency.lean** | Literal coefficient-and-phase expansion and exact frequency-first form `sum_r |lambda_r|^2 D(r)` of the signed quotient ledger | 140+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateEstimateMatchingAudit.lean** | External-estimate stop test: direct/inverse phase mismatch, positive fixed-frequency exponents, and an `O(Q)` quotient family | 50+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateCollisionPhaseCompression.lean** | Equal/opposite colliding pair characters become the missing character or its conjugate; exact constant diagonal plus second-harmonic identity | 170+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateCollisionHarmonicLedger.lean** | Lifts phase compression through every signed quotient fiber and proves `D(r) = diagonal + second harmonic` with all coefficients retained | 220+ | ✅ |
+| **NB12BBLSH15PostFEDegenerateCollisionDiagonalExtraction.lean** | Pulls the frequency-independent degenerate diagonal through the full outer frequency mass and retains the signed weighted second harmonic exactly | 100+ | ✅ |
+| **NB12BBLSH15PostFECollisionFourSectorDiagonalReassembly.lean** | Reassembles incident, alias, extracted degenerate diagonal, second-harmonic, and favorable sectors and substitutes them into the global collision-matching residual | 120+ | ✅ |
+| **NB12BBLSH15PostFECompleteCollisionGap.lean** | Packages the alignment defect as a complete static collision gap plus the signed second-harmonic/off-diagonal ledger; proves exact energy and asymptotic closure interfaces | 210+ | ✅ |
+| **NB12BBLSH15PostFECompleteDiagonalBalance.lean** | Isolates the correctly normalized extracted-versus-missing diagonal gap and separates every remaining static collision term exactly | 130+ | ✅ |
+| **NB12BBLSH15PostFEDiagonalFrequencyAudit.lean** | Collapses the missing--missing diagonal to one support sum and proves the diagonal-balance gap is an exact signed frequency average | 150+ | ✅ |
+| **NB12BBLSH15PostFEMissingDiagonalPhaseCompression.lean** | Applies `(Im z)^2=(1-Re(z^2))/2` on genuine reduced phases and splits the diagonal balance into a constant mode minus a signed second harmonic | 210+ | ✅ |
+| **NB12BBLSH15PostFECompleteHarmonicNormalForm.lean** | Assembles the full energy into norm imbalance plus weighted constant balance, static non-diagonal gap, and one correction-retaining combined harmonic ledger | 160+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeCoefficientAudit.lean** | Removes quotient collection from the degenerate diagonal and states the exact factor-four finite coefficient identity equivalent to constant matching | 100+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeOrientationSplit.lean** | Splits the degenerate constant diagonal into opposite-collision mass minus equal-collision mass with the literal complex coefficients retained | 170+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeFiberMismatch.lean** | Recollects the constant diagonal by missing atoms, proves zero extension to the full missing support, and isolates one local mismatch sum | 160+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeLocalFactorization.lean** | Factors each local mismatch as endpoint mean times the exact signed pair-mass-minus-twice-Laurent-mean coefficient defect | 130+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeModulusCollection.lean** | Collects local defects by missing modulus before absolute values and exposes the minimal endpoint-weighted one-dimensional ledger | 110+ | ✅ |
+| **NB12BBLSH15PostFEConstantModeModulusBudget.lean** | Applies absolute values only after modulus collection, proves the sharp outer budget, and plugs its decay interface into the complete energy closure theorem | 190+ | ✅ |
 
 **Legend:** ✅ = Verified, 🟡 = Scaffold (needs genuine bounds)
 
@@ -198,7 +217,7 @@ NB8 (log-taper target)
 
 **Verified:** Complete umbrella and axiom-audit imports
 
-**Build:** Clean; 8,630 jobs in the latest verified build
+**Build:** Clean; 8,649 jobs in the latest verified build
 
 **Axioms:** 0 custom axioms
 
@@ -215,10 +234,10 @@ missing-residue support in each coordinate.  The final analytic decay remains
 open and is RH-strength.
 
 **Next work:**
-- Partition the actual H15 external support into the degenerate sector
-  `p ∣ qq'` and the favorable sector `p ∤ qq'`, retaining signed coefficients
-- Test whether actual support and Möbius/log-taper weights suppress the
-  full-density degenerate sector
+- Extract the frequency-independent collision diagonal from the full
+  `sum_r |lambda_r|^2 D(r)` ledger and compare it with the retained correction
+- Test whether Möbius/log-taper weights suppress the full-density quotient
+  families without separating the retained correction
 - Test whether the literal diagonal and colliding endpoint-incidence sectors reproduce
   an explicit part of the norm product
 - Retain and estimate every surviving even-modulus alias, cross-modulus

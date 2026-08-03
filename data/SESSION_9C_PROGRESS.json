@@ -1,0 +1,1814 @@
+{
+  "metadata": {
+    "title": "Session 9c Progress: RH Conditional Reduction Frontier",
+    "version": "1.0",
+    "date": "2026-08-02",
+    "last_updated": "2026-08-04T00:00:00Z",
+    "scope": "Complete documentation of Session 9c progress through the constant-mode modulus budget and conditional energy closure interface",
+    "author": "Xavier Fresquet (SCAI, Sorbonne Université)",
+    "formalization_engine": "Sol 5.6 (Codex)",
+    "verification": "Lean 4 kernel verification; 8,649 jobs verified, 0 custom axioms"
+  },
+
+  "session_summary": {
+    "start_date": "2026-07-30",
+    "current_date": "2026-08-03",
+    "total_duration_days": 4,
+    "total_jobs_added": 137,
+    "initial_jobs": 8512,
+    "current_jobs": 8649,
+    "status": "CONSTANT MODE MODULUS BUDGET AND CLOSURE INTERFACE — exact analytic target exposed; its decay remains open",
+    "objective": "Prove H15: SignedBilinearDispersionDecay (sufficient for RH conditional reduction)",
+    "architecture_status": "THE COMPLETE ENERGY HAS A CORRECTION-PRESERVING NORMAL FORM AND A SHARP CONSTANT-MODE BUDGET — residue cancellation is retained inside each modulus fiber and budget decay feeds the energy theorem; quantitative signed control remains"
+  },
+
+  "steps_completed": [
+    {
+      "step": "1",
+      "session_marker": "9c.1",
+      "title": "Triple-Plus-Simple Laurent Package",
+      "module": "NB12BBLSActiveLaurent.lean",
+      "date_completed": "2026-07-30",
+      "jobs": 8517,
+      "key_results": [
+        "Exact triple-pole decomposition with explicit residue coefficients",
+        "A₋₃ = -1/q (triple pole, exact)",
+        "A₋₂ = w₁/q + 2(γ - ln q)/q (quadratic pole, δ-dependent)",
+        "A₋₁ = w₂/q - ... - F(1) (simple pole, residue isolation)",
+        "F(1) residual explicitly isolated as bridge to H15 bilinear correction"
+      ],
+      "architectural_insight": "All singularities at s=0 and s=1 are explicit. F(1) residual is the handle for H15 connection.",
+      "lean_status": "✓ Complete, 0 custom axioms"
+    },
+    {
+      "step": "2",
+      "session_marker": "9c.2",
+      "title": "H15 Correction Matching via F(1)",
+      "module": "NB12BBLSPoleSubtractedRectangle.lean",
+      "date_completed": "2026-07-31",
+      "jobs": 8520,
+      "key_results": [
+        "Exact pole-subtracted rectangle identity (correction-preserving)",
+        "Complete conserved ledger: (bdCorrectionTerm - F_fin) + E_polar(δ) + R₁(δ) + E_endpoint",
+        "Cubic and quadratic pole boundary integrals vanish",
+        "Simple poles contribute exactly 2πi",
+        "Correction conservation through contour shift (line 927)",
+        "Explicit Abel schedule: δ_N → 0 with |R₁(δ_N, N)| ≤ 1/(N+1) → 0"
+      ],
+      "architectural_insight": "The correction ledger travels separately from the analytic remainder, not embedded in it. This is the key architectural shift from Sessions 1-8.",
+      "lean_status": "✓ Complete, 0 custom axioms"
+    },
+    {
+      "step": "3.5a",
+      "session_marker": "9c.3.5a",
+      "title": "Constructive One-Pole Removal",
+      "module": "NB12BBLSOnePoleRemoval.lean",
+      "date_completed": "2026-07-31",
+      "jobs": 8521,
+      "key_results": [
+        "Canonical analytic extension at s=1 (Mathlib divided-slope machinery)",
+        "Simultaneous removal of all four poles (three at s=0, one at s=1)",
+        "Exact four-pole decomposition: F(s) = H(s) + A₋₃/s³ + A₋₂/s² + A₋₁/s + R₁(δ)/(s-1)",
+        "H(s) is analytic throughout Re(s) < 2 (proved constructively)",
+        "Correction-preserving boundary integral: ∫_∂R F(s)ds = 2πi(A₋₁ + R₁(δ))"
+      ],
+      "architectural_insight": "Both singularities handled exactly and constructively. The analytic remainder H(s) is provably holomorphic, ready for Bettin-Chandee application.",
+      "lean_status": "✓ Complete, 0 custom axioms"
+    },
+    {
+      "step": "3.5b-c",
+      "session_marker": "9c.3.5c",
+      "title": "H15 Rectangle Specialization & Critical Equivalence",
+      "module": "NB12BBLSH15Rectangle.lean",
+      "date_completed": "2026-08-01",
+      "jobs": 8522,
+      "key_results": [
+        "Exact H15 four-pole decomposition with explicit Möbius/log-taper row data",
+        "Pole-removed aggregate H(s) holomorphic on Re(s) < 2",
+        "Correction-preserving rectangle identity specialized to H15",
+        "CRITICAL EQUIVALENCE PROVED: A₋₁(n) + R₁(n) → 0 iff A₋₁(n) → 0",
+        "Explicit residue bound: ||R₁(n)|| ≤ 1/(n+1) → 0 as n → ∞"
+      ],
+      "architectural_insight": "The s=1 residue vanishes automatically if the finite part does. Only the right edge needs absolute control; the critical line (where Bettin-Chandee acts) can oscillate.",
+      "lean_status": "✓ Complete, 0 custom axioms"
+    },
+    {
+      "step": "3.5d",
+      "session_marker": "9c.3.5d",
+      "title": "Right-Line Vertical Majorant Audit",
+      "module": "NB12BBLSH15ThreeHalfLine.lean",
+      "date_completed": "2026-08-01",
+      "jobs": 8523,
+      "key_results": [
+        "Exact Abel-factor norm with opposite behavior on positive vs. negative reflected lines",
+        "Finite aggregate estimate (the majorant): ||F_n(σ+it)|| ≤ C(n+1)^{-σ}·(∑|w_i|q_i^β)·(1+|t|)^d·e^{-π|t|/2}",
+        "Vertical domination applies to ORIGINAL Gamma-damped aggregate F_n, not globally pole-subtracted function",
+        "Isolated arithmetic condition: CutoffBudget (concrete, testable inequality)",
+        "CutoffBudget determines whether row growth compatible with majorant"
+      ],
+      "architectural_insight": "The majorant has a concrete, testable gate (CutoffBudget). This is the final diagnostic before the exponent test.",
+      "diagnostic_finding": "ABSOLUTE-MAJORANT FAILURE DETECTED: q² loss makes rowwise bounds nonintegrable as N→∞",
+      "lean_status": "✓ Complete, 0 custom axioms"
+    },
+    {
+      "step": "3.5e",
+      "session_marker": "9c.3.5e",
+      "title": "Absolute-Majorant Failure Diagnostic (Critical Finding)",
+      "date_completed": "2026-08-02",
+      "jobs": 8524,
+      "key_results": [
+        "Normalized mass increases from 0.58 (N=8) to 4.23 (N=350)",
+        "Rowwise absolute bounds fail to integrate over N→∞",
+        "CRITICAL INSIGHT: Signed cancellation at integral level is REQUIRED, not optional"
+      ],
+      "architectural_shift": "Absolute convergence strategy fails. The correct approach is SIGNED L¹-tightness (aggregate-level cancellation), not rowwise absolute domination.",
+      "lean_status": "✓ Diagnostic complete, diagnostic documented"
+    },
+    {
+      "step": "4a",
+      "session_marker": "9c.4a",
+      "title": "Signed Right-Line Conditional Target",
+      "module": "NB12BBLSH15SignedRightLine.lean",
+      "date_completed": "2026-08-02T21:45:00Z",
+      "jobs": 8525,
+      "key_results": [
+        "Exact correction-preserving rectangle identity (signed version): i∫_{-T}^{T}F_N(3/2+it)dt - 2πi·ℒ_N = i∫_{-T}^{T}F_N(σ_L+it)dt - H_N(T)",
+        "Exact compact/tail decomposition after signed row aggregation (line 101)",
+        "The H15SignedThreeHalfL1Tightness package (line 120) states the precise open L¹-tightness condition for signed aggregates",
+        "An inhabitant of this package implies decay of the complete right-line integral",
+        "Combining that hypothesis with residue-ledger decay implies corrected right-edge vanishing"
+      ],
+      "architectural_breakthrough": "The signed L¹-tightness target and its downstream implications are exactly typed. The estimate itself is not proved.",
+      "significance": "The contour and correction interfaces are complete enough to audit external trilinear estimates without pretending that the analytic gate is closed.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4b",
+      "session_marker": "9c.4b",
+      "title": "Bettin-Chandee Balanced Exponent Stop Test",
+      "module": "NB12BBLSH15BettinChandeeAudit.lean",
+      "date_completed": "2026-08-02T23:00:00Z",
+      "jobs": 8526,
+      "key_results": [
+        "Exact q²-weight factorization into separate H15 numerator and modulus coefficients",
+        "Balanced exponents N^(9/20)R^(-13/20) and N^(3/8)R^(-1/2)",
+        "Power decay is available only beyond R=N^(3/4+eta)",
+        "Fixed and low frequencies are not controlled by Bettin-Chandee Theorem 1"
+      ],
+      "significance": "Bettin-Chandee is a plausible high-frequency tool, not a proof of the full compact signed gate.",
+      "lean_status": "✓ Exact algebra and exponent arithmetic, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4c",
+      "session_marker": "9c.4c",
+      "title": "Correction-Preserving Estermann Frequency Split",
+      "module": "NB12BBLSH15FrequencySplit.lean",
+      "date_completed": "2026-08-02T23:30:00Z",
+      "jobs": 8527,
+      "key_results": [
+        "Exact finite low block plus genuine shifted-tsum high tail",
+        "Exact transport through both Estermann functional-equation orientations",
+        "Exact split after the complete signed H15 row aggregate",
+        "The complete residue ledger is attached only to the low-frequency right edge"
+      ],
+      "significance": "Bettin-Chandee can now be targeted at a correction-free high sector without losing or duplicating the retained correction.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4d",
+      "session_marker": "9c.4d",
+      "title": "Uniform High-Frequency Sum-Integral Exchange",
+      "module": "NB12BBLSH15FrequencyIntegral.lean",
+      "date_completed": "2026-08-02T23:45:00Z",
+      "jobs": 8528,
+      "key_results": [
+        "Continuous paired Estermann frequency terms on Re(s)=3/2",
+        "Global L1 majorant with summable divisor coefficients and Gamma decay",
+        "Global and symmetric finite-window shifted-tsum/integral exchange",
+        "Exact identification of the algebraic H15 high remainder with the genuine high-tail integral",
+        "Fully expanded finite signed row sum followed by the shifted frequency tsum"
+      ],
+      "significance": "The high sector is now an explicit integrated trilinear object with no hidden correction term; only its cutoff-uniform signed decay remains open.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4e / 5c",
+      "session_marker": "9c.4e",
+      "title": "H15 Bettin-Chandee Dyadic Coefficient Ledger",
+      "module": "NB12BBLSH15BettinChandeeLedger.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8529,
+      "key_results": [
+        "Exact two-orientation reindexing by gcd, inverse-variable, modulus, frequency, and orientation scales",
+        "Exact coefficient separation w_i v_i^2=(pi/g_i)(c_N(g_i u_i)/u_i)(c_N(g_i v_i)v_i)",
+        "Supported squared-mass bounds: inverse mass <=1/A and modulus mass <=4Q^3",
+        "Exact divisor frequency mass sum d(r)^2/r^3",
+        "Complete Bettin-Chandee phase factor retained; lower threshold remains R>N^(3/4+eta)",
+        "For R>=N^2 one theorem term loses frequency decay, so direct infinite block summation is invalid",
+        "Hybrid architecture identified: finite Bettin-Chandee middle window plus a separately controlled ultra-high sector with lambda>2"
+      ],
+      "significance": "The dyadic ledger is exact, and it corrects the earlier high-sector strategy by exposing the mandatory published phase factor. The remaining high-sector work is finite and classical, but not yet proved.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4f / 5d",
+      "session_marker": "9c.4f",
+      "title": "Quantitative H15 Divisor-Square Dyadic Bound",
+      "module": "NB12BBLSDivisorSquareDyadic.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8530,
+      "key_results": [
+        "Injective encoding of each divisor pair d,e|n into the four positive factors gcd(d,e), d/g, e/g, and n/lcm(d,e)",
+        "Exact recovery of n from the four factors and an injective bounded-product-to-triple-fiber count",
+        "Quantitative block estimate sum_{R<=r<2R} d(r)^2 <= 2R(1+log(2R))^3",
+        "Constructed H15DivisorSquareDyadicBound with explicit constant C=2",
+        "Derived sum_{R<=r<2R} d(r)^2/r^3 <= 2(1+log(2R))^3/R^2"
+      ],
+      "significance": "The classical divisor-frequency L2 input required by the hybrid high-sector strategy is now unconditional. This does not supply the Bettin-Chandee trilinear estimate itself or the correction-coupled low-frequency decay.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4g / 5e",
+      "session_marker": "9c.4g",
+      "title": "H15 Ultra-High Frequency Tail",
+      "module": "NB12BBLSH15UltraHighTail.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8531,
+      "key_results": [
+        "Finite Cauchy-Schwarz estimate for each divisor-frequency dyadic block",
+        "Explicit block bound F(R)^2 <= 2(1+log(2R))^3/R",
+        "The divisor-frequency block L1 norm tends to zero",
+        "The dyadic sequence F(2^k) is summable",
+        "The shifted dyadic divisor-frequency tail tends to zero"
+      ],
+      "significance": "This closes the frequency-only absolute ultra-high tail and supplies the vanishing factor used by the next adaptive-coupling theorem.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4h / 5f",
+      "session_marker": "9c.4h",
+      "title": "H15 Adaptive Moving-Cutoff Coupling",
+      "module": "NB12BBLSH15MovingCutoff.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8532,
+      "key_results": [
+        "Exact nonnegative coupled budget: three-halves constant × Abel damping × finite arithmetic row mass × dyadic frequency tail × vertical-profile mass",
+        "For every cutoff n there exists a dyadic threshold J>=n making the budget at most 1/(n+1)",
+        "A canonical adaptive threshold is selected and tends to infinity",
+        "The complete coupled budget tends to zero along that adaptive threshold"
+      ],
+      "significance": "The actual finite-height ultra-high remainder is uniformly dominated by the exact shifted-tail budget and vanishes cofinally. The theorem is non-quantitative and does not yet show a fixed-power schedule.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4i / 5g",
+      "session_marker": "9c.4i",
+      "title": "H15 Arithmetic-Mass Rate Ledger",
+      "module": "NB12BBLSH15ArithmeticMass.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8533,
+      "key_results": [
+        "Every supported H15 row coefficient has norm at most pi",
+        "Every reduced row denominator is at most n+2",
+        "The complete arithmetic row mass is at most 2*pi*(n+2)^5",
+        "The damped arithmetic factor is at most (1/(n+1))^(3/2)*2*pi*(n+2)^5",
+        "The same polynomial ledger uniformly bounds the actual finite-height ultra-high integral remainder after multiplication by the shifted frequency tail"
+      ],
+      "significance": "This computes the exact coarse polynomial loss that a quantitative shifted-tail theorem must beat. It uses no cancellation and does not yet give a fixed-power cutoff.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4j / 5h",
+      "session_marker": "9c.4j",
+      "title": "H15 Polynomial Ultra-High Frequency Cutoff",
+      "module": "NB12BBLSH15FrequencyTailRate.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8534,
+      "key_results": [
+        "The dyadic block L1 mass is at most 40*R^(-1/4)",
+        "The exact shifted analytic tail injects into the complete dyadic tail",
+        "At J(n)=clog_2((n+2)^40), the shifted tail is O((n+2)^(-10))",
+        "The frequency threshold 2^J is strictly below 2*(n+2)^40",
+        "After the complete arithmetic ledger, the ultra-high budget is O((n+2)^(-5))",
+        "The actual integrated ultra-high remainder tends to zero uniformly for arbitrary moving nonnegative contour height"
+      ],
+      "significance": "The adaptive-cutoff compatibility problem is closed unconditionally. Only the finite middle-frequency Bettin-Chandee range and the correction-coupled low sector remain.",
+      "lean_status": "✓ Complete, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4k / 5i",
+      "session_marker": "9c.4k",
+      "title": "Exact H15 Finite Middle-Window Isolation",
+      "module": "NB12BBLSH15FrequencyTailRate.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8534,
+      "key_results": [
+        "The genuine exchanged high remainder equals the finite signed middle window plus the shifted infinite tail",
+        "The finite window reassembles exactly into the existing five-coordinate Bettin-Chandee dyadic fibers",
+        "The corrected right edge equals correction-coupled low + finite middle + correction-free ultra-high",
+        "The lower endpoint is exactly the Bettin-Chandee eta=1/4 cutoff N=n+2",
+        "The upper endpoint is 2^clog_2((n+2)^40)-1 and lies beyond the lower endpoint",
+        "Middle-window decay plus correction-coupled low decay imply full corrected-right-edge decay because the ultra-high term is already proved"
+      ],
+      "significance": "The finite middle sector is now the actual signed H15 object, not a proxy. Its published trilinear estimate and the aggregate low-sector estimate remain open.",
+      "lean_status": "✓ Complete algebraic reduction, 0 custom axioms, DIRECTLY TYPECHECKED"
+    },
+    {
+      "step": "4l / 5j",
+      "session_marker": "9c.4l",
+      "title": "Exact H15 Bettin-Chandee Instantiation Stop Test",
+      "module": "NB12BBLSH15BettinChandeeInstantiation.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8535,
+      "key_results": [
+        "The H15 Laurent row stores the inverse primitive residue exactly",
+        "The Estermann functional-equation inverse cancels that stored inverse",
+        "Both actual row orientations therefore have direct phases e(±ru/q)",
+        "Bettin-Chandee Theorem 1 is faithfully recorded as a hypothesis structure with its epsilon-dependent constant",
+        "Direct application of that theorem is rejected because it estimates e(±r ubar/q), not e(±ru/q)",
+        "The corrected direct-additive trilinear form is defined as the next analytic object"
+      ],
+      "significance": "This prevents an invalid literature instantiation. Reindexing u by inversion would make the numerator coefficient depend jointly on (u,q), violating the separated-coefficient hypothesis.",
+      "lean_status": "✓ Complete exact phase audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4m / 5k",
+      "session_marker": "9c.4m",
+      "title": "H15 Direct-Additive Reassembly and Large-Sieve Stop Test",
+      "module": "NB12BBLSH15DirectAdditiveReassembly.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8536,
+      "key_results": [
+        "Every valid H15 fixed-height frequency term is exactly reassembled into the paired direct phases e(ru/q) and e(-ru/q)",
+        "The classical Estermann factor splits exactly into q^2, q^(2it), and a modulus-independent Archimedean factor",
+        "The Dirichlet frequency term splits exactly into its 3/2 base and r^(-it)",
+        "Both q^(2it) and r^(-it) have norm one",
+        "The twisted finite modulus and frequency L2 masses equal the existing untwisted H15 masses exactly",
+        "The elementary additive large-sieve balanced exponent is negative exactly when the frequency scale exceeds N^2"
+      ],
+      "significance": "The actual H15 direct-additive object is now coefficient-separated without vertical loss. The classical additive large sieve controls only the upper middle sector and cannot close the range at or below the quadratic transition.",
+      "lean_status": "✓ Complete exact reassembly and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4n / 5l",
+      "session_marker": "9c.4n",
+      "title": "H15 Paired Direct-Kernel Stop Test",
+      "module": "NB12BBLSH15PairedDirectKernel.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8537,
+      "key_results": [
+        "The three-halves-line cosine is exactly i*sinh(pi*t)",
+        "The negative direct phase is the inverse and conjugate of the positive phase on every reduced positive-modulus row",
+        "The paired norm square is exactly 1+sinh(pi*t)^2+2*sinh(pi*t)*Im(e(2ru/q))",
+        "The cross mode sums to zero on a complete unweighted reduced-residue system",
+        "The actual weighted dyadic block leaves an explicit signed weighted Ramanujan correlation",
+        "Its unconditional absolute bound is only the original coefficient mass and supplies no power saving"
+      ],
+      "significance": "Keeping the two Estermann orientations together is necessary but not sufficient. It isolates the exact lower-middle cancellation target as a weighted incomplete Ramanujan correlation rather than an automatic cosine cancellation.",
+      "lean_status": "✓ Complete exact norm-square and weighted cross-term ledger, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4o / 5m",
+      "session_marker": "9c.4o",
+      "title": "H15 Weighted Ramanujan Completion-Defect Identity",
+      "module": "NB12BBLSH15RamanujanCompletionDefect.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8538,
+      "key_results": [
+        "Every complete translated reduced-residue period has exactly zero unweighted paired cross mode",
+        "The reduced dyadic numerator block splits exactly into pairwise-disjoint complete periods plus an incomplete boundary support",
+        "The incomplete boundary support has at most 2q natural points",
+        "Subtracting an arbitrary periodwise reference weight leaves only the within-period variation defect",
+        "The genuine H15 inverse coefficient is extended by zero with exact support g*u<=N",
+        "Its complex norm-square is exactly the real squared supported H15 weight",
+        "The actual supported paired H15 cross correlation equals the sum of the variation and boundary defects",
+        "The supported endpoint defect is at most 2q/U^2"
+      ],
+      "significance": "Complete orthogonality has now been fully exploited without discarding endpoints. Endpoint geometry gives 2q/U^2; the remaining lower-middle problem is to bound H15 square-weight variation and sum both budgets through the full (g,q,r) ledger.",
+      "lean_status": "✓ Complete exact finite completion ledger, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4p / 5n",
+      "session_marker": "9c.4p",
+      "title": "H15 Ramanujan Variation and Balanced-Exponent Stop Test",
+      "module": "NB12BBLSH15RamanujanVariationAudit.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8539,
+      "key_results": [
+        "The supported inverse square weight factors exactly as the squarefree indicator of g*u times a smooth logarithmic envelope",
+        "Within-period variation splits exactly into smooth-envelope variation and squarefree additive-character fluctuation",
+        "Total absolute complete-period variation is at most 2/U",
+        "Together with the endpoint estimate, each modulus row is at most 2/U+2q/U^2",
+        "The supported q~Q block is at most 2Q/U+4Q^2/U^2",
+        "At Q=U the bound is exactly 6 and the balanced power exponent is zero"
+      ],
+      "significance": "The absolute completion strategy is definitively insufficient on balanced blocks. The next lower-middle target is not generic variation but signed distribution of the squarefree indicator against direct additive characters.",
+      "lean_status": "✓ Complete exact squarefree split and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4q / 5o",
+      "session_marker": "9c.4q",
+      "title": "H15 Squarefree Divisor Expansion and Signed-Row Stop Test",
+      "module": "NB12BBLSH15SquarefreeDivisorExpansion.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8540,
+      "key_results": [
+        "The exact identity 1_squarefree(n)=sum_{d^2|n}mu(d) is proved through Nat.floorRoot and Möbius inversion",
+        "The frozen squarefree reference cancels exactly against the complete-period zero character mode before absolute values",
+        "Each remaining period is reindexed as signed square-divisor additive-character rows with the smooth endpoint envelope retained",
+        "Nonsquarefree divisor rows vanish identically",
+        "When gcd(d^2,g)=1, the incidence d^2|g*u reduces exactly to the progression d^2|u",
+        "The absolute squarefree budget is Q/U, hence equals 1 at Q=U and again has exponent zero",
+        "The remaining lower-middle gate is packaged as H15SignedSquareDivisorPowerSaving"
+      ],
+      "significance": "The classical squarefree expansion succeeds algebraically but does not itself improve the balanced exponent. Any gain must retain Möbius cancellation jointly across square divisors, periods, and moduli.",
+      "lean_status": "✓ Complete exact divisor expansion, signed reindexing, and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4r / 5p",
+      "session_marker": "9c.4r",
+      "title": "H15 GCD-Stratified Normalized Progression Stop Test",
+      "module": "NB12BBLSH15SquarefreeGCDStratification.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8541,
+      "key_results": [
+        "For positive d, d^2|g*u iff (d^2/gcd(d^2,g))|u",
+        "Every active incidence forces the normalized progression modulus L to be coprime to q",
+        "Rows with gcd(L,q)>1 vanish identically",
+        "The degenerate L=1 row is the complete zero additive-character mode and vanishes identically",
+        "All surviving rows have L>=2, gcd(L,q)=1, and L|u",
+        "The divisor rows partition exactly by c=gcd(d^2,g)",
+        "The original, normalized-progression, and gcd-stratified global aggregates are exactly equal",
+        "Coefficient and elementary row bounds are explicit, but the balanced absolute aggregate remains at most 1"
+      ],
+      "significance": "The joint (g,d) incidence is no longer opaque. Exact pruning removes all impossible and constant modes, but no decay follows without exploiting cancellation over the true Lq period or a signed dispersion theorem.",
+      "lean_status": "✓ Complete exact normalization, pruning, aggregate equivalence, and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4s / 5q",
+      "session_marker": "9c.4s",
+      "title": "H15 Normalized Lq-Superperiod Completion",
+      "module": "NB12BBLSH15NormalizedSuperperiod.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8542,
+      "key_results": [
+        "Multiplication u=L*v is an exact bijection from one normalized Lq superperiod to one reduced q-period",
+        "The direct additive cross mode transfers from frequency r at L*v to frequency r*L at v",
+        "Every complete active Lq superperiod has exactly zero unweighted cross mode",
+        "Equivalently, L consecutive normalized q-period rows cancel exactly",
+        "The actual weighted q-row sequence splits exactly into within-superperiod variation plus uncovered row boundary",
+        "The direct normalized dyadic support also splits exactly into complete superperiods plus two endpoint fragments",
+        "The point boundary has at most 2Lq elements and the smooth H15 endpoint defect is at most 2Lq/U^2",
+        "At q=U the crude boundary budget is 2L/U, so a uniform negative exponent still needs averaged control of active normalized moduli"
+      ],
+      "significance": "The true product period now yields exact row cancellation and a correction-preserving weighted decomposition. The remaining obstruction is quantitative rather than algebraic: average the L-dependent boundary and prove signed within-superperiod variation decay.",
+      "lean_status": "✓ Complete exact superperiod bijection, row cancellation, weighted completion, boundary bound, and stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4t / 5r",
+      "session_marker": "9c.4t",
+      "title": "H15 Active Normalized-Modulus Average Stop Test",
+      "module": "NB12BBLSH15NormalizedModulusAverage.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8543,
+      "key_results": [
+        "Every active normalized modulus satisfies 2<=L<2U and gcd(L,q)=1",
+        "The active divisor family reindexes exactly into fibers with fixed L",
+        "For fixed L, d maps injectively to gcd(d^2,g), so the fiber cardinality is at most divisorsCard(g)",
+        "The sum of active normalized moduli is at most 4*divisorsCard(g)*U^2",
+        "One modulus-row boundary budget is at most 8*divisorsCard(g)*q",
+        "The full q~Q absolute boundary budget is at most 16*divisorsCard(g)*Q^2",
+        "The balanced exponent produced by this absolute fiber-cardinality audit is +2, not negative"
+      ],
+      "significance": "Exact active-L reindexing succeeds, but the first absolute average consumes the superperiod gain and grows. This does not rule out sharper endpoint density; it identifies the next finite refinement before signed dispersion.",
+      "lean_status": "✓ Complete exact fiber decomposition, multiplicity bound, global budget, and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4u / 5s",
+      "session_marker": "9c.4u",
+      "title": "H15 Progression-Density Boundary Stop Test",
+      "module": "NB12BBLSH15BoundaryDensity.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8544,
+      "key_results": [
+        "Every interval of length at most Lq contains at most q+1 multiples of a positive L",
+        "The normalized superperiod endpoint boundary has cardinality at most 2(q+1), independent of L",
+        "The smooth H15 endpoint defect is at most 2(q+1)/U^2",
+        "The active divisor family has cardinality at most 2U*divisorsCard(g)",
+        "One density-refined row budget is at most 4*divisorsCard(g)*(q+1)/U",
+        "The full q~Q supported absolute budget is at most 8*divisorsCard(g)*Q when Q<=U",
+        "At Q=U the balanced exponent is +1, so the absolute route still cannot decay"
+      ],
+      "significance": "The endpoint-density refinement succeeds exactly and removes the normalized-modulus loss. Its linear balanced growth is a decisive stop test: the endpoint and within-superperiod variation must now remain inside one signed expression.",
+      "lean_status": "✓ Complete progression-density cardinality, smooth endpoint bound, global active-divisor budget, and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-a / 5t-a",
+      "session_marker": "9c.4v-a",
+      "title": "H15 Active-Incidence Extension by Zero",
+      "module": "NB12BBLSH15ActiveIncidence.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8545,
+      "key_results": [
+        "A positive normalized row is exactly zero when d is absent from that period's square-divisor incidence set",
+        "Membership in the dyadic active union supplies d>0, L>=2, and gcd(L,q)=1 independently of the selected period",
+        "A divisor active somewhere in the dyadic block contributes zero in every period where it is locally inactive",
+        "The moving periodwise active sets can therefore be enlarged to their common dyadic union without changing any signed row"
+      ],
+      "significance": "This removes the genuine moving-support obstruction identified in the Kimi audit. The next k,d transpose is now finite algebra rather than an unproved support assumption.",
+      "lean_status": "✓ Complete exact extension by zero, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-b / 5t-b",
+      "session_marker": "9c.4v-b",
+      "title": "H15 Signed Active-Incidence Transpose",
+      "module": "NB12BBLSH15ActiveIncidence.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8545,
+      "key_results": [
+        "A generic finite family supported on moving active sets transposes exactly over their common dyadic union",
+        "The specialization retains an arbitrary signed real period weight and the genuine normalized progression row",
+        "The complete h15NormalizedProgressionAggregate equals its divisor-first dyadic active-incidence form",
+        "No absolute value, estimate, or cancellation hypothesis enters the transpose"
+      ],
+      "significance": "The moving-support issue is now completely discharged. The existing row-level normalized-superperiod identity can be assembled divisor-first while keeping endpoint and variation terms coupled.",
+      "lean_status": "✓ Complete exact signed transpose and aggregate equality, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-c / 5t-c",
+      "session_marker": "9c.4v-c",
+      "title": "H15 Coupled Variation-Plus-Boundary Assembly",
+      "module": "NB12BBLSH15ActiveIncidence.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8545,
+      "key_results": [
+        "Defined the complete signed q,d aggregate with variation and endpoint boundary inside the same summand",
+        "Used the smooth envelope as the outer period weight because the normalized row already contains the Möbius coefficient",
+        "Sampled the reference at the left endpoint j*(L*q) of each normalized superperiod",
+        "Proved exact equality with h15NormalizedProgressionAggregate before taking any absolute value"
+      ],
+      "significance": "The retained endpoint is now algebraically coupled to the within-superperiod variation in the genuine H15 aggregate. The next task is a row-to-pointwise bridge and then one combined signed decay estimate.",
+      "lean_status": "✓ Complete correction-preserving assembly, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-d / 5t-d",
+      "session_marker": "9c.4v-d",
+      "title": "H15 Corrected Row-to-Pointwise Coupled Bridge",
+      "module": "NB12BBLSH15ActiveIncidence.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8545,
+      "key_results": [
+        "A point in the normalized k-th q-period satisfies u/q=k, with no positivity hypothesis on q required",
+        "Every weighted normalized row sum equals the exact complete-period pointwise sum with the Möbius weight and smooth envelope frozen at kq",
+        "The full row aggregate equals the frozen complete-period pointwise aggregate",
+        "The genuine smooth full-support pointwise aggregate equals its normalized-superperiod variation plus retained boundary",
+        "The row-coupled expression plus one explicit signed residual equals the genuine pointwise-coupled expression"
+      ],
+      "significance": "The proposed direct row-to-pointwise equality is false in general: weights are frozen on rows and the full pointwise support has incomplete outer q-periods. The exact residual records both discrepancies and prevents an invalid identity from entering the analytic pipeline.",
+      "lean_status": "✓ Complete exact corrected bridge, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-e / 5t-e",
+      "session_marker": "9c.4v-e",
+      "title": "H15 Row-to-Pointwise Residual Decomposition and Endpoint Audit",
+      "module": "NB12BBLSH15ActiveIncidence.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8545,
+      "key_results": [
+        "The complete-period normalized support is the complete ordinary-period support filtered by L|u",
+        "The missing support is exactly h15CompletionBoundarySupport filtered by L|u",
+        "The residual splits exactly into smooth-envelope unfreezing on complete periods plus the incomplete endpoint row",
+        "The unfreezing row has an exact periodwise variation formula retaining mu(d), L|u, and the additive character",
+        "The incomplete support has cardinality at most 2q and each endpoint row is at most 2q/U^2 in absolute value",
+        "The full incomplete endpoint is bounded by the existing density budget and hence by 8*divisorsCard(g)*Q when Q<=U"
+      ],
+      "significance": "The endpoint mismatch is fully identified but cannot be removed absolutely: its available balanced-block certificate grows linearly. The endpoint must remain signed and coupled to smooth unfreezing and the retained correction.",
+      "lean_status": "✓ Complete exact decomposition and quantitative endpoint stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-f / 5t-f",
+      "session_marker": "9c.4v-f",
+      "title": "H15 Correction-Coupled Abel Representation",
+      "module": "NB12BBLSH15CorrectionCoupledAbel.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8546,
+      "key_results": [
+        "Formalized a generic finite inclusive-prefix Abel identity from Finset.sum_range_by_parts",
+        "Defined zero-padded period coefficients retaining mu(d), L|u, coprimality, and the direct additive character",
+        "Reindexed each complete progression-period variation exactly onto range q",
+        "Expressed smooth unfreezing as arithmetic prefixes times consecutive smooth-envelope differences plus a terminal mode",
+        "Coupled the terminal mode with the incomplete ordinary-period endpoint before taking absolute values",
+        "Recovered both the row-to-pointwise residual and the genuine pointwise coupled aggregate exactly"
+      ],
+      "significance": "All remaining smooth geometry is now explicit in first differences. The analytic input has become a quantitative signed-prefix problem with the Abel boundary retained, rather than an ambiguous variation estimate.",
+      "lean_status": "✓ Complete exact correction-coupled Abel identity, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-g / 5t-g",
+      "session_marker": "9c.4v-g",
+      "title": "H15 Smooth Variation and Prefix-Discrepancy Threshold",
+      "module": "NB12BBLSH15AbelVariationThreshold.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8547,
+      "key_results": [
+        "Proved the supported log-tapered inverse-square envelope is antitone on positive natural arguments",
+        "Proved consecutive Abel first differences are nonnegative and telescope exactly on each complete ordinary period",
+        "Constructed the full ordinary-period support and proved q*card(complete periods)<=U",
+        "Defined the exact uniform zero-padded signed-prefix bound on the active H15 incidence",
+        "Proved the row, finite geometry-budget, and global interior estimates",
+        "Calculated the sharp available exponent ledger |AbelInterior|<=2*divisorsCard(g)*P"
+      ],
+      "significance": "For fixed g, smooth geometry requires only uniform prefix decay P=o(1), not a power saving in U or Q. The terminal Abel mode and incomplete endpoints remain one signed boundary ledger, so complete closure still needs their coupled decay.",
+      "lean_status": "✓ Complete smooth and exponent audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-h / 5t-h",
+      "session_marker": "9c.4v-h",
+      "title": "H15 Terminal-Prefix Superperiod Cancellation",
+      "module": "NB12BBLSH15TerminalPrefixSuperperiod.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8548,
+      "key_results": [
+        "Identified each complete zero-padded terminal prefix exactly with the normalized H15 progression row",
+        "Proved terminal-prefix constant-mode cancellation on every complete normalized Lq-superperiod",
+        "Recompleted the varying terminal mode as a normalized-superperiod smooth variation",
+        "Coupled uncovered terminal rows with the original incomplete pointwise endpoints",
+        "Lifted the identity through the complete active q,d incidence",
+        "Refined the row-to-pointwise residual into two explicit variations plus one final signed boundary"
+      ],
+      "significance": "The terminal constant mode is not an RH-strength obstruction: it cancels algebraically. The remaining weighted terminal variation is now suitable for a second Abel transform; the final boundary stays coupled.",
+      "lean_status": "✓ Complete exact terminal-superperiod cancellation and reassembly, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-i / 5t-i",
+      "session_marker": "9c.4v-i",
+      "title": "H15 Second Abel Transform and Two-Prefix Threshold",
+      "module": "NB12BBLSH15TerminalSecondAbel.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8549,
+      "key_results": [
+        "Defined cumulative normalized-row prefixes inside each complete L-row block",
+        "Proved the second finite Abel identity and removed its terminal mode using exact superperiod zero-sum",
+        "Bound the first-Abel terminal weight by U^-2 and adjacent terminal-weight differences by 2/U^2",
+        "Used Lq*card(complete normalized superperiods)<=U to obtain the row bound 2P2/(qU)",
+        "Summed the active divisor and modulus incidence to prove |secondAbelAggregate|<=4*tau(g)*P2",
+        "Proved the complete sufficient bound 2*tau(g)*P1+4*tau(g)*P2+B"
+      ],
+      "significance": "The same qualitative o(1) discrepancy threshold controls both smooth sectors for fixed g. All remaining non-variation geometry is concentrated in one final correction-coupled superperiod boundary.",
+      "lean_status": "✓ Complete exact second Abel and exponent audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-j / 5t-j",
+      "session_marker": "9c.4v-j",
+      "title": "H15 Final Superperiod Boundary Audit",
+      "module": "NB12BBLSH15FinalSuperperiodBoundary.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8550,
+      "key_results": [
+        "Proved that uncovered complete-row points and incomplete ordinary-period endpoints are disjoint",
+        "Proved their union is exactly the normalized Lq-superperiod boundary",
+        "Reindexed both contributions as one correction-coupled signed pointwise sum",
+        "Certified the genuine active row (g,d,U,q)=(2,2,5,3) with L=2",
+        "Computed its boundary as {8} and its unweighted character mode as sqrt(3)/2 != 0",
+        "Packaged the exact remaining final-boundary estimate and the sufficient 2*tau(g)*P1+4*tau(g)*P2+Bfinal bound"
+      ],
+      "significance": "The final endpoint geometry has no third universal zero mode. Exact finite algebra is exhausted here: unconditional closure now requires a genuinely signed estimate for the coupled boundary together with the two prefix norms.",
+      "lean_status": "✓ Complete support, reindexing, and negative zero-mode stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-k / 5t-k",
+      "session_marker": "9c.4v-k",
+      "title": "H15 Final-Boundary Fourier and Alias Audit",
+      "module": "NB12BBLSH15FinalBoundaryFourier.lean",
+      "date_completed": "2026-08-02",
+      "jobs": 8551,
+      "key_results": [
+        "Folded the exact correction-coupled endpoint coefficients by residue class modulo q",
+        "Proved each real endpoint row is the imaginary part of one finite doubled-character Fourier sum",
+        "Lifted the identity through the full active q,d incidence without changing the retained correction weight",
+        "Computed the exact frequency mean square: cross terms survive precisely when 2(y-x)=0 modulo q",
+        "Proved ordinary Parseval for odd q and isolated the genuine two-torsion alias for even q",
+        "Proved that a signed Fourier-aggregate estimate supplies Bfinal and the complete two-prefix residual theorem without loss"
+      ],
+      "significance": "The endpoint gate is now in its correct finite harmonic form. Mean-square normalization is exact, but even moduli alias and frequency averaging alone does not prove the fixed-r signed decay required by H15.",
+      "lean_status": "✓ Complete residue folding, alias ledger, odd-modulus Parseval, and aggregate gate, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-l / 5t-l",
+      "session_marker": "9c.4v-l",
+      "title": "H15 Endpoint Collision and Mean-Square Stop Test",
+      "module": "NB12BBLSH15FinalBoundaryCollision.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8552,
+      "key_results": [
+        "Proved reduction modulo q is injective on L-multiples in any half-open interval of length at most Lq when (L,q)=1",
+        "Proved every folded final-boundary residue fiber contains at most two points",
+        "Derived the correction-preserving coefficient bound sum_x |c(x)|^2 <= 2 sum_u |W(u)|^2",
+        "Proved both the terminal-Abel and smooth endpoint sectors obey the common U^-2 coefficient envelope",
+        "Derived pointwise mass <=2(q+1)U^-4 and odd-q frequency mean square <=4q(q+1)U^-4",
+        "Proved the fixed-frequency row square is bounded by that mean square and audited the balanced scale as O(U^-2), with no power improvement over the prior absolute bound"
+      ],
+      "significance": "The proposed collision gain is real and sharp for frequency averages, but it does not by itself improve the fixed-r exponent. The remaining gain must come from cross-modulus/correction-coupled dispersion, not single-row Parseval.",
+      "lean_status": "✓ Complete interval injectivity, fiber bound, coefficient L2 estimate, explicit odd-q mean square, and fixed-frequency stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-m / 5t-m",
+      "session_marker": "9c.4v-m",
+      "title": "H15 Even-Alias Bound and Signed Dispersion Normalization",
+      "module": "NB12BBLSH15FinalBoundaryEvenAlias.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8553,
+      "key_results": [
+        "Proved every element killed by multiplication by two in ZMod q is zero or the half-modulus class",
+        "Proved every fiber of r -> 2r modulo q has cardinality at most two",
+        "Proved ordinary finite Parseval in the exact additive-character normalization",
+        "Derived the uniform all-modulus doubled-frequency bound with factor-two alias cost",
+        "Combined alias and endpoint collisions to prove mean square <=8q(q+1)U^-4 for every positive q",
+        "Defined the nonnegative cross-(q,d) frequency energy and the exact signed dispersion gain Delta",
+        "Proved that the dispersion gain supplies Bfinal with bound sqrt(Delta*energy) while retaining the correction-coupled aggregate"
+      ],
+      "significance": "Even moduli cause only a constant two-torsion loss and no new exponent. All finite Fourier ambiguity is discharged; the remaining endpoint problem is exactly a signed fixed-frequency cross-modulus gain relative to the complete frequency energy.",
+      "lean_status": "✓ Complete all-modulus alias estimate, explicit H15 mean square, and correction-preserving cross-modulus dispersion interface, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-n / 5t-n",
+      "session_marker": "9c.4v-n",
+      "title": "H15 Cross-Modulus Energy and Exponent Ledger",
+      "module": "NB12BBLSH15FinalBoundaryDispersionLedger.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8554,
+      "key_results": [
+        "Proved the fixed-frequency row square is bounded by the complete all-frequency row mean square",
+        "Proved the exact two-level Cauchy-Schwarz baseline |B|^2 <= 2*U*Q*tau(g)*E on the active incidence family",
+        "Derived E <= 64*tau(g)*Q^3/U^3 and the balanced bound E <= 64*tau(g) when Q<=U",
+        "Proved every signed dispersion coefficient Delta yields |B| <= sqrt(64*tau(g)*Delta) on Q<=U",
+        "Computed the elementary bound |B| <= sqrt(128*U*Q*tau(g)^2), which grows like U on Q=U",
+        "Identified the exact frontier: fixed-g closure needs Delta=o(1), a full o(U^-2) relative saving over Delta_triv on the balanced scale"
+      ],
+      "significance": "The power deficit is no longer qualitative. Single-row Fourier estimates and elementary cross-row Cauchy-Schwarz cannot close H15; the remaining theorem must exploit signed off-diagonal correlation across distinct active (q,d) rows.",
+      "lean_status": "✓ Complete incidence-energy majorant, trivial dispersion coefficient, balanced exponent stop test, and conditional endpoint bound, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-o / 5t-o",
+      "session_marker": "9c.4v-o",
+      "title": "H15 Exact Row Diagonal/Off-Diagonal Ledger",
+      "module": "NB12BBLSH15FinalBoundaryOffDiagonal.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8555,
+      "key_results": [
+        "Defined the exact positive fixed-frequency row diagonal and complete ordered row-pair sum",
+        "Proved the full ordered pair sum equals the square of the signed endpoint aggregate",
+        "Proved |B|^2 = rowDiagonal + orderedOffDiagonal exactly, before any triangle inequality",
+        "Proved rowDiagonal <= completeFrequencyEnergy",
+        "Proved the row diagonal is exactly the sum of squares of complete correction-coupled point rows",
+        "Proved Delta-dispersion is equivalent to offDiagonal <= Delta*energy-rowDiagonal"
+      ],
+      "significance": "The retained correction is internal to each row and does not supply an external negative diagonal term. Signed off-diagonal products must compensate the positive row-square diagonal.",
+      "lean_status": "✓ Complete exact square expansion, correction-location audit, and off-diagonal compensation equivalence, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-p / 5t-p",
+      "session_marker": "9c.4v-p",
+      "title": "H15 Within-Modulus versus Cross-Modulus Compensation",
+      "module": "NB12BBLSH15FinalBoundaryCrossModulus.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8556,
+      "key_results": [
+        "Defined the nonnegative modulus-block diagonal by first summing all d-rows at fixed q",
+        "Split the ordered off-diagonal exactly into within-modulus and distinct-modulus sectors",
+        "Proved within-modulus interactions can reduce the row diagonal only to the nonnegative modulus-block diagonal",
+        "Proved |B|^2 = modulusBlockDiagonal + crossModulusOffDiagonal",
+        "Proved Delta-dispersion is equivalent to crossModulusOffDiagonal <= Delta*energy-modulusBlockDiagonal",
+        "At Delta=0, distinct moduli must cancel the entire modulus-block diagonal"
+      ],
+      "significance": "The frontier is sharper than generic cross-row cancellation: no amount of within-q cancellation alone closes the endpoint. The required negative correlation is genuinely between distinct moduli.",
+      "lean_status": "✓ Complete two-scale diagonal split and exact cross-modulus compensation equivalence, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-q / 5t-q",
+      "session_marker": "9c.4v-q",
+      "title": "H15 Literal Distinct-Modulus Correlation",
+      "module": "NB12BBLSH15FinalBoundaryExplicitCorrelation.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8557,
+      "key_results": [
+        "Proved the reusable finite identity (sum f)^2-sum f^2 = sum_i sum_{j in S.erase i} f_i f_j",
+        "Defined the exact complete correction-coupled modulus row R_q",
+        "Rewrote both the endpoint aggregate and modulus-block diagonal in terms of R_q",
+        "Proved the subtraction-defined cross sector equals the literal ordered q-not-equal-q' correlation",
+        "Restated Delta-dispersion exactly as a bound on this literal correlation",
+        "Restated zero dispersion as cancellation of the complete nonnegative sum_q R_q^2"
+      ],
+      "significance": "The frontier now has the exact summation shape required for a literature match. There is no hidden diagonal, correction omission, or absolute-value relaxation in the target.",
+      "lean_status": "✓ Complete literal cross-modulus identity and equivalent analytic gate, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-r / 5t-r",
+      "session_marker": "9c.4v-r",
+      "title": "H15 Terminal-Abel / Incomplete-Smooth Four-Sector Expansion",
+      "module": "NB12BBLSH15FinalBoundaryFourSector.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8558,
+      "key_results": [
+        "Defined the terminal-Abel modulus row T_q and incomplete-smooth modulus row S_q",
+        "Proved the exact correction-preserving identity R_q=T_q+S_q on every positive supported modulus",
+        "Defined literal TT, TS, ST, and SS distinct-modulus correlations",
+        "Proved the complete cross-modulus correlation equals TT+TS+ST+SS",
+        "Proved the two ordered mixed sectors TS and ST coincide",
+        "Derived the exact reduced form crossCorrelation=TT+2TS+SS"
+      ],
+      "significance": "The analytic frontier can now be audited sector by sector, but no sector may be discarded without a quantitative estimate because the retained correction is distributed across terminal and smooth endpoint data.",
+      "lean_status": "✓ Complete row split, four-sector expansion, mixed-sector symmetry, and three-sector reduction, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-s / 5t-s",
+      "session_marker": "9c.4v-s",
+      "title": "H15 Three-Sector Absolute Stop Test",
+      "module": "NB12BBLSH15FinalBoundarySectorAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8559,
+      "key_results": [
+        "Proved a terminal-row boundary bound from the exact point support and common U^-2 envelope",
+        "Proved fixed-modulus bounds |T_q|,|S_q|<=8*tau(g)*Q/U",
+        "Proved global modulus L1 budgets <=8*tau(g)*Q^2/U",
+        "Proved a reusable ordered erase-correlation L1 inequality",
+        "Derived identical absolute budgets for TT, TS, and SS",
+        "On Q<=U each sector is bounded only by 64*tau(g)^2*Q^2 and the complete separated bound is 256*tau(g)^2*Q^2"
+      ],
+      "significance": "The available sectorwise triangle-inequality route grows rather than decays. It cannot supply Delta=o(1); the three sectors must remain coupled unless a genuinely stronger signed theorem treats one of them.",
+      "lean_status": "✓ Complete endpoint budget propagation, three-sector absolute bounds, and balanced exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-t / 5t-t",
+      "session_marker": "9c.4v-t",
+      "title": "H15 Exact Coupled Terminal/Smooth Gate",
+      "module": "NB12BBLSH15FinalBoundaryCoupledGate.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8560,
+      "key_results": [
+        "Defined the exact signed target TT+2TS+SS<=Delta*energy-modulusBlockDiagonal",
+        "Proved exact equivalence with the prior cross-modulus frequency-dispersion gate",
+        "Proved the Delta=0 form requires complete cancellation of the modulus-block diagonal",
+        "Transferred the coupled input directly to the existing Fourier endpoint gate",
+        "Recovered the balanced endpoint bound |B|<=sqrt(64*tau(g)*Delta)"
+      ],
+      "significance": "The finite architecture has reached its sharpest correction-preserving analytic statement. Any unconditional closure must prove this coupled inequality with Delta tending to zero.",
+      "lean_status": "✓ Complete exact coupled-gate equivalence and endpoint transfer, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ah / 5t-ah",
+      "session_marker": "9c.4v-ah",
+      "title": "Literal H15 Interval-Row Completion",
+      "module": "NB12BBLSH15FinalBoundaryIntervalCompletion.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8574,
+      "key_results": [
+        "Identified the doubled H15 endpoint phase exactly as the standard additive character at frequency 2r",
+        "Collected the full signed interval predicate and endpoint coefficient on the unit group modulo q'",
+        "Recovered the original natural endpoint row exactly from the collected unit coefficient",
+        "Completed the literal row into an explicit Ramanujan zero mode plus nonzero Kloosterman modes",
+        "Proved that the inverse-coordinate zero Fourier coefficient is exactly the original signed endpoint mass"
+      ],
+      "significance": "The mandatory completion is no longer generic: it acts on the actual H15 interval coefficient without introducing a correction or remainder.",
+      "lean_status": "✓ Complete literal row completion and explicit zero-mode mass, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ai / 5t-ai",
+      "session_marker": "9c.4v-ai",
+      "title": "Aggregate Completion and Corrected Final Scale",
+      "module": "NB12BBLSH15FinalBoundaryIntervalCompletionAggregate.lean; NB12BBLSH15FinalBoundaryIntervalCompletionGate.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8576,
+      "key_results": [
+        "Lifted the exact row completion through every q,q',d,d',u index and both sum/difference orientations",
+        "Recovered the direct real interval ledgers as real parts of the complex completed aggregates",
+        "Proved boundary squared equals collision defect plus all Ramanujan zero ledgers plus all nonzero Kloosterman ledgers",
+        "Established that the Ramanujan zero aggregate and collision defect are distinct finite ledgers rather than an automatic equality",
+        "Packaged the sufficient coupled scale |completed correction|+|nonzero dispersion|<=S_N with S_N tending to zero"
+      ],
+      "significance": "This corrects the final normalization and prevents a false zero-mode/collision identification. The remaining task is one explicit signed analytic estimate on the assembled completed ledgers.",
+      "lean_status": "✓ Complete aggregate conservation law and moving-scale interface, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-az / 5t-az",
+      "session_marker": "9c.4v-az",
+      "title": "Post-FE Ramanujan Completion and Missing-Residue Trace",
+      "module": "NB12BBLSH15PostFERamanujanCompletion.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8593,
+      "key_results": [
+        "Collected the complete union-supported mismatch exactly by residue key (u mod q,q)",
+        "Split the residue coefficients into arbitrary modulus references plus centered variation",
+        "Defined the canonical arithmetic mean on every residue fiber and proved the centered coefficients have exact unweighted sum zero",
+        "Proved the paired cross mode has zero mean on every complete natural residue system",
+        "Proved each incomplete constant trace equals the negative trace over the missing residue representatives",
+        "Rewrote the centered post-FE lift defect canonically as fiber-mean-zero variation plus mean trace minus ordered cross-row dispersion"
+      ],
+      "significance": "The complete cross-mode Ramanujan mean is eliminated algebraically, while coefficient mean-zero is now a proved canonical normalization rather than an arbitrary-reference claim. The precise remaining boundary object is the mean-weighted missing-residue trace, which must be aligned with the ordered cross-row dispersion before any quantitative estimate.",
+      "lean_status": "✓ Complete exact residue collection and missing-residue identity, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ba / 5t-ba",
+      "session_marker": "9c.4v-ba",
+      "title": "Ordered Cross-Row Residue Alignment Stop Test",
+      "module": "NB12BBLSH15PostFECrossRowResidueAlignment.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8594,
+      "key_results": [
+        "Reindexed the nested ordered erase-sum as one finite Laurent-row-pair family",
+        "Collected the literal ordered dispersion by pairs of residue keys ((u mod q,q),(u' mod q',q'))",
+        "Proved every coordinate of the pair support lies in the actual post-FE residue support",
+        "Proved actual residue keys are disjoint from the missing-residue set for their modulus",
+        "Derived one fully residue-aligned lift-defect identity with mean-zero variation, linear missing trace, and pair-collected dispersion"
+      ],
+      "significance": "The hoped-for same-index boundary cancellation is structurally unavailable: the dispersion has only actual–actual pair support, while the linear trace is missing-residue supported. Any saving must be a global signed transform or estimate.",
+      "lean_status": "✓ Complete exact ordered-pair collection and support obstruction, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bb / 5t-bb",
+      "session_marker": "9c.4v-bb",
+      "title": "Global Signed Phase-Population Normalization",
+      "module": "NB12BBLSH15PostFEGlobalBoundaryTransfer.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8595,
+      "key_results": [
+        "Proved reduced direct phases and the complete paired kernel are invariant under reduction of the inverse coordinate modulo a positive modulus",
+        "Factored each ordered cross-row summand into a complex arithmetic scalar and a universal residue-pair kernel",
+        "Collected the complex arithmetic scalars exactly by ordered residue-key pairs",
+        "Expanded the residue-pair kernel exactly into the four positive/negative orientation populations (++,+-,-+,--)",
+        "Assembled the retained missing-residue trace and all four populations into one correction-coupled global boundary-transfer expression",
+        "Rewrote the centered lift defect exactly as mean-zero residue variation minus that complete global expression"
+      ],
+      "significance": "Support bookkeeping has been replaced by the correct analytic object. The next theorem must act on one global signed phase system; separate absolute estimates on the missing trace or individual populations are structurally inadequate.",
+      "lean_status": "✓ Complete exact complex collection and correction-coupled phase normalization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bc / 5t-bc",
+      "session_marker": "9c.4v-bc",
+      "title": "Common Additive-Character Boundary-Transfer Normalization",
+      "module": "NB12BBLSH15PostFECommonAdditivePhase.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8596,
+      "key_results": [
+        "Embedded either signed reduced phase into the ordered common modulus q*q'",
+        "Proved the conjugated-left/right phase product is one zero-extended additive character with numerator -epsilon_L*u*r*q' + epsilon_R*v*r*q",
+        "Separated the two Archimedean orientation factors from that common character",
+        "Rewrote each of the four global ordered populations in the common-modulus normalization",
+        "Identified the missing-residue cross mode with an explicit zero-extended doubled character e_q(2ar)",
+        "Rewrote the full centered lift defect using the common additive-character boundary-transfer expression"
+      ],
+      "significance": "The common-denominator test passes exactly and leaves no algebraic or coprimality remainder. The next uncertainty is purely quantitative: whether a published bilinear transform gives enough saving after the complete H15 coefficient ledger.",
+      "lean_status": "✓ Complete common additive-character normalization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bd / 5t-bd",
+      "session_marker": "9c.4v-bd",
+      "title": "Correction-Preserving Bilinear Exponent Audit",
+      "module": "NB12BBLSH15PostFEBilinearExponentAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8597,
+      "key_results": [
+        "Proved both collected residues lie below their respective moduli q and q', while q and q' retain the dyadic Q support and cutoff",
+        "Proved the common character modulus lies in [Q^2,4Q^2)",
+        "Proved the raw ordered-pair scalar norm factors and residue collection cannot increase total L1 coefficient mass",
+        "Recorded the hypothetical two-factor Bettin-Chandee exponent: negative above kappa=3/4 but inapplicable because H15 has direct rather than inverse phases",
+        "Recorded the correct direct-additive two-factor exponent: negative only above kappa=2, zero at kappa=2, and positive at fixed frequency"
+      ],
+      "significance": "The published-tool exponent test fails for the correction-coupled low sector. Common-modulus normalization does not restore coefficient separability or an inverse phase. The next input must be a correction-preserving bilinear transform for direct phases and joint collected coefficients.",
+      "lean_status": "✓ Complete post-collection range, mass, phase, and exponent stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-be / 5t-be",
+      "session_marker": "9c.4v-be",
+      "title": "Joint-Coefficient Correction-Preserving Transform Interface",
+      "module": "NB12BBLSH15PostFEJointTransformInterface.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8598,
+      "key_results": [
+        "Defined a generic ordered-pair transform with arbitrary joint coefficients and the literal common additive phase",
+        "Defined the doubled missing-residue transform and retained it with all four orientation populations in one correction transform",
+        "Proved the literal H15 supports and coefficients instantiate the generic transform exactly",
+        "Defined the nonseparated joint L1 coefficient mass and bounded its pair sector by the uncollected raw ordered-pair mass",
+        "Packaged a moving gain-times-mass estimate and proved it implies decay of the common transfer",
+        "Proved transform decay plus fiber-mean-zero variation decay implies centered lift-defect decay"
+      ],
+      "significance": "The analytic gate now has an exact theorem-level signature that cannot hide phase mismatch, coefficient separation, or correction loss. A candidate theorem must inhabit this package with a decaying fixed/low-frequency gain.",
+      "lean_status": "✓ Complete joint transform interface and downstream decay implication, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bf / 5t-bf",
+      "session_marker": "9c.4v-bf",
+      "title": "Joint Transform Literature Compatibility Audit",
+      "module": "NB12BBLSH15PostFEJointTransformCompatibilityAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8599,
+      "key_results": [
+        "Proved the literal post-functional-equation H15 phase is direct",
+        "Rejected direct-to-inverse Bettin-Chandee relabelling by the explicit residue 2 mod 5",
+        "Proved the Bettin-Chandee pair ledger has no fixed-frequency power saving",
+        "Proved the direct-additive pair ledger has no saving at fixed frequency or the quadratic transition and saves exactly above kappa=2",
+        "Audited the archived Motohashi branch as conditional trace/correction/spectral structures rather than an existing theorem"
+      ],
+      "significance": "No audited published theorem directly fits the exact joint-transform signature. The outcome is not an impossibility theorem: it identifies the need for a new joint-coefficient, correction-preserving transform estimate.",
+      "lean_status": "✓ Exact phase and exponent stop tests, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bg / 5t-bg",
+      "session_marker": "9c.4v-bg",
+      "title": "Correction-Preserving Joint Absolute Baseline",
+      "module": "NB12BBLSH15PostFEJointTransformAbsoluteBaseline.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8600,
+      "key_results": [
+        "Proved every common pair phase and doubled missing phase has norm at most one",
+        "Separated genuine joint pair L1 mass from missing-trace L1 mass without tensor factorization",
+        "Bound each orientation population with its exact Archimedean norm cost",
+        "Proved one unconditional bound for the complete correction transform with the missing trace retained",
+        "Instantiated the bound on the literal H15 supports and coefficients"
+      ],
+      "significance": "This is the strongest immediate triangle-inequality baseline and a faithful comparator for any future signed theorem.",
+      "lean_status": "✓ Complete joint L1 baseline, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bh / 5t-bh",
+      "session_marker": "9c.4v-bh",
+      "title": "Archimedean Absolute-Cost Stop Test",
+      "module": "NB12BBLSH15PostFEArchimedeanCostAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8601,
+      "key_results": [
+        "Computed the four-orientation norm cost exactly as (1+|sinh(pi t)|)^2",
+        "Computed the normalized nonzero-height pair gain as 2(1+|sinh(pi t)|)^2/|sinh(pi t)|",
+        "Proved that gain is at least 8 at every nonzero height",
+        "Isolated the totalized t=0 value separately"
+      ],
+      "significance": "The absolute method cannot yield a shrinking low-frequency gain. Genuine signed cancellation is quantitatively mandatory.",
+      "lean_status": "✓ Exact Archimedean formula and factor-eight lower bound, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bi / 5t-bi",
+      "session_marker": "9c.4v-bi",
+      "title": "Normalized Signed-Cancellation Ratio",
+      "module": "NB12BBLSH15PostFESignedCancellationRatio.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8602,
+      "key_results": [
+        "Defined one absolute envelope multiplying the complete joint coefficient mass",
+        "Proved the literal signed cancellation ratio lies between zero and one",
+        "Proved exact reconstruction |transform| = ratio * absolute baseline",
+        "Packaged ratio-times-envelope-times-mass decay",
+        "Proved that package constructs H15PostFEJointTransformDecayData"
+      ],
+      "significance": "The remaining analytic theorem is now normalized and correction-faithful: prove the signed ratio beats the exact nondecaying envelope and the literal joint mass.",
+      "lean_status": "✓ Complete normalized signed target and transfer theorem, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bj / 5t-bj",
+      "session_marker": "9c.4v-bj",
+      "title": "Correction-Preserving Frequency Gram",
+      "module": "NB12BBLSH15PostFEFrequencyGram.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8603,
+      "key_results": [
+        "Reassembled the complete transform as missing atoms plus four-orientation pair atoms",
+        "Defined missing, mixed, and pair Gram sectors",
+        "Proved energy = missing Gram + 2 mixed Gram + pair Gram exactly"
+      ],
+      "significance": "The retained correction now participates in one exact square instead of being bounded separately.",
+      "lean_status": "✓ Exact finite Gram identity, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bk / 5t-bk",
+      "session_marker": "9c.4v-bk",
+      "title": "Complete-Period Character Orthogonality",
+      "module": "NB12BBLSH15PostFEFrequencyOrthogonality.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8604,
+      "key_results": [
+        "Evaluated complete-period difference characters as equality collisions",
+        "Evaluated complete-period sum characters as additive-inverse collisions",
+        "Recorded collision symmetry and zero consequences"
+      ],
+      "significance": "The common-period square has exact finite collision conditions, with no analytic estimate yet used.",
+      "lean_status": "✓ Exact ZMod orthogonality, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bl / 5t-bl",
+      "session_marker": "9c.4v-bl",
+      "title": "Real/Imaginary Frequency Product Kernels",
+      "module": "NB12BBLSH15PostFEFrequencyProductKernels.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8605,
+      "key_results": [
+        "Proved pointwise product-to-character identities",
+        "Evaluated real-real and imaginary-imaginary complete-period kernels",
+        "Evaluated the mixed imaginary-real kernel with its signed collision orientation"
+      ],
+      "significance": "Every sector of the correction-preserving real square is reduced to explicit character collisions.",
+      "lean_status": "✓ Exact product kernels, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bm / 5t-bm",
+      "session_marker": "9c.4v-bm",
+      "title": "Common-Period Correction Collision Gram",
+      "module": "NB12BBLSH15PostFEFrequencyCollisionGram.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8606,
+      "key_results": [
+        "Defined an abstract common-period correction system",
+        "Expanded its full energy into missing, mixed, and pair collision sectors",
+        "Proved an explicit signed collision-indicator normal form"
+      ],
+      "significance": "This is the exact algebraic target for a later signed dispersion or spectral estimate.",
+      "lean_status": "✓ Complete collision Gram, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bn / 5t-bn",
+      "session_marker": "9c.4v-bn",
+      "title": "Literal H15 Frequency Lift",
+      "module": "NB12BBLSH15PostFEFrequencyLift.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8607,
+      "key_results": [
+        "Proved a character modulo q lifts unchanged to q*b after numerator scaling",
+        "Identified the literal pair base frequency modulo q*q'",
+        "Identified the reduced missing-residue frequency 2u modulo q"
+      ],
+      "significance": "Literal H15 phases can now enter the abstract common-period collision ledger without altering their values.",
+      "lean_status": "✓ Exact phase lift, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bo / 5t-bo",
+      "session_marker": "9c.4v-bo",
+      "title": "Reduced Missing-Residue Support",
+      "module": "NB12BBLSH15PostFEReducedMissingSupport.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8608,
+      "key_results": [
+        "Proved every non-coprime doubled missing phase is exactly zero",
+        "Filtered each missing fiber by coprimality without changing its character sum",
+        "Preserved the literal complete correction transform and exposed only genuine base frequencies"
+      ],
+      "significance": "Artificial zero atoms no longer obstruct a literal common-period frequency function.",
+      "lean_status": "✓ Exact support filter, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bp / 5t-bp",
+      "session_marker": "9c.4v-bp",
+      "title": "Reduced Ordered-Pair Support",
+      "module": "NB12BBLSH15PostFEReducedPairSupport.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8609,
+      "key_results": [
+        "Proved every non-coprime common pair phase is exactly zero",
+        "Filtered all four orientation populations without changing their sums",
+        "Preserved the complete correction transform on reduced missing and pair supports"
+      ],
+      "significance": "Every surviving pair now satisfies the literal base-frequency hypotheses.",
+      "lean_status": "✓ Exact pair-support filter, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bq / 5t-bq",
+      "session_marker": "9c.4v-bq",
+      "title": "Literal H15 Common Superperiod",
+      "module": "NB12BBLSH15PostFECommonSuperperiod.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8610,
+      "key_results": [
+        "Defined the product of all actual residue moduli and its square",
+        "Proved positivity and divisibility for every missing modulus and pair modulus q*q'",
+        "Proved exact additive-character lifting from any positive divisor modulus to the common period"
+      ],
+      "significance": "All literal denominators now live in one finite ambient cyclic group without phase distortion.",
+      "lean_status": "✓ Exact superperiod arithmetic, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-br / 5t-br",
+      "session_marker": "9c.4v-br",
+      "title": "Literal Lifted Frequency Functions",
+      "module": "NB12BBLSH15PostFELiteralLiftedFrequencies.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8611,
+      "key_results": ["Defined total lifted missing and oriented-pair frequencies", "Recovered every literal phase exactly on reduced support"],
+      "significance": "All surviving H15 phases are explicit characters in one cyclic group.",
+      "lean_status": "✓ Exact phase lift, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bs / 5t-bs",
+      "session_marker": "9c.4v-bs",
+      "title": "Literal Common-Period Value",
+      "module": "NB12BBLSH15PostFELiteralCommonPeriodValue.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8612,
+      "key_results": ["Expanded the pair support into four explicit orientation atoms", "Identified the literal correction transform pointwise with one common-period value"],
+      "significance": "The abstract collision system is instantiated with the actual H15 coefficients and phases.",
+      "lean_status": "✓ Literal value identity, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bt / 5t-bt",
+      "session_marker": "9c.4v-bt",
+      "title": "Literal Frozen-Row Collision Energy",
+      "module": "NB12BBLSH15PostFELiteralCollisionEnergy.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8613,
+      "key_results": ["Proved the frozen-row full-period energy equals explicit collision indicators", "Formalized the varying-row energy as a diagonal family evaluation"],
+      "significance": "The collision identity is exact, and the invalid unweighted-Parseval shortcut is explicitly excluded.",
+      "lean_status": "✓ Collision ledger and diagonal audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bu / 5t-bu",
+      "session_marker": "9c.4v-bu",
+      "title": "Coefficient Frequency Factorization",
+      "module": "NB12BBLSH15PostFECoefficientFrequencyFactorization.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8614,
+      "key_results": ["Factored one common frequency scalar from every Laurent row", "Factored its norm square from all collected pair and Laurent-diagonal coefficients"],
+      "significance": "The apparent arbitrary row dependence is reduced to one explicit scalar weight.",
+      "lean_status": "✓ Exact homogeneous factorization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bv / 5t-bv",
+      "session_marker": "9c.4v-bv",
+      "title": "Residue-Fiber Affine Factorization",
+      "module": "NB12BBLSH15PostFEResidueFrequencyFactorization.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8615,
+      "key_results": ["Split residue mismatches into endpoint and frequency-weighted Laurent parts", "Preserved the split under canonical fiber averaging"],
+      "significance": "The retained correction coefficient has exact affine, not arbitrary, row dependence.",
+      "lean_status": "✓ Exact affine fiber means, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bw / 5t-bw",
+      "session_marker": "9c.4v-bw",
+      "title": "Affine Signed Frequency Transform",
+      "module": "NB12BBLSH15PostFEAffineFrequencyTransform.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8616,
+      "key_results": ["Proved T(r)=T_endpoint(r)+lambda_r*T_Laurent+pair(r)", "Proved lambda_r=(d(r)/r^(3/2))^2 and is independent of t"],
+      "significance": "The next gate is a precise weighted collision estimate, not an unstructured varying-coefficient problem.",
+      "lean_status": "✓ Complete affine transform identity, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bx / 5t-bx",
+      "session_marker": "9c.4v-bx",
+      "title": "Weighted Affine Energy Sectors",
+      "module": "NB12BBLSH15PostFEWeightedAffineEnergy.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8617,
+      "key_results": ["Expanded the actual varying-row energy into endpoint, signed mixed, and weighted Laurent/pair sectors", "Proved the endpoint and weighted Laurent/pair square sectors are nonnegative", "Proved the signed mixed sector is exactly the correction needed between the full energy and both square sectors"],
+      "significance": "The final estimate must preserve signed mixed-sector cancellation; it cannot bound that sector independently by absolute values.",
+      "lean_status": "✓ Exact weighted energy decomposition, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-by / 5t-by",
+      "session_marker": "9c.4v-by",
+      "title": "Signed Correlation Defects",
+      "module": "NB12BBLSH15PostFESignedCorrelationDefects.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8618,
+      "key_results": ["Proved the sharp negative Cauchy boundary for the lambda-weighted mixed sector", "Decomposed the complete energy into norm-imbalance and antiparallel-alignment defects", "Proved both defects nonnegative and energy decay equivalent to simultaneous defect decay along arbitrary schedules"],
+      "significance": "The final analytic gate is no longer an opaque three-sector cancellation: it is exactly norm balance plus saturation of the negative Cauchy boundary.",
+      "lean_status": "✓ Exact sharp-defect and asymptotic-equivalence theorem, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-bz / 5t-bz",
+      "session_marker": "9c.4v-bz",
+      "title": "Literal Signed Mixed-Sector Expansion",
+      "module": "NB12BBLSH15PostFESignedMixedExpansion.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8619,
+      "key_results": ["Expanded the lambda-weighted mixed sector into the Laurent missing-residue trace and all four signed Estermann pair populations", "Proved the antiparallel defect is twice an explicit nonnegative alignment residual", "Proved antiparallel-defect decay equivalent to literal alignment-residual decay along arbitrary schedules"],
+      "significance": "The signed alignment gate is now expressed directly in the literal H15 atom populations with its archimedean normalization retained.",
+      "lean_status": "✓ Exact literal mixed-sector and residual identities, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ca / 5t-ca",
+      "session_marker": "9c.4v-ca",
+      "title": "Signed Mixed Atom Expansion",
+      "module": "NB12BBLSH15PostFESignedMixedAtoms.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8620,
+      "key_results": ["Reindexed endpoint times Laurent-missing into a double sum of literal missing-atom correlations", "Reindexed the normalized endpoint times four-orientation pair term into literal missing-pair atom correlations", "Expressed the complete nonnegative alignment residual as one exact finite atom ledger"],
+      "significance": "The next collision analysis acts on actual weighted H15 atoms; no transform abbreviation can hide a lost correction or normalization factor.",
+      "lean_status": "✓ Exact atom-level mixed-ledger identities, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cb / 5t-cb",
+      "session_marker": "9c.4v-cb",
+      "title": "Weighted Collision/Off-Diagonal Split",
+      "module": "NB12BBLSH15PostFEWeightedCollisionSplit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8621,
+      "key_results": ["Expanded every four-orientation pair atom before collision classification", "Partitioned both weighted atom ledgers by equal or opposite lifted frequencies", "Expressed the alignment residual as norm, collision, and retained off-diagonal sectors without invoking unweighted orthogonality"],
+      "significance": "The exact remaining cancellation is now divided into collision matching and genuinely weighted off-diagonal dispersion.",
+      "lean_status": "✓ Exact orientation-first weighted collision split, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cc / 5t-cc",
+      "session_marker": "9c.4v-cc",
+      "title": "Collision-Matching Audit",
+      "module": "NB12BBLSH15PostFECollisionMatchingAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8622,
+      "key_results": ["Defined the exact failure of the collision ledgers to reproduce the negative Cauchy boundary", "Separated the alignment residual into collision mismatch plus the retained signed weighted off-diagonal ledger", "Expressed the complete varying-row energy as norm imbalance plus twice the audited signed sum", "Proved decay of the three audited terms is sufficient for complete energy decay"],
+      "significance": "Collision matching is now an explicit arithmetic target rather than an unproved consequence of the equal/opposite-frequency partition.",
+      "lean_status": "✓ Exact collision-audit normal form and sufficient asymptotic theorem, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cd / 5t-cd",
+      "session_marker": "9c.4v-cd",
+      "title": "Collision Congruence Classification",
+      "module": "NB12BBLSH15PostFECollisionCongruenceClassification.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8623,
+      "key_results": ["Represented every total lifted missing and oriented-pair frequency by an explicit natural numerator", "Proved collision iff the numerators are congruent modulo the common period or their sum is divisible by it", "Split missing–missing collisions into diagonal, same-modulus alias, and cross-modulus sectors", "Split missing–pair collisions into endpoint incidence, same-modulus alias, and external cross-modulus sectors", "Substituted all six sectors into the exact collision-matching residual"],
+      "significance": "The next arithmetic analysis can work with ordinary congruences rather than opaque equalities in varying ZMod types.",
+      "lean_status": "✓ Exact congruence and six-sector classification, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ce / 5t-ce",
+      "session_marker": "9c.4v-ce",
+      "title": "Reduced-Support Numerator Evaluation",
+      "module": "NB12BBLSH15PostFEReducedSupportNumerators.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8624,
+      "key_results": ["Factored every denominator lift through the least common multiple and cancelled the common period factor exactly", "Evaluated the missing native numerator as 2u modulo q", "Evaluated every oriented-pair native numerator as -epsilon*u*q' + eta*v*q modulo qq'", "Specialized the native-lcm collision test to the actual reduced missing–missing and missing–pair supports"],
+      "significance": "The collision analysis no longer depends on the enormous product-square period; the remaining aliases and cross-modulus families are concrete Diophantine congruences at their minimal common modulus.",
+      "lean_status": "✓ Exact native-lcm numerator reduction, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cf / 5t-cf",
+      "session_marker": "9c.4v-cf",
+      "title": "Native Collision Diophantine Audit",
+      "module": "NB12BBLSH15PostFENativeCollisionDiophantineAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8625,
+      "key_results": ["Proved that multiplication by two introduces no same-modulus missing alias at odd modulus", "Proved that modulus 2k reduces equal doubled frequencies exactly to congruence modulo k", "Reduced the even opposite-frequency condition from modulus 2k to modulus k", "Instantiated both classifications on the actual reduced missing support and proved retained residues lie below their modulus"],
+      "significance": "The parity obstruction is now exact: odd-modulus equality is literal diagonal, while even half-modulus aliases are genuine and must remain in the signed ledger.",
+      "lean_status": "✓ Exact same-modulus parity/two-torsion classification, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cg / 5t-cg",
+      "session_marker": "9c.4v-cg",
+      "title": "Signed Missing–Pair Native Congruence Audit",
+      "module": "NB12BBLSH15PostFESignedMissingPairNativeCongruences.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8626,
+      "key_results": ["Collapsed the native lcm to qq' when a missing atom is the left or right endpoint of an oriented pair", "Expanded equal- and opposite-frequency collision conditions for all four sign orientations at both endpoints", "Instantiated the product-modulus reduction on the actual reduced H15 support", "Proved by the exact statements that endpoint incidence is only a routing condition and does not itself imply collision"],
+      "significance": "The complete endpoint-incidence sector is explicit. What remains arithmetically is the genuinely external cross-modulus missing–pair sector, followed by the signed analytic estimate.",
+      "lean_status": "✓ Exact eight-family endpoint congruence classification, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ch / 5t-ch",
+      "session_marker": "9c.4v-ch",
+      "title": "External Missing–Pair Congruence Shells",
+      "module": "NB12BBLSH15PostFEExternalMissingPairCongruenceShells.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8627,
+      "key_results": ["Evaluated lcm(p,qq')/p as qq'/gcd(p,qq')", "Evaluated lcm(p,qq')/(qq') as p/gcd(p,qq')", "Proved the two reduced lift multipliers are coprime", "Defined exact equal and opposite external collision shells and instantiated them on the actual reduced H15 support"],
+      "significance": "The external collision geometry is now minimal and canonical. The next question is quantitative signed shell mass, not further denominator normalization.",
+      "lean_status": "✓ Exact external shell normalization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ci / 5t-ci",
+      "session_marker": "9c.4v-ci",
+      "title": "External Shell Counting Stop Test",
+      "module": "NB12BBLSH15PostFEExternalShellCountingStopTest.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8628,
+      "key_results": ["Proved that either equal or opposite external shell forces pairMultiplier to divide the missing native residue and missingMultiplier to divide the signed pair native residue", "Counted admissible missing native residues below p exactly as (p-1)/pairMultiplier+1", "Retained the result as a necessary shell condition without converting signed coefficients to absolute values"],
+      "significance": "The external shell has an exact finite density factor. Whether that factor is uniformly useful is a separate arithmetic question.",
+      "lean_status": "✓ Exact shell divisibility and cardinality, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cj / 5t-cj",
+      "session_marker": "9c.4v-cj",
+      "title": "External Shell Density Degeneracy",
+      "module": "NB12BBLSH15PostFEExternalShellDensityDegeneracy.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8629,
+      "key_results": ["Proved pairMultiplier=1 iff p divides qq'", "Proved that the admissible missing native support is then the full range below p", "Exhibited the external triple (p,q,q')=(6,2,3) with full support", "Disproved any uniform lower bound pairMultiplier>=2 based only on external incidence"],
+      "significance": "Congruence density alone cannot close H15. The next test must use the actual support and signed Möbius/log-taper weights, especially on the p|qq' sector.",
+      "lean_status": "✓ Sharp no-uniform-density-saving stop theorem, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ck / 5t-ck",
+      "session_marker": "9c.4v-ck",
+      "title": "Actual-Support Degenerate External Sector Split",
+      "module": "NB12BBLSH15PostFEActualSupportDegenerateSector.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8630,
+      "key_results": ["Defined the p|qq' degeneracy predicate on genuine missing-atom/oriented-pair indices", "Proved on actual pair support that degeneracy is equivalent to external pair multiplier one", "Defined signed degenerate and favorable cross-modulus collision ledgers with all original coefficients retained", "Proved their exact sum is the original cross-modulus collision ledger"],
+      "significance": "The no-saving sector is no longer a generic warning: it is an exact component of the genuine H15 signed ledger. Its arithmetic mass is the next stop test.",
+      "lean_status": "✓ Exact actual-ledger partition, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cl / 5t-cl",
+      "session_marker": "9c.4v-cl",
+      "title": "Degenerate Quotient Dyadic Reindexing",
+      "module": "NB12BBLSH15PostFEDegenerateQuotientReindex.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8631,
+      "key_results": ["Proved actual missing and pair moduli all lie in the supported block [Q,2Q)", "Defined k=qq'/p and proved qq'=pk on p|qq'", "Proved Q<2k and k<4Q on actual degenerate support"],
+      "significance": "The divisibility reindexing does not eliminate a dyadic dimension: it replaces p by another Q-scale variable k.",
+      "lean_status": "✓ Exact quotient identity and scale bounds, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cm / 5t-cm",
+      "session_marker": "9c.4v-cm",
+      "title": "Signed Degenerate Quotient-Fiber Ledger",
+      "module": "NB12BBLSH15PostFEDegenerateQuotientLedger.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8632,
+      "key_results": ["Defined the genuine degenerate cross-modulus collision support", "Collected it exactly by k=qq'/p", "Retained the complete signed endpoint-oriented-pair correlation in every fiber", "Proved every quotient in support satisfies Q<2k and k<4Q"],
+      "significance": "The irreducible degenerate-sector target is now an exact quotient-indexed signed dispersion sum; no absolute value or correction separation has been introduced.",
+      "lean_status": "✓ Exact signed quotient collection, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cn / 5t-cn",
+      "session_marker": "9c.4v-cn",
+      "title": "Coefficient-Aware Frequency-First Quotient Dispersion",
+      "module": "NB12BBLSH15PostFEDegenerateQuotientFrequency.lean",
+      "date_completed": "2026-08-04",
+      "jobs": 8633,
+      "key_results": ["Expanded each quotient fiber to literal endpoint and oriented-pair coefficients and phases", "Pulled out the exact divisor-frequency norm square", "Proved the degenerate ledger equals sum_r |lambda_r|^2 D(r)", "Defined and proved a sufficient frequency-L1 budget without taking absolute values inside D(r)"],
+      "significance": "The next external analytic estimate can now be tested against a literal signed exponential-sum expression rather than opaque atom notation.",
+      "lean_status": "✓ Exact frequency-first normal form, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-co / 5t-co",
+      "session_marker": "9c.4v-co",
+      "title": "External Estimate Matching Audit",
+      "module": "NB12BBLSH15PostFEDegenerateEstimateMatchingAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8634,
+      "key_results": ["Recorded failure of literal inverse-phase Bettin-Chandee compatibility", "Recorded fixed-frequency comparison exponents 9/10 and 4", "Combined the exponent obstruction with the O(Q) quotient-support bound"],
+      "significance": "Immediate separated exponential-sum estimates do not close the exact correction-coupled quotient dispersion. The next finite target is collision-shell phase compression, not another denominator lift.",
+      "lean_status": "✓ Exact estimate-matching stop test, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cp / 5t-cp",
+      "session_marker": "9c.4v-cp",
+      "title": "Equal/Opposite Collision Phase Compression",
+      "module": "NB12BBLSH15PostFEDegenerateCollisionPhaseCompression.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8635,
+      "key_results": ["Proved a colliding pair character equals the missing character or its conjugate", "Proved exact imaginary-real product identities with a constant diagonal and doubled frequency", "Instantiated the identities on genuine actual-superperiod H15 support"],
+      "significance": "The degenerate phase is not irreducibly bilinear: collision support lowers it exactly to a signed diagonal plus a second harmonic.",
+      "lean_status": "✓ Exact collision phase compression, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cq / 5t-cq",
+      "session_marker": "9c.4v-cq",
+      "title": "Complete Collision Harmonic Ledger",
+      "module": "NB12BBLSH15PostFEDegenerateCollisionHarmonicLedger.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8636,
+      "key_results": ["Defined exact collision diagonal and second-harmonic atoms with every H15 coefficient retained", "Lifted the pointwise identity through each quotient fiber", "Proved D(r)=D_diag+D_2r for the complete degenerate quotient dispersion"],
+      "significance": "The remaining low-sector analytic target is now an explicit second harmonic together with an exact diagonal-correction comparison, not the original joint direct-phase product.",
+      "lean_status": "✓ Exact diagonal-plus-harmonic quotient ledger, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cr / 5t-cr",
+      "session_marker": "9c.4v-cr",
+      "title": "Outer-Frequency Degenerate Diagonal Extraction",
+      "module": "NB12BBLSH15PostFEDegenerateCollisionDiagonalExtraction.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8637,
+      "key_results": ["Defined the exact outer frequency mass", "Pulled the frequency-independent degenerate diagonal through the full outer sum", "Retained the complete signed weighted second harmonic", "Proved nonnegativity of the frequency mass"],
+      "significance": "The diagonal is explicit, but it is only one cross-modulus degenerate subsector and is not identified with the global correction.",
+      "lean_status": "✓ Exact outer-frequency extraction, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cs / 5t-cs",
+      "session_marker": "9c.4v-cs",
+      "title": "Complete Collision-Sector Diagonal Reassembly",
+      "module": "NB12BBLSH15PostFECollisionFourSectorDiagonalReassembly.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8638,
+      "key_results": ["Reassembled the missing--pair collision ledger into incident, alias, extracted degenerate diagonal, degenerate second harmonic, and favorable sectors", "Substituted the five-term identity into the full collision-matching residual", "Retained all three missing--missing sectors and the Cauchy norm product"],
+      "significance": "Correction matching can now be audited at the correct global level; a degenerate subsector is no longer at risk of being mistaken for the whole retained correction.",
+      "lean_status": "✓ Exact five-term collision reassembly, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-ct / 5t-ct",
+      "session_marker": "9c.4v-ct",
+      "title": "Complete Collision-Matching Gap Normalization",
+      "module": "NB12BBLSH15PostFECompleteCollisionGap.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8639,
+      "key_results": ["Defined the complete static collision gap", "Separated the complete signed oscillatory alignment ledger", "Proved the exact energy normal form and a sequence-level closure theorem"],
+      "significance": "The smallest honest full collision gap is explicit; no degenerate subsector is substituted for the retained correction.",
+      "lean_status": "✓ Exact gap normalization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cu / 5t-cu",
+      "session_marker": "9c.4v-cu",
+      "title": "Complete Diagonal Balance",
+      "module": "NB12BBLSH15PostFECompleteDiagonalBalance.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8640,
+      "key_results": ["Isolated the correctly normalized extracted-degenerate minus four-times-missing diagonal gap", "Separated the remaining static non-diagonal collision gap", "Characterized exact diagonal matching by a zero iff theorem"],
+      "significance": "Any diagonal cancellation claim must satisfy the explicit factor-four normalization.",
+      "lean_status": "✓ Exact diagonal normalization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cv / 5t-cv",
+      "session_marker": "9c.4v-cv",
+      "title": "Frequency-First Diagonal Audit",
+      "module": "NB12BBLSH15PostFEDiagonalFrequencyAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8641,
+      "key_results": ["Collapsed the filtered missing--missing diagonal to its actual support sum", "Reindexed it frequency-first", "Expressed the complete diagonal gap as a signed frequency average"],
+      "significance": "Diagonal matching is a coefficient-weighted frequency problem, not an automatic Parseval identity.",
+      "lean_status": "✓ Exact frequency-first audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cw / 5t-cw",
+      "session_marker": "9c.4v-cw",
+      "title": "Missing-Diagonal Phase Compression",
+      "module": "NB12BBLSH15PostFEMissingDiagonalPhaseCompression.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8642,
+      "key_results": ["Applied the exact unit-phase identity (Im z)^2=(1-Re z^2)/2", "Split every missing diagonal frequency fiber into constant and doubled-frequency modes", "Reduced the complete diagonal gap to weighted constant balance minus a signed second harmonic"],
+      "significance": "The non-oscillatory diagonal question is now one explicit constant-mode coefficient comparison.",
+      "lean_status": "✓ Exact phase compression, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cx / 5t-cx",
+      "session_marker": "9c.4v-cx",
+      "title": "Complete Constant/Static/Harmonic Normal Form",
+      "module": "NB12BBLSH15PostFECompleteHarmonicNormalForm.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8643,
+      "key_results": ["Assembled the full alignment residual from weighted constant balance, static non-diagonal gap, and one combined harmonic ledger", "Derived the corresponding exact energy identity", "Proved a sequence-level closure theorem from decay of the four exposed components"],
+      "significance": "The finite architecture is complete enough to audit the constant coefficient identity before attempting analytic decay.",
+      "lean_status": "✓ Exact complete normal form, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cy / 5t-cy",
+      "session_marker": "9c.4v-cy",
+      "title": "Constant-Mode Coefficient Audit",
+      "module": "NB12BBLSH15PostFEConstantModeCoefficientAudit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8644,
+      "key_results": ["Removed quotient collection from the degenerate diagonal", "Recovered its exact genuine-support coefficient sum", "Proved constant matching iff the factor-four direct finite coefficient identity"],
+      "significance": "Constant matching is not automatic finite algebra; it is now an explicit equality between different genuine supports.",
+      "lean_status": "✓ Exact coefficient audit, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-cz / 5t-cz",
+      "session_marker": "9c.4v-cz",
+      "title": "Equal/Opposite Constant-Mode Orientation Split",
+      "module": "NB12BBLSH15PostFEConstantModeOrientationSplit.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8645,
+      "key_results": ["Partitioned genuine degenerate collisions by equality versus opposition of lifted frequencies", "Removed phase notation from each diagonal atom", "Expressed the degenerate diagonal as opposite mass minus equal mass"],
+      "significance": "The constant diagonal is intrinsically signed; positivity and raw cardinality cannot supply matching.",
+      "lean_status": "✓ Exact orientation ledger, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-da / 5t-da",
+      "session_marker": "9c.4v-da",
+      "title": "Missing-Fiber Constant-Mode Mismatch",
+      "module": "NB12BBLSH15PostFEConstantModeFiberMismatch.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8646,
+      "key_results": ["Collected the degenerate diagonal by its missing atom", "Proved the collision projection lies inside the full missing support", "Extended the fibers by zero", "Expressed the constant gap as the sum of local factor-four coefficient mismatches"],
+      "significance": "The next diagnostic is local and exact: factor each fiber mismatch into the endpoint mean times a pair-versus-Laurent defect.",
+      "lean_status": "✓ Exact missing-fiber localization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-db / 5t-db",
+      "session_marker": "9c.4v-db",
+      "title": "Local Pair-versus-Laurent Coefficient Factorization",
+      "module": "NB12BBLSH15PostFEConstantModeLocalFactorization.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8647,
+      "key_results": ["Factored the endpoint mean from every collision diagonal atom", "Collected the remaining pair coefficient at fixed missing atom", "Proved each local mismatch equals endpoint mean times pair mass minus twice Laurent mean"],
+      "significance": "Any exact correction identity must act on one explicit inner coefficient defect; no such identity is assumed.",
+      "lean_status": "✓ Exact local factorization, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-dc / 5t-dc",
+      "session_marker": "9c.4v-dc",
+      "title": "Modulus Collection of Constant-Mode Defects",
+      "module": "NB12BBLSH15PostFEConstantModeModulusCollection.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8648,
+      "key_results": ["Collected residue-dependent defects by missing modulus before absolute values", "Retained the common endpoint mean outside each signed modulus fiber", "Proved the exact zero iff modulus-ledger identity", "Showed same-modulus defect differences equal pair-fiber differences"],
+      "significance": "The constant-mode problem is now a minimal one-dimensional signed modulus ledger; distinct-row pair mass is not identified with the Laurent diagonal.",
+      "lean_status": "✓ Exact modulus collection, 0 custom axioms, KERNEL-VERIFIED"
+    },
+    {
+      "step": "4v-dd / 5t-dd",
+      "session_marker": "9c.4v-dd",
+      "title": "Sharp Constant-Mode Modulus Budget",
+      "module": "NB12BBLSH15PostFEConstantModeModulusBudget.lean",
+      "date_completed": "2026-08-03",
+      "jobs": 8649,
+      "key_results": ["Defined the nonnegative outer modulus budget with inner residue sums still signed", "Proved it bounds both the constant balance and its frequency-weighted form", "Packaged the moving-parameter budget-decay input", "Connected that input directly to the complete varying-row energy closure theorem"],
+      "significance": "All finite constant-mode processing is complete. The next step is a genuine signed estimate for the inner modulus fibers, not another reindexing.",
+      "lean_status": "✓ Exact budget and conditional closure interface, 0 custom axioms, KERNEL-VERIFIED"
+    }
+  ],
+
+  "next_step": {
+    "step": "4v-de / 5t-de",
+    "session_marker": "9c.4v-de",
+    "title": "Signed Inner Modulus-Fiber Estimate",
+    "target_paper": "Bettin-Conrey/Estermann or arithmetic dispersion estimate for the pair-versus-Laurent defect",
+    "objective": "Prove decay of the actual endpoint-weighted modulus budget without taking termwise absolute values inside each residue fiber",
+    "procedure": [
+      "1. Expand each modulus fiber into its equal/opposite collision-shell coefficients and Laurent diagonal mean",
+      "2. Test reciprocity or residue identities at the complete fiber level",
+      "3. If exact matching fails, dyadically estimate the signed pair-versus-Laurent defect",
+      "4. Sum only the outer endpoint-weighted modulus absolute values",
+      "5. Instantiate H15PostFEConstantModeModulusDecayData"
+    ],
+    "expected_outcomes": {
+      "success": "The weighted constant balance tends to zero unconditionally and one of the four complete energy gates closes",
+      "contingency": "Document the precise exponent or structural obstruction and retain the signed modulus ledger itself as the analytic gate"
+    },
+    "estimated_effort": "Genuine signed analytic-number-theory estimate",
+    "success_probability": "Genuinely open; no unconditional decay theorem has yet been supplied"
+  },
+
+  "architecture_map": {
+    "sessions_1_to_8": {
+      "reduction": "Nyman-Beurling → RH (H1-H12)",
+      "status": "✓ Proved unconditionally (kernel-verified, 0 custom axioms)",
+      "jobs": 8512
+    },
+    "session_9a": {
+      "target": "Estermann dual collapse",
+      "status": "✓ Proved (8,513 jobs)",
+      "role": "Prepares the regulator machinery for contour analysis"
+    },
+    "session_9b": {
+      "target": "Archimedean kernel analysis + polynomial growth bounds + reflected-contour discovery",
+      "status": "✓ Proved (8,516 jobs)",
+      "critical_discovery": "Triple-pole structure at s=0; factor δ/s raises pole from double to triple"
+    },
+    "session_9c_steps_1_to_4a": {
+      "target": "H15 conditional reduction via signed L¹-tightness",
+      "status": "✓ CONDITIONAL INTERFACE COMPLETE (8,543 jobs)",
+      "gate_1": "Triple-pole structure explicit ✓",
+      "gate_2": "Pole-subtracted rectangle identity ✓",
+      "gate_3": "Constructive one-pole removal ✓",
+      "gate_4": "H15 specialization + critical equivalence ✓",
+      "gate_5": "Right-line vertical majorant audit ✓",
+      "gate_6": "Absolute-majorant failure diagnostic ✓",
+      "gate_7": "Signed L¹-tightness package and conditional implications ✓; estimate open",
+      "gate_8": "Bettin-Chandee exponent test ✓; passes only for R>N^(3/4+eta)",
+      "gate_9": "Correction-preserving frequency split ✓",
+      "gate_10": "High-frequency sum-integral exchange ✓",
+      "gate_11": "Exact dyadic coefficient ledger and full phase-factor audit ✓",
+      "gate_12": "Quantitative divisor-square dyadic input with constant 2 ✓",
+      "gate_13": "Frequency-only absolute ultra-high dyadic tail ✓",
+      "gate_14": "Uniform actual-remainder domination and adaptive cofinal decay ✓",
+      "gate_15": "Explicit arithmetic-mass polynomial ledger ✓",
+      "gate_16": "Explicit shifted-tail rate and polynomial ultra-high cutoff ✓",
+      "gate_17": "Exact finite middle-window isolation and correction-preserving three-sector assembly ✓",
+      "gate_18": "Exact Bettin-Chandee instantiation stop test: H15 dual phase is direct e(±ru/q), not inverse e(±rū/q) ✓",
+      "gate_19": "Exact fixed-height direct-additive separation, unitary twist budgets, and elementary large-sieve quadratic-threshold stop test ✓",
+      "gate_20": "Exact paired-kernel norm square and complete unweighted reduced-residue cancellation ✓",
+      "gate_21": "Exact q-period completion, at-most-2q boundary support, and 2q/U^2 endpoint estimate ✓",
+      "gate_22": "Exact smooth/squarefree split and balanced absolute exponent-zero stop test ✓",
+      "gate_23": "Exact Möbius square-divisor expansion, signed progression-row reindexing, and second balanced exponent-zero stop test ✓",
+      "gate_24": "Exact gcd normalization, inactive-row pruning, and normalized/gcd-stratified aggregate equality ✓",
+      "gate_25": "Exact Lq-superperiod bijection, cancellation, weighted completion, and 2Lq/U^2 endpoint ledger ✓",
+      "gate_26": "Exact active-L fiber reindexing and multiplicity <=tau(g); elementary absolute boundary exponent +2 ✓",
+      "gate_27": "Progression-density boundary refinement: card <=2(q+1), absolute q-block <=8*tau(g)*Q, balanced exponent +1 ✓",
+      "gate_28": "Exact active-incidence extension by zero from moving periodwise sets to the dyadic union ✓",
+      "gate_29": "Exact signed k,d active-incidence transpose in the full normalized aggregate ✓",
+      "gate_30": "Exact correction-preserving variation-plus-boundary assembly in the full normalized aggregate ✓",
+      "gate_31": "Exact correction-preserving Fourier folding, doubled-frequency alias ledger, and odd-modulus Parseval ✓",
+      "gate_32": "Two-endpoint fiber cardinality <=2, coefficient L2 bound, explicit odd-q mean square, and fixed-frequency exponent stop test ✓",
+      "gate_33": "Uniform even-q two-torsion alias cost and exact cross-modulus frequency-energy normalization ✓",
+      "gate_34": "Exact cross-modulus energy majorant, trivial Delta coefficient, and balanced exponent deficit ✓",
+      "gate_35": "Exact row and modulus-block diagonal/off-diagonal decompositions; automatic correction subtraction ruled out ✓",
+      "gate_36": "Literal ordered distinct-modulus correlation and equivalent Delta gate ✓",
+      "gate_37": "Exact terminal-Abel/incomplete-smooth four-sector expansion and TT+2TS+SS reduction ✓",
+      "gate_38": "Sectorwise absolute stop test and exact coupled TT+2TS+SS endpoint gate ✓",
+      "gate_39": "Exact endpoint-pair product-to-sum expansion into difference- and sum-frequency populations ✓",
+      "gate_40": "Exact collision/separated split and equivalence to a separated-phase estimate coupled to the diagonal-plus-collision defect ✓",
+      "gate_41": "Exact common-modulus congruence characterization of difference and sum collisions ✓",
+      "gate_42": "Exact least-cyclic-residue and tunable signed near/far spacing partition ✓",
+      "gate_43": "Elementary spacing-cardinality stop test: H=0 consistent, but positive H gives no saving over 2(q+1) ✓",
+      "gate_44": "Exact signed congruence-shell decomposition into fewer than 4Q² cyclic-residue shells, equivalent to the original dispersion gate ✓",
+      "gate_45": "Minimal absolute shell-majorant stop test: every pointwise absolute majorant is no better than the canonical absolute signed-shell budget coupled to the collision defect ✓",
+      "gate_46": "Exact signed arithmetic shell blocks: blockwise absolute budgets preserve within-window cancellation and dominate the full dispersion gate when coupled to the collision defect ✓",
+      "gate_47": "Block-budget sandwich, exact one-block endpoint, and uniform moving-parameter package with the correct Delta_N*energy_N→0 scale ✓",
+      "gate_48": "Direct interval-block translation: quotient shells are exact cyclic-distance windows on the original signed weighted endpoint pairs ✓",
+      "gate_49": "Exact endpoint scale identity: squared Fourier boundary equals collision defect plus separated ledger, so direct S_N→0 replaces energy-normalized Delta_N*E_N→0 ✓",
+      "gate_50": "Published-tool stop test: direct/inverse phase mismatch is witnessed modulo 5 and both available fixed-frequency exponents are nonnegative ✓",
+      "gate_51": "Generic finite inverse-coordinate completion with exact Ramanujan zero-mode/nonzero Kloosterman split ✓",
+      "gate_52": "Literal H15 interval-row completion with exact endpoint-mass zero coefficient ✓",
+      "gate_53": "Aggregate completed-mode identity: collision defect and Ramanujan zero modes are distinct coupled ledgers ✓",
+      "gate_54": "Exact inverse-coordinate Parseval and nonzero-frequency mean-removal identity for literal interval coefficients ✓",
+      "gate_55": "Sharp interval-filtered two-point fiber bound and explicit coefficient energy <=4q'(q'+1)U^-4 ✓",
+      "gate_56": "Exact Kloosterman mean square q'phi(q') and normalized Cauchy-Schwarz stop test: no modulus power saving ✓",
+      "gate_57": "Exact completed outer-modulus square: positive nonzero diagonal plus literal ordered signed cross-modulus sector ✓",
+      "gate_58": "Minimal linear trace expression C_completed+Re(K_signed) equals the boundary square; old separate-ledger scale implies the new coupled gate ✓",
+      "gate_59": "Active compatibility: the linear trace scale gives the genuine row-to-pointwise residual bound with the two Abel-prefix costs ✓",
+      "gate_60": "Moving trace assembly: decay of 2tau(g)P1+4tau(g)P2+sqrt(S) implies decay of the genuine active residual ✓",
+      "gate_61": "Localized Laurent projection: exact fixed-g/dyadic-q coefficient support and full contour = localized + complementary row ledger ✓",
+      "gate_62": "Localized functional equation: exact low/high split, finite transformed-frequency slices, direct-additive realization, and complementary-row ledger ✓",
+      "gate_63": "Quadratic endpoint projection: centered paired-kernel norm square recovers the exact cross mode and the complete U/divisor-incidence weighted boundary aggregate ✓",
+      "gate_64": "Localized quadratic lifting: exact Laurent diagonal/ordered-cross-row expansion and named endpoint projection defect ✓",
+      "gate_65": "Doubly localized orientation audit: exact (g,U,Q) support, orientation partition, post-functional-equation scale swap, involutive transpose, and generic finite-sum reindexing ✓",
+      "gate_66": "Literal transpose invariance: validity, Laurent weight, reduced row, post-FE variables, and fixed-height direct-additive summand are invariant ✓",
+      "gate_67": "Raw-block orientation identity: F(U,Q)+F(Q,U), retained only as a raw localization diagnostic ✓",
+      "gate_68": "Correct post-FE endpoint alignment: orientation zero (U,Q) plus orientation one (Q,U) equals 2F(U,Q); centered lift defect equals incidence mismatch minus ordered cross-row dispersion ✓",
+      "gate_69": "Common-key collection: endpoint-incidence and Laurent diagonal coefficients are collected exactly by the same arithmetic key (u,q) ✓",
+      "gate_70": "Union-support assembly: exact zero-extension and one literal coefficient-mismatch sum minus ordered cross-row dispersion ✓",
+      "gate_71": "Ramanujan residue collection: canonical coefficient means, complete cross-mode mean cancellation, and exact mean-weighted negative missing-residue trace ✓",
+      "gate_72": "Ordered cross-row residue alignment: actual–actual pair support is disjoint from missing-residue support, ruling out termwise boundary cancellation ✓",
+      "gate_73": "Global phase normalization: exact complex scalar/kernel collection, four signed orientation populations, and retained missing-residue trace in one boundary-transfer expression ✓",
+      "gate_74": "Common additive-character normalization: each ordered pair is one character modulo q*q', and the missing trace is a doubled character modulo q ✓",
+      "gate_75": "Post-collection bilinear exponent audit: qq'~Q^2, L1 collection control, Bettin-Chandee phase mismatch, and direct-additive threshold kappa>2 ✓",
+      "gate_76": "Joint transform interface: arbitrary pair coefficients, four populations, doubled missing trace, joint L1 mass, and centered-defect implication ✓",
+      "gate_77": "Exact missing/pair atom reassembly and correction-preserving frequency Gram ✓",
+      "gate_78": "Complete-period difference/sum character orthogonality ✓",
+      "gate_79": "Exact real-real, imaginary-imaginary, and mixed character product kernels ✓",
+      "gate_80": "Abstract common-period correction energy equals an explicit signed collision Gram ✓",
+      "gate_81": "Literal H15 pair and missing phases have exact base-frequency denominator lifts ✓",
+      "gate_82": "Non-coprime missing atoms filter out with exact transform invariance ✓",
+      "gate_83": "Non-coprime ordered-pair atoms filter out in all four populations with exact transform invariance ✓",
+      "gate_84": "Positive product-square common period, denominator divisibility, and divisor-modulus character lift ✓",
+      "gate_85": "Total literal missing and four-orientation frequency lifts ✓",
+      "gate_86": "Pointwise literal common-period correction value ✓",
+      "gate_87": "Frozen-row collision ledger and varying-row diagonal distinction ✓",
+      "gate_88": "Common frequency norm-square factor in pair and Laurent coefficients ✓",
+      "gate_89": "Affine residue mismatch and fiber-mean factorization ✓",
+      "gate_90": "Complete T_endpoint+lambda*T_Laurent+pair transform identity with lambda=(d(r)/r^(3/2))^2 ✓",
+      "gate_91": "Actual energy equals endpoint square + twice signed weighted mixed + weighted Laurent/pair square ✓",
+      "gate_92": "Sharp Cauchy stop test: energy equals norm-imbalance plus antiparallel-alignment defects, and energy decay iff both defects decay ✓",
+      "gate_93": "Literal antiparallel alignment residual: mixed sector split into missing trace and all four signed pair populations ✓",
+      "gate_94": "Both signed mixed ledgers expanded into exact lambda-weighted literal atom correlations ✓",
+      "gate_95": "Orientation-first weighted collision/off-diagonal partition with no false orthogonality ✓",
+      "gate_96": "Exact collision-matching residual and signed off-diagonal ledger isolated; full energy normal form proved ✓",
+      "gate_97": "Lifted collisions rewritten as natural congruence/divisibility and partitioned into six arithmetic sectors ✓",
+      "gate_98": "Common-period factors cancelled and actual-support collision numerators reduced to native-lcm arithmetic ✓",
+      "gate_99": "Same-modulus missing parity/two-torsion alternatives classified exactly ✓",
+      "gate_100": "All eight signed left/right endpoint missing-pair congruence alternatives and actual-support product-modulus bridges proved exactly ✓",
+      "gate_101": "External missing-pair collisions normalized as equal/opposite lcm shells with coprime gcd-reduced lift multipliers ✓",
+      "gate_102": "External shell divisibility and exact admissible missing-residue count proved ✓",
+      "gate_103": "Uniform shell-density saving disproved at the incidence-only level; multiplier-one degeneracy is exactly p|qq' ✓",
+      "gate_104": "Actual signed cross-modulus collision ledger split exactly into p|qq' and p∤qq' sectors ✓",
+      "gate_105": "Degenerate sector reindexed exactly by qq'=pk; k remains in the Q-scale window Q<2k and k<4Q ✓",
+      "gate_106": "Complete signed degenerate ledger collected by quotient fibers with all original correlations retained ✓",
+      "gate_107": "Literal coefficient-and-phase form and exact frequency-first sum_r |lambda_r|^2 D(r) proved ✓",
+      "gate_108": "Degenerate collision ledger split exactly into extracted outer-frequency diagonal plus signed weighted second harmonic ✓",
+      "gate_109": "Complete missing--pair collision ledger reassembled into incident, alias, extracted diagonal, second harmonic, and favorable sectors and substituted into collision matching ✓",
+      "gate_110": "Complete collision gap normalized into static and oscillatory components with exact energy closure interface ✓",
+      "gate_111": "Correct factor-four diagonal balance isolated from all static non-diagonal collision sectors ✓",
+      "gate_112": "Missing diagonal collapsed to actual support and reindexed as a signed frequency average ✓",
+      "gate_113": "Missing diagonal split exactly into constant and doubled-frequency modes ✓",
+      "gate_114": "Complete energy assembled into norm imbalance, weighted constant balance, static non-diagonal gap, and combined harmonic ledger ✓",
+      "gate_115": "Degenerate diagonal decollected to its genuine support and factor-four constant matching identity isolated ✓",
+      "gate_116": "Equal/opposite lifted-frequency collisions split the degenerate diagonal into an exact signed coefficient ledger ✓",
+      "gate_117": "Constant balance localized as a sum of missing-fiber collision-versus-Laurent mismatches ✓",
+      "gate_118": "Each local mismatch factored as endpoint mean times an explicit pair-mass-minus-twice-Laurent defect ✓",
+      "gate_119": "Residue defects collected by modulus before absolute values, yielding the minimal one-dimensional constant ledger ✓",
+      "gate_120": "Sharp outer modulus budget and moving-parameter constant-mode decay interface proved ✓",
+      "gate_121_FINAL": "Prove decay of the inner signed modulus defects and every surviving static/harmonic analytic component (open)"
+    }
+  },
+
+  "key_insights": {
+    "architectural_lesson_1": "Absolute convergence fails due to q² loss in the majorant. Signed cancellation at the integral level is the correct mathematics.",
+    "architectural_lesson_2": "The correction ledger travels separately from the analytic remainder. This separation allows clean tracking of what must vanish for H15.",
+    "architectural_lesson_3": "The s=1 residue vanishes automatically if the finite part does. The right edge (Re(s)>1) needs absolute control. The critical line (Re(s)=1/2) is subject to Bettin-Chandee signed cancellation.",
+    "frontier_boundary": "The constant-mode comparison has a verified post-collection budget and conditional energy interface. The next target is genuine signed decay of its inner modulus defects; the static and harmonic ledgers remain independent analytic gates.",
+    "honesty_statement": "This is NOT a proof of RH. This is a CONDITIONAL REDUCTION of RH to an explicit frontier problem (H15: signed bilinear dispersion decay). The boundary is transparent and verifiable."
+  },
+
+  "verification_summary": {
+    "total_jobs": 8649,
+    "custom_axioms": 0,
+    "sorry_statements": 0,
+    "isolated_axioms": 0,
+    "kernel_verified": true,
+    "literature_grounded": "Primary-source interfaces are distinguished from newly proved finite algebraic reductions; no literature theorem is claimed to supply the open signed decay",
+    "audit_trail": "Complete through the sharp constant-mode modulus budget and conditional energy closure interface on the verified 8,649-job build"
+  },
+
+  "bibliography_for_session_9c": {
+    "classical_architecture": [
+      "Estermann, Theodor (1921). Über die Darstellung der Zahlen als Summen und Produkte",
+      "Hurwitz, Adolf (1882). Zur analytischen Zahlentheorie",
+      "Nyman, Bertil (1950). On some groups and semi-groups of numbers",
+      "Beurling, Arne (1955). A closure problem relating to the Riemann zeta-function"
+    ],
+    "bilinear_reduction": [
+      "Báez-Duarte, Luis; Bilu, Yuri; Luca, Florian & Sondow, Jonathan (2008-2015). BBLS divisor expansion",
+      "Vasyunin, Vasily (2014). On a weighted inequality of Widom type"
+    ],
+    "frontier_machinery": [
+      "Bettin, Sandro & Chandee, Vorrapan (2015). Trilinear forms with Kloosterman fractions (arXiv:1502.00769)",
+      "Connes, Alain (2017-2020). Riemann, the Adelic Trace Formula and the Selberg Trace Formula"
+    ]
+  }
+}
