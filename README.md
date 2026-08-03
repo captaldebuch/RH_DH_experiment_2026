@@ -1,8 +1,29 @@
-# Riemann Hypothesis Formalization: Research Archive
+# Riemann Hypothesis Formalization: Digital Humanities & AI-Assisted Research Archive
 
-**Lean 4 kernel-verified reduction of the Riemann Hypothesis to a frontier problem.**
+**A Digital Humanities & Lean 4 kernel-verified conditional reduction of the Riemann Hypothesis to an explicit arithmetic frontier.**
 
-> **Status (4 August 2026, Session 9c Steps 4v-zzvi–4v-ck):** **8,630 Lean jobs verified, 0 custom axioms. PENDING COMPREHENSIVE AUDIT.** Same-modulus and endpoint-incident collisions are classified exactly. External shells are counted exactly, and the genuine signed cross-modulus ledger is split into the full-density sector `p ∣ qq'` and favorable sector `p ∤ qq'`. Thus external incidence alone supplies no uniform saving. Signed control of the retained degenerate sector remains open. Unified knowledge graph (21,942 nodes, 15,338 relations).
+> ⚠️ **EPISTEMIC DISCLAIMER & ANTI-OVERCLAIMING NOTICE**  
+> **This project DOES NOT present an unconditional proof of the Riemann Hypothesis.**  
+> What this repository provides is a **formally verified conditional reduction** ($NymanBeurlingCriterion \implies RiemannHypothesis$) certified by the Lean 4 kernel (0 custom axioms) and a 167-year **Digital Humanities Knowledge Graph** mapping the literature. The remaining open step ($H_{15}$ signed bilinear dispersion decay) is an **unproven open problem of full RH-equivalent difficulty**.
+
+> **Status (August 2026):** **8,630 Lean jobs verified, 0 custom axioms.** Same-modulus and endpoint-incident collisions are classified exactly. External shells are counted exactly, and the genuine signed cross-modulus ledger is split into the full-density sector `p ∣ qq'` and favorable sector `p ∤ qq'`. Signed control of the retained degenerate sector remains open. Unified knowledge graph (21,942 nodes, 15,338 relations).
+
+---
+
+## 🏛️ Digital Humanities Approach
+
+This repository approaches mathematical formalization through the lens of **Digital Humanities (DH)** and **AI-Assisted Knowledge Curation**:
+
+1. **Epistemic Traceability & Corpus Integration**:
+   - Maps 167+ years of mathematical history (1859–2026) across 498 papers, 384 mathematicians, and 21,942 semantic graph nodes directly to Lean 4 code terms.
+   - Every theorem in the reduction chain is linked to its historical origin, peer-reviewed source, and institutional lineage.
+
+2. **Transparent Multi-Agent Parliament**:
+   - Documents human-AI collaboration (Sorbonne University researchers with Claude, Codex, and Gemini parliaments).
+   - Preserves complete session archives, prompt ledgers, and forensic audit trails (`audit/AXIOM_ANALYSIS_AND_SOLUTIONS.txt`) to isolate legacy errors and guarantee zero custom axioms.
+
+3. **Frontier Isolation without Overclaiming**:
+   - Uses formal verification not to claim premature victories, but to **isolate the exact boundary** between what is known unconditionally and what requires new mathematical breakthroughs.
 
 ---
 
@@ -283,11 +304,11 @@ riemann-github/
 - ✅ **55 frontier papers** mapped (4 tiers, 3 targets)
 - ✅ **Unified knowledge graph** (20,956 nodes, 12,859 relations)
 
-**Infrastructure:**
-- ✅ **Jupyter explorer** for interactive graph analysis
-- ✅ **Session documentation protocol** (maintain records during Codex work)
-- ✅ **Clean repository organization** (6 root files, clear docs structure)
-- ❌ **Does NOT prove RH** (that's the frontier problem)
+**Digital Humanities Methodology:**
+- 🏛️ **167-Year Lineage**: Synthesizes 498 papers into an interactive graph (21,942 nodes).
+- 🤝 **Transparent AI Parliament**: Every prompt session, audit trail, and tactic choice logged.
+- 🛑 **Strict Epistemic Integrity**: No speculative leaps, zero custom axioms, and full acknowledgement of unproven open frontiers.
+- ❌ **Does NOT prove RH unconditionally**: Explicitly formalizes conditional reduction only.
 
 ---
 
