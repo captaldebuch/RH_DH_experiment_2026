@@ -6,7 +6,12 @@
 > **This project DOES NOT present an unconditional proof of the Riemann Hypothesis.**  
 > What this repository provides is a **formally verified conditional reduction** ($NymanBeurlingCriterion \implies RiemannHypothesis$) certified by the Lean 4 kernel (0 custom axioms) and a 167-year **Digital Humanities Knowledge Graph** mapping the literature. The remaining open step ($H_{15}$ signed bilinear dispersion decay) is an **unproven open problem of full RH-equivalent difficulty**.
 
-> **Status (August 2026):** **8,630 Lean jobs verified, 0 custom axioms.** Same-modulus and endpoint-incident collisions are classified exactly. External shells are counted exactly, and the genuine signed cross-modulus ledger is split into the full-density sector `p ∣ qq'` and favorable sector `p ∤ qq'`. Signed control of the retained degenerate sector remains open. Unified knowledge graph (21,942 nodes, 15,338 relations).
+> 📌 **PUBLICATION STRATEGY & RESTRUCTURING NOTICE (August 2026)**  
+> This repository is currently undergoing a planned restructuring to support a **two-paper split**:
+> 1. **Paper 1 (ITP / CPP / JAR target)**: *A Lean 4 Formalization of the Nyman–Beurling Criterion* (Self-contained, machine-checked formalization of the Nyman–Beurling equivalence, Mathlib API design, and upstreamable analytic lemmas).
+> 2. **Paper 2 (DSH / DHQ target)**: *Kernel Verification is Necessary But Insufficient: Vacuity Detection as the Dominant Failure Mode in LLM-Assisted Formalization* (Digital Humanities methodology, vacuity-audit framework, and forensic analysis of LLM formalization failure modes).
+>
+> The repository state prior to this restructuring has been preserved under Git tag [`pre-split-v1.0`](https://github.com/captaldebuch/RH_DH_experiment_2026/tree/pre-split-v1.0).
 
 ---
 
