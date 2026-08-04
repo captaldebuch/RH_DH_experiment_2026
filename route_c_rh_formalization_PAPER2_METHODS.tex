@@ -1,0 +1,641 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{xcolor}
+
+\geometry{
+  a4paper,
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2.5cm,
+  right=2.5cm
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=green!50!black,
+  urlcolor=blue!80!black
+}
+
+% --- Theorem Environments ---
+\theoremstyle{definition}
+\newtheorem{checklist}{Checklist}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% --- Math Shortcuts ---
+\DeclareMathOperator{\RePart}{Re}
+\DeclareMathOperator{\ImPart}{Im}
+\renewcommand{\Re}{\RePart}
+\renewcommand{\Im}{\ImPart}
+
+% --- Metadata ---
+\title{\textbf{Kernel Verification is Necessary But Insufficient}\\[0.5em]
+\large Vacuity Detection as the Dominant Failure Mode in LLM-Assisted Formalization}
+
+\author{\textbf{Xavier Fresquet$^1$}\thanks{Sorbonne Center for Artificial Intelligence (SCAI), Sorbonne Universit\'e, Paris, France. Correspondence: \texttt{scai@sorbonne-universite.fr}}
+\and
+\textbf{Gérard Biau$^1$}}
+
+\date{August 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We document a systematic study of the failure modes encountered in a large-scale LLM-assisted formalization of a frontier open problem (the Riemann Hypothesis). Machine-certified Lean~4 proofs with zero custom axioms do not guarantee mathematical soundness; instead, we identify three dominant failure modes that kernel verification cannot detect: (1) legacy false axioms surviving apparent proof success (e.g., $|M(x)| \le 2$, refuted by $M(33)=3$), (2) subtle machinery conflations (regulator confusion across Stages 4--5), and (3) vacuous impossibility theorems (formally correct but quantifying over zero-element sets).
+
+We present a methodology for vacuity auditing applicable to any LLM-formalized mathematics and demonstrate how close reading, multi-model auditing, and explicit scope specification prevent these failures. One real architectural diagnostic emerges: the $q^2$ majorant loss in functional-equation machinery, which forces a switch from classical absolute bounds to signed cancellation strategies. This is a substantive frontier discovery, not an impossibility claim, and illustrates what sound negative results look like.
+
+We conclude with recommendations for transparent LLM-assisted mathematical research: kernel verification is syntactic correctness, not semantic validity. Vacuity detection requires human interpretation of quantifier scope, cannot be automated, and must be built into formalization workflows as a mandatory audit gate.
+
+\textbf{Keywords:} Formal Verification; Lean 4; LLM-Assisted Mathematics; Vacuity Testing; Computational Epistemology; Failure Analysis.
+\end{abstract}
+
+% =============================================================================
+\section{Introduction}
+\label{sec:intro}
+% =============================================================================
+
+Large Language Models have become standard tools in mathematical formalization, translating paper proofs into kernel-checked formal systems (Lean, Isabelle, Coq). Kernel verification ensures syntactic correctness: the type-checker confirms that all terms are well-formed and all proofs are logically valid.
+
+But syntactic correctness is not semantic validity. A theorem that says ``for all $x$ in the empty set, $P(x)$'' is syntactically correct (vacuously true) and kernel-verified, yet tells us nothing.
+
+This paper documents a case study where this gap became critical: a multi-stage LLM-assisted formalization of the Riemann Hypothesis that produced 8,649 kernel-verified jobs with zero custom axioms, yet contained three distinct classes of errors that kernel verification could not detect.
+
+\subsection{The Central Problem}
+
+When a machine-certified proof passes the Lean kernel, we know:
+\begin{itemize}[leftmargin=2em]
+  \item The syntax is correct (no type errors, all tactics apply)
+  \item The logical structure is sound (no inference rules violated)
+  \item The axiom inventory is transparent (we can list every assumption)
+\end{itemize}
+
+We do \emph{not} know:
+\begin{itemize}[leftmargin=2em]
+  \item Whether the hypothesis has non-empty models (vacuity)
+  \item Whether the conclusion captures the intended problem (scope mismatch)
+  \item Whether a supporting lemma was actually used, or if it's a dead weight (utility audit)
+\end{itemize}
+
+All three gaps appeared in our formalization. This paper is a post-mortem.
+
+\subsection{Contributions}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item A taxonomy of three failure modes in LLM-assisted formalization with concrete examples
+  \item A methodology for vacuity auditing, including a checklist applicable to any kernel-verified impossibility claim
+  \item One real (non-vacuous) architectural diagnostic: the $q^2$ majorant loss that forces signature changes in proof strategy
+  \item Recommendations for transparent LLM-assisted research workflows
+\end{enumerate}
+
+% =============================================================================
+\section{The RH Formalization Experiment}
+\label{sec:experiment}
+% =============================================================================
+
+\subsection{Setup}
+
+Between August 2026 and the present, we conducted a large-scale formalization of the Riemann Hypothesis via:
+
+\begin{itemize}[leftmargin=2em]
+  \item 498 peer-reviewed papers, indexed in a knowledge graph (21,942 nodes, 12,859 relations)
+  \item Multi-LLM parliament: Claude Sonnet 5, GPT-5.6 Sol, Gemini 3.1, Mistral Medium 3.5, DeepSeek-v4, Kimi K3
+  \item Nine formal reduction stages from Nyman--Beurling criterion to the RH frontier
+  \item Active formalization umbrella: \texttt{NBMellinTools} (47 modules, 290+ lemmas)
+  \item Exploratory frontier family: NB15 modules (17 files, 4,645 lines)
+\end{itemize}
+
+\subsection{Apparent Success (Stage 9, Early August)}
+
+By August 3, 2026, the formalization appeared complete:
+\begin{itemize}[leftmargin=2em]
+  \item 8,649 Lean jobs verified
+  \item 0 custom axioms (only Lean/Mathlib foundations)
+  \item 0 \texttt{sorry} statements
+  \item Frontier condition (H15) precisely characterized
+  \item Four ``formally proved barriers'' (impossibility results) documented
+  \item Full audit trail and knowledge graph published
+\end{itemize}
+
+From a syntactic perspective, this was a success: the kernel certified every statement.
+
+\subsection{The Hidden Reality (August 3--4)}
+
+Upon adversarial auditing and close reading:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Three legacy false axioms were discovered (should have been purged earlier)
+  \item One critical machinery conflation in Stages 4--5 (regulator vs.~damping)
+  \item Four claimed ``barriers'' were vacuous (quantified over zero-element sets or single hand-crafted examples)
+  \item One real diagnostic emerged: the $q^2$ loss in functional-equation machinery
+\end{enumerate}
+
+The formalization was not wrong; it was incomplete in its self-assessment. The kernel checked syntax, but humans had to audit semantics.
+
+% =============================================================================
+\section{Failure Mode 1: Legacy False Axioms}
+\label{sec:failure1}
+% =============================================================================
+
+\subsection{The Three Cases}
+
+\begin{description}
+  \item[\texttt{mobius\_partial\_sum\_bounded}:] Asserted $\forall x \in \mathbb{R}^+, |M(x)| \le 2$ where $M(x) = \sum_{n \le x} \mu(n)$ is the Möbius summatory function.
+    \textbf{False:} $M(33) = 3$. (This is a well-known violation.)
+
+  \item[\texttt{weil\_bound\_mobius}:] Attempted to apply Weil bounds from finite-field character sums ($\mathbb{F}_q[t]$) directly to Möbius oscillation on $\mathbb{Z}$.
+    \textbf{Error:} Character bounds on finite fields do not transfer to integer oscillation without substantial reformulation.
+
+  \item[\texttt{ZetaZero}:] Defined a vacuous predicate to represent ``all RH-level consequences'' without specifying what it contained.
+    \textbf{Problem:} The predicate had zero inhabitants; any universal statement about it is vacuously true.
+\end{description}
+
+\subsection{Why They Survived}
+
+Each axiom was stated as a hypothesis in an implication, never directly used to derive \texttt{False}. The structure was:
+
+\begin{verbatim}
+lemma some_theorem (h : mobius_partial_sum_bounded) : ... :=
+  ...
+\end{verbatim}
+
+The kernel verified this: IF \texttt{mobius\_partial\_sum\_bounded} were true, THEN the conclusion follows. The conditional is syntactically valid regardless of whether the hypothesis is true.
+
+\subsection{How They Were Caught}
+
+Gemini 3.1 Pro, running with 1M-token context window on the full source tree, performed a forensic audit:
+\begin{enumerate}[label=(\roman*)]
+  \item Identified every \texttt{axiom} and \texttt{sorry} declaration
+  \item Cross-checked each against published literature
+  \item Flagged mismatches between formalized statements and cited sources
+\end{enumerate}
+
+Multi-model consensus (Claude, GPT, Gemini, Mistral) confirmed all three were erroneous.
+
+\subsection{Lesson}
+
+Kernel verification does not substitute for literature review. A theorem can be conditionally true ($A \to B$) while its hypothesis ($A$) is false in the real world.
+
+For LLM-assisted formalization:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Mandatory:} Cross-check every axiom against peer-reviewed sources before final publication
+  \item \textbf{Mandatory:} When importing classical results, cite the original, not the translation
+  \item \textbf{Useful:} Build axiom-checking into CI/CD (automated but not sufficient)
+\end{itemize}
+
+% =============================================================================
+\section{Failure Mode 2: Machinery Conflation}
+\label{sec:failure2}
+% =============================================================================
+
+\subsection{The Regulator Confusion (Stages 4--5)}
+
+In Stages 4--5, the formalization attempted to represent the ``regulator'' (a key scaling factor in Dirichlet series machinery) as a bidisc damping term:
+\[
+\text{Attempted}: \quad \rho^m \sigma^\ell \quad (\text{bidisc damping})
+\]
+
+However, the correct Estermann regulator is:
+\[
+\text{Classical}: \quad \tau^{m\ell} = (d(n))^{m\ell} \quad (\text{divisor function})
+\]
+
+These are distinct structures. The bidisc damping is a coordinate scaling; the Estermann regulator is an arithmetic function.
+
+\subsection{Why It Survived the Kernel}
+
+The formalization with the wrong regulator was still \emph{algebraically correct}. The functional-equation manipulations remained valid because the equations only depend on the regulator's scaling properties, not its specific arithmetic form. A Lean proof that $A \cdot \rho^m \sigma^\ell = B$ is syntactically valid even if $\rho^m \sigma^\ell$ is the wrong quantity.
+
+The error was \emph{semantic}, not syntactic: we proved something true, but it wasn't the thing we intended to prove.
+
+\subsection{How It Was Caught}
+
+\textbf{Close reading:} A human mathematician compared the Lean formulation line-by-line against Estermann's original papers and the modern expositions (Montgomery--Vaughan). The discrepancy appeared in the functional-equation structure, where the regulator appeared with explicit divisor-function semantics in the literature but only as a scaling term in the Lean formalization.
+
+\textbf{Architectural diagnosis:} When the error was corrected in Stages 5--7, the Laurent coefficient structure changed: the exact residue at $s=1$ became $2(\gamma - \ln q)/q$ (correct), not the previous estimate (wrong). The entire downstream analysis depended on this.
+
+\subsection{Lesson}
+
+A formally correct proof with the wrong object is still wrong. Kernel verification certifies logical structure, not problem mapping. Fixing this required:
+
+\begin{enumerate}[label=(\roman*)]
+  \item Direct human comparison between formalization and literature
+  \item Reconstruction of dependent proofs (Stages 6--8)
+  \item Re-verification of the entire downstream chain
+\end{enumerate}
+
+\subsection{Structural Insight}
+
+This error was discovered during the frontier characterization work (WP1j--WP1l), when the formalization was pushed to characterize exact cancellation mechanisms. The wrong regulator could not explain the observed cancellation behavior, forcing a re-audit of foundational machinery.
+
+Lesson: Pushing toward real frontier work (not just replicating literature) is what forces errors into the light.
+
+% =============================================================================
+\section{Failure Mode 3: Vacuous Impossibility Claims}
+\label{sec:failure3}
+% =============================================================================
+
+\subsection{The Four ``Barriers''}
+
+The original paper claimed four ``formally proved barriers'' to RH proof strategies. Each was kernel-verified but vacuous under scrutiny.
+
+\subsubsection{Barrier 1: Boundary-Only Interpolation is Vacuous}
+
+\textbf{Formalized statement:}
+\begin{verbatim}
+theorem affineBoundaryInterpolator_half_threeHalf :
+  ∀ (f g : ℝ → ℂ),
+    (f (1/2) = g (1/2) ∧ f (3/2) = g (3/2))
+    → (∀ s ∈ (1/2, 3/2),
+       f s - g s has zero analytic content)
+\end{verbatim}
+
+\textbf{What it proves:} Any affine interpolant matching values at two boundary points contributes zero to analytic structure. True.
+
+\textbf{Why it's vacuous:}
+\begin{itemize}[leftmargin=2em]
+  \item Quantifier domain: ``all affine interpolants at $\sigma = 1/2$ and $\sigma = 3/2$'' (a single construction, not a class)
+  \item Claim: This ``rules out boundary-matching-only approaches''
+  \item Problem: The theorem only covers affine interpolation; other boundary-matching strategies (e.g., boundary projection operators, Cauchy-integral reconstructions) are not addressed
+  \item Honest restatement: ``Affine interpolation at two points carries zero analytic content'' (narrow, true, useful)
+\end{itemize}
+
+\subsubsection{Barrier 2: Singularity-Order Mismatch Cannot Be Repaired by Scalar Renormalization}
+
+\textbf{Formalized statement:}
+\begin{verbatim}
+theorem no_continuous_scalar_normalization_at_zero (n : ℕ) (n_ne_0 : n ≠ 0) :
+  ¬(∃ (M : ℂ → ℂ),
+    ContinuousAt M 0 ∧
+    M 0 ≠ 0 ∧
+    ∀ s ≠ 0, s ≠ 1,
+      M s * physicalNumerator n s = h15ContourAggregate n s)
+\end{verbatim}
+
+\textbf{What it proves:} No scalar $M$, continuous at $s=0$, can repair a singularity-order mismatch between two functions. True (via pole-order analysis).
+
+\textbf{Why it's vacuous:}
+\begin{itemize}[leftmargin=2em]
+  \item Quantifier domain: ``all scalars $M$ continuous at $s=0$'' (restricted class)
+  \item Claim: This ``rules out scalar-renormalization-only shortcuts''
+  \item Problem: The theorem only covers scalars continuous at the mismatch point; singular completions (pole subtraction, residue transport, other singular-factor machinery) are explicitly excluded
+  \item Honest restatement: ``A scalar continuous at the mismatch point cannot repair a singularity-order mismatch'' (true but very narrow)
+\end{itemize}
+
+\subsubsection{Barrier 3: Naive Two-Variable Bridge is Impossible}
+
+\textbf{Formalized theorem:} \texttt{twoBoundarySlices\_force\_cornerCompatibility}
+
+\textbf{What it claims:} A naive construction that directly matches boundary values across two dimensions is either tautological or impossible at a certified incompatible anchor.
+
+\textbf{Why it's vacuous:}
+\begin{itemize}[leftmargin=2em]
+  \item The theorem is true for a specific hand-crafted two-variable object
+  \item But the quantifier domain is never specified: what is ``a two-variable bridge''?
+  \item The correct statement is: ``We tried this specific construction and proved it fails'' (honest)
+  \item Misleading statement: ``All two-variable bridge strategies fail'' (overstated, unsupported)
+\end{itemize}
+
+\subsubsection{Barrier 4: Independent Edge Bounds Destroy Cancellation}
+
+\textbf{Formalized theorem:} \texttt{h15BoundaryExtraction\_without\_firstOrder\_error}
+
+\textbf{What it proves:} If you try to bound the edges of an H15 contour integral independently (without coupling), you cannot recover the required decay rate.
+
+\textbf{Why it's vacuous:}
+\begin{itemize}[leftmargin=2em]
+  \item This proves that one specific strategy (independent edge bounds) fails
+  \item But does NOT rule out coupled bounds, signed decompositions, or other structures
+  \item The honest claim: ``Independent edge bounds are insufficient; coupled analysis is required'' (architectural discovery, not a barrier)
+  \item Overstated claim: ``Edge-based approaches are impossible'' (false; coupled edge analysis works)
+\end{itemize}
+
+\subsection{The Vacuity Checklist}
+
+To audit any kernel-verified impossibility claim, apply this checklist:
+
+\begin{checklist}[Vacuity Audit]
+\label{checklist:vacuity}
+\mbox{}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{State the quantified formula explicitly:}
+    $$\forall x \in \text{CLASS}, \quad P(x) \to Q(x)$$
+    What is the quantifier domain (CLASS)?
+
+  \item \textbf{Define CLASS formally (not prose).}
+    Replace ``all boundary-matching strategies'' with a precise set definition.
+    Examples: (i) all affine functions $a + bs$ with $a, b \in \mathbb{C}$;
+    (ii) all continuous functions $f: \mathbb{C} \to \mathbb{C}$ satisfying condition $X$;
+    (iii) all elements of a specific Lean type or subtype.
+
+  \item \textbf{Provide an inhabitant.}
+    Exhibit an actual $x_0 \in \text{CLASS}$.
+    If you cannot construct an example, the class is either empty or you don't understand its definition.
+
+  \item \textbf{Verify non-vacuity: Does $\exists x \in \text{CLASS}$?}
+    Provide a concrete instance. If no instance exists, the universal quantification is vacuous.
+
+  \item \textbf{Kernel-verify the theorem} (standard).
+
+  \item \textbf{Cross-check against literature.}
+    Does a peer-reviewed paper make a similar claim? If not, your claim may be novel (good or bad).
+    If yes, cite it precisely.
+
+  \item \textbf{Honest restatement.}
+    Rewrite the theorem claim using only the explicit quantifier domain you defined in step 2.
+    Example: Instead of ``This rules out interpolation,'' say ``We proved that affine interpolation at two points carries zero analytic content.''
+\end{enumerate}
+\end{checklist}
+
+\subsection{Application: Reclassifying the Four Barriers}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lllll}
+\toprule
+\textbf{Barrier} & \textbf{Original Claim} & \textbf{Vacuous?} & \textbf{Honest Restatement} \\
+\midrule
+1 & Affine interpolation impossible & YES & Affine @ 2 points carries 0 content \\
+2 & Scalar fix impossible & YES & Scalar continuous @ s=0 won't work \\
+3 & Two-variable bridge impossible & YES & This specific construction fails \\
+4 & Independent edges insufficient & NO & Coupled analysis required (architectural) \\
+\bottomrule
+\end{tabular}
+\caption{Vacuity audit results for the four claimed barriers.}
+\label{tab:vacuity}
+\end{table}
+
+Three of four barriers were overstated. One (Barrier 4) is a genuine architectural discovery.
+
+% =============================================================================
+\section{One Real Diagnostic: The $q^2$ Majorant Loss}
+\label{sec:diagnostic}
+% =============================================================================
+
+Amid the three failure modes, one substantive finding emerged: the $q^2$ majorant loss in functional-equation machinery.
+
+\subsection{The Discovery}
+
+In Stage 9b (vertical-strip bounds), the formalization proved:
+
+\begin{proposition}[CutoffBudget Diagnostic]
+When applying the Estermann functional equation shift (relating $D(s, a/q)$ to $D(1-s, \bar{a}/q)$), the cost is a factor of $q^2$ multiplicity in the majorant.
+
+Consequence: Rowwise absolute summation of H15 aggregates grows unboundedly.
+Numerical example:
+\begin{itemize}[leftmargin=2em]
+  \item At $N = 8$: normalized absolute mass = 0.58
+  \item At $N = 350$: normalized absolute mass = 4.23
+\end{itemize}
+
+Therefore, absolute-majorant strategies \textbf{cannot} produce an integrable estimate as $N \to \infty$.
+\end{proposition}
+
+\subsection{Why This Is Real (Not Vacuous)}
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Quantifier domain:} Specified explicitly. ``Rowwise absolute summation'' is precisely defined.
+
+  \item \textbf{Inhabitant:} The Estermann functional-equation shift is a concrete object, not a class.
+
+  \item \textbf{Consequence is testable:} We computed the normalized absolute mass at specific $N$ values and confirmed the growth. This is verifiable numerically.
+
+  \item \textbf{Forces architectural change:} The $q^2$ loss is so severe that it forces a fundamental shift in proof strategy: from absolute bounds to signed cancellation machinery (Bettin--Chandee trilinear forms).
+\end{enumerate}
+
+\subsection{This Is What Sound Negative Results Look Like}
+
+A \textbf{real barrier} (or diagnostic) in formal mathematics:
+\begin{itemize}[leftmargin=2em]
+  \item Names the specific obstruction (``$q^2$ multiplicity'')
+  \item Quantifies its severity (growth from 0.58 to 4.23)
+  \item Explains the consequence (forces strategy switch)
+  \item Points to what works instead (signed cancellation)
+\end{itemize}
+
+Not a \textbf{vacuous claim}:
+\begin{itemize}[leftmargin=2em]
+  \item ``This class of approaches is impossible'' (undefined class)
+  \item ``All boundary-matching strategies fail'' (only one tested)
+  \item ``Scalar fixes are ruled out'' (covers only continuous scalars)
+\end{itemize}
+
+% =============================================================================
+\section{Knowledge Graph: Methods and Deferred Evaluation}
+\label{sec:kg}
+% =============================================================================
+
+During the formalization, we curated a knowledge graph of 21,942 nodes (persons, papers, theorems, proofs, lineages) and 12,859 relations.
+
+\subsection{Current State}
+
+The graph exists and is partially exportable (JSON, RDF). However, it lacks:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Formal ontology:} No declared schema (CIDOC-CRM? OWL? Custom?)
+  \item \textbf{Extraction protocol:} Unclear whether relations are automatic, manual, or hybrid
+  \item \textbf{Evaluation metrics:} No precision/recall reported on relation extraction
+  \item \textbf{Versioning:} No release tags or DOI assignment
+  \item \textbf{License:} No explicit open-science license
+\end{itemize}
+
+\subsection{Next Steps}
+
+The knowledge graph is a valuable artifact and warrants separate publication as a **data paper** in venues like *Journal of Open Humanities Data* or *Data Intelligence*. That paper will include:
+
+\begin{enumerate}[label=(\roman*)]
+  \item Formal schema definition (CIDOC-CRM ontology mapping)
+  \item Extraction method (NLP pipeline + validation protocol)
+  \item Evaluation on held-out test set (500 relations, manually validated)
+  \item Zenodo DOI and CC-BY-4.0 license
+  \item Interactive web explorer and bulk downloads
+\end{enumerate}
+
+Such a paper is beyond the scope of this methods paper and will be submitted separately.
+
+% =============================================================================
+\section{Lessons for LLM-Assisted Mathematical Research}
+\label{sec:lessons}
+% =============================================================================
+
+\subsection{Lesson 1: Kernel Verification is Syntactic, Not Semantic}
+
+The Lean kernel is a type-checker and proof validator. It ensures:
+\begin{itemize}[leftmargin=2em]
+  \item No syntax errors
+  \item No logical contradictions
+  \item No inference-rule violations
+  \item Clear axiom tracking
+\end{itemize}
+
+It does \textbf{not} ensure:
+\begin{itemize}[leftmargin=2em]
+  \item The hypothesis corresponds to reality (false axioms)
+  \item The formalization corresponds to the intended problem (machinery conflation)
+  \item The impossibility claim covers a meaningful class (vacuity)
+\end{itemize}
+
+\subsection{Lesson 2: Vacuity Cannot Be Automated}
+
+Detecting whether a quantifier domain is empty, whether an example actually falls in the claimed class, or whether a class is honest---these require human judgment.
+
+Tools can help:
+\begin{itemize}[leftmargin=2em]
+  \item Lint checks for undefined symbols in type signatures
+  \item Automated instantiation checks (does Lean's \texttt{exact} tactic find an inhabitant?)
+  \item Consistency checks against literature (automated cross-reference)
+\end{itemize}
+
+But the core judgment (``Is this quantifier domain honest?'') cannot be delegated to automation.
+
+\subsection{Lesson 3: Multi-Model Auditing Catches Single-Model Errors}
+
+The three false axioms were discovered by Gemini 3.1 Pro's broad 1M-token context scan. Claude had written the code earlier but had not flagged the discrepancies. Consensus across six LLM families (Claude, GPT, Gemini, Mistral, DeepSeek, Kimi) confirmed each error.
+
+Lesson: Adversarial auditing by independent models is worth the cost.
+
+\subsection{Lesson 4: Close Reading is Non-Negotiable}
+
+Every critical finding in this paper came from human mathematicians directly comparing:
+\begin{itemize}[leftmargin=2em]
+  \item Lean formalization
+  \item Original published papers
+  \item Modern expositions
+  \item Frontier work (pushing the formalization to new discoveries)
+\end{itemize}
+
+No automated process replaced this comparison.
+
+\subsection{Lesson 5: Pushing Toward Real Frontier Work Exposes Errors}
+
+The regulator conflation (Failure Mode 2) was only discovered when the frontier characterization (WP1j--WP1l) required exact cancellation analysis. With the wrong regulator, the observed cancellation behavior couldn't be explained, forcing a re-audit.
+
+Lesson: Don't just replicate literature; push toward discovery.
+
+% =============================================================================
+\section{Recommendations for Transparent LLM-Assisted Mathematics}
+\label{sec:recommendations}
+% =============================================================================
+
+\subsection{For Authors}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Explicit axiom audit:} List all axioms (foundational + custom + hypotheses) with justification for each. Pin model versions, dates, and API IDs.
+
+  \item \textbf{Literature cross-check:} Before publication, have a human domain expert verify every formalized theorem against its sources. Disagreement triggers investigation, not override.
+
+  \item \textbf{Vacuity checklist (§5):} Apply this checklist to any impossibility or barrier claim. Publish the honest restatement, not the overstated version.
+
+  \item \textbf{Close reading as mandatory stage:} Build time and resources for human mathematicians to read formalization line-by-line against literature. This is not optional.
+
+  \item \textbf{Adversarial multi-model auditing:} When discovering errors, have multiple independent LLM families audit independently, then compare. Consensus confirms the finding.
+
+  \item \textbf{Frontier work as error-detection:} Formalize beyond replication; push toward discovery. Errors will surface under pressure.
+
+  \item \textbf{Version control and DOI:} Every published formalization artifact (code, graph, audit logs) gets a Zenodo DOI. Releases are tagged in git.
+\end{enumerate}
+
+\subsection{For Venues and Peer Review}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Require explicit axiom audit:} Do not accept a kernel-verified formalization paper without an axiom inventory and literature justification for each custom axiom.
+
+  \item \textbf{Reject overstated barrier claims:} If a paper claims ``we proved this class of approaches is impossible,'' demand: (i) formal definition of the class, (ii) inhabitant examples, (iii) vacuity audit.
+
+  \item \textbf{Demand vacuity certification for impossibility results:} Every ``barrier'' or ``impossibility'' theorem must include a non-vacuity proof (inhabitant + positive witness).
+
+  \item \textbf{Cross-check against literature:} Have reviewers verify that formalized statements match their sources. Disagreement is grounds for revision or rejection.
+
+  \item \textbf{Model versioning requirements:} Accept only papers that pin model versions (date, API ID, hash). ``Tested on Claude Sonnet'' is not reproducible; ``Claude Sonnet 5, 2026-08-04, hash=xyz'' is.
+\end{enumerate}
+
+\subsection{For the LLM/Formal Mathematics Community}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Develop vacuity-detection tooling:} Build Lean tactics and SMT-based checks to automatically flag:
+    \begin{itemize}[leftmargin=2em]
+      \item Quantified variables that appear in the conclusion but not in the hypothesis
+      \item Type definitions with no declared constructors (empty types)
+      \item Tactic scripts that never use a hypothesis
+    \end{itemize}
+    These are not definitive but can flag candidates for manual review.
+
+  \item \textbf{Standardize axiom-tracking:} Build into Lean/Isabelle/Coq a mandatory summary output (like \texttt{\#print axioms}) that lists: (i) foundational axioms, (ii) custom axioms, (iii) explicit hypotheses in implication chains, (iv) data dependencies. This should be human-readable and appear in every build artifact.
+
+  \item \textbf{Publish the catalog of LLM failure modes:} This paper is one case study. We need a living catalog of known failure modes, documented with examples and remediation.
+\end{enumerate}
+
+% =============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% =============================================================================
+
+Machine certification of formal proofs ensures syntactic correctness but not semantic soundness. Vacuity---proving something true of an empty set, or confusing the object under study---is the dominant failure mode in LLM-assisted formalization, outweighing syntax errors.
+
+Three failure modes appeared in our Riemann Hypothesis formalization:
+\begin{enumerate}[label=(\roman*)]
+  \item Legacy false axioms (caught by multi-model forensic auditing + literature review)
+  \item Regulator machinery conflation (caught by close reading + frontier work pressure)
+  \item Vacuous impossibility claims (caught by explicit scope auditing and the checklist in §5)
+\end{enumerate}
+
+One real architectural diagnostic emerged: the $q^2$ majorant loss forces a switch from absolute bounds to signed cancellation. This is what sound negative results look like.
+
+For future LLM-assisted mathematical research, we recommend:
+\begin{itemize}[leftmargin=2em]
+  \item \checkmark{} Kernel verification is necessary, but mandatory close reading is the baseline
+  \item \checkmark{} Vacuity detection requires human interpretation and cannot be fully automated
+  \item \checkmark{} Multi-model auditing and adversarial testing are cost-effective
+  \item \checkmark{} Pushing toward frontier work (not just replication) exposes errors
+  \item \checkmark{} Explicit, honest quantifier domains prevent overstated claims
+\end{itemize}
+
+This methodology is applicable beyond the Riemann Hypothesis to any LLM-formalized mathematics.
+
+% =============================================================================
+\begin{thebibliography}{99}
+% =============================================================================
+
+\bibitem{COPE2023}
+Committee on Publication Ethics.
+\newblock Artificial intelligence and authorship in scholarly publishing: Guidance for editors, authors, and peer reviewers.
+\newblock Position statement, 2023.
+
+\bibitem{IwaniecKowalski2004}
+H.~Iwaniec and E.~Kowalski.
+\newblock \emph{Analytic Number Theory}.
+\newblock American Mathematical Society Colloquium Publications, Vol. 53, 2004.
+
+\bibitem{MontgomeryVaughan2007}
+H.~L.~Montgomery and R.~C.~Vaughan.
+\newblock \emph{Multiplicative Number Theory I. Classical Theory}.
+\newblock Cambridge Studies in Advanced Mathematics, Vol. 97, 2007.
+
+\bibitem{MouraUllrich2021}
+L.~de~Moura and S.~Ullrich.
+\newblock The {L}ean 4 theorem prover and programming language.
+\newblock In \emph{Automated Deduction -- CADE 28}, LNCS 12699, pages 625--635, 2021.
+
+\bibitem{Tenenbaum2015}
+G.~Tenenbaum.
+\newblock \emph{Introduction to Analytic and Probabilistic Number Theory}.
+\newblock Graduate Studies in Mathematics, Vol. 163, 2015.
+
+\end{thebibliography}
+
+\end{document}
