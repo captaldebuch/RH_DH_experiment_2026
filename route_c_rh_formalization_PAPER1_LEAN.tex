@@ -209,13 +209,24 @@ The finite part (regular part) of the Laurent expansion at $s=1$ is:
 where $\gamma$ is the Euler--Mascheroni constant. The pole-free remainder has integrable bounds on vertical lines.
 \end{lemma}
 
-\subsection{Reflected-Contour Normalization}
+\subsection{Mellin--Plancherel Isometry and Riesz Means Infrastructure}
 
-\begin{lemma}[Triple-Pole Discovery]
-For reflected contour $F_\delta(-s) = \frac{\delta}{s}R_\delta(s)$, the factor $\delta/s$ raises the $s=0$ pole from double (in the original) to cubic (in the reflected form). This forcing was unexpected and is a genuine discovery in the formalization.
+\begin{lemma}[Mellin--Plancherel Isometry, \texttt{NB17Mellin.lean}]
+The Mellin transform acts as a unitary linear isometry equivalence $L^2((0,\infty), \frac{dx}{x}) \simeq_{\ell i}[\mathbb{C}] L^2(\mathbb{R})$. For log-tapered Schwartz data $f(x) = g(\ln x)$, the concrete Plancherel identity holds:
+\[
+\int_{\mathbb{R}} \|M f(-2\pi it)\|^2 \,\diff t = \int_{0}^{\infty} \|f(x)\|^2 \,\frac{\diff x}{x}.
+\]
 \end{lemma}
 
-All four lemmas are Lean-verified and include explicit bounds (e.g., integrable majorants for vertical-line estimates).
+\begin{lemma}[Riesz Means of $1/\zeta(s)$, \texttt{NB17RieszMeanZeta.lean}]
+For the first-order Riesz mean of the M\"obius function $R(y) = \sum_{n \le y} \mu(n)(1 - n/y)$, its Mellin transform satisfies for $\Re(s) > 1$:
+\[
+\int_{0}^{\infty} R(y) y^{-s-1} \,\diff y = \frac{1}{s(s+1)\zeta(s)}.
+\]
+Consequently, the Mellin--Plancherel isometry maps $L^2$ convergence statements about M\"obius Riesz means on $(0,\infty)$ to $L^2$ bounds on $\frac{1}{s(s+1)\zeta(s)}$ along vertical lines $\Re(s) = 1/2$.
+\end{lemma}
+
+All five lemmas are Lean-verified with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
 
 % =============================================================================
 \section{Stages 1--8: Complete Reduction Chain}
@@ -233,7 +244,8 @@ $H_1$--$H_7$ & PNT + Zero-Free Region & $\checkmark$ & 8,500 \\
 $H_8$--$H_{11}$ & Gram Decomposition \& Vasyunin & $\checkmark$ & 8,506 \\
 $H_{12}$--$H_{12.10}$ & BBLS, Estermann, Hurwitz, Laurent & $\checkmark$ & 8,512 \\
 $H_{12.11}$--$H_{12.13}$ & Dual Collapse, Vertical Bounds & $\checkmark$ & 8,515 \\
-$H_{12.14}$--$H_{12.26}$ & Reflected Contour, Pole Subtraction, H15 Specialization & $\checkmark$ & 8,529 \\
+$H_{12.14}$--$H_{12.26}$ & Reflected Contour, Pole Subtraction & $\checkmark$ & 8,529 \\
+$H_{16}$--$H_{17}$ (\texttt{NB17}) & Mellin--Plancherel Isometry \& Riesz Means & $\checkmark$ & 8,630 \\
 \midrule
 $H_{15}$ & Signed Bilinear Dispersion Decay & \textbf{🔑 FRONTIER} & --- \\
 \bottomrule
