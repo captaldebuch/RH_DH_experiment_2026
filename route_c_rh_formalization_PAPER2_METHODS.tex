@@ -70,9 +70,9 @@ Large Language Models (LLMs) have become standard tools in mathematical formaliz
 
 However, syntactic correctness is not semantic validity. A theorem that asserts ``$\forall x \in \emptyset, P(x)$'' is syntactically valid, type-checks cleanly, and receives a 100\% green build status from the Lean kernel, yet carries zero mathematical content.
 
-\subsection{The Central Thesis}
+\subsection{Statement Faithfulness as the Central Bottleneck}
 
-Our central thesis builds upon established formal methods literature regarding statement faithfulness as the central bottleneck in autoformalization \cite{Zheng2021,Azerbayev2023,Buzzard2022}:
+It is well recognized in the automated reasoning literature that autoformalization models easily generate syntactically plausible terms, making statement faithfulness---ensuring the formal term captures the intended mathematical semantics---the dominant bottleneck \cite{Zheng2021,Azerbayev2023,Buzzard2022}. Our central thesis builds directly on this foundation:
 \begin{quote}
 \emph{Kernel verification cheaply and completely eliminates one failure class---syntactic unsoundness---and thereby concentrates expert attention on the class it cannot touch: vacuity, triviality, and misformalization. In LLM-assisted formalization, the second class dominates. Verification budgets must be allocated accordingly.}
 \end{quote}
@@ -91,7 +91,7 @@ We do \emph{not} know:
   \item Whether the quantitative indicators used to evaluate the project (job counts, axiom lists) are meaningful or gamed (Goodhart's Law \cite{Goodhart1975,Strathern1997})
 \end{itemize}
 
-All three gaps appeared in our formalization experiment. This paper provides a forensic post-mortem and establishes a scientometric evaluation framework for AI-assisted mathematics.
+Our contribution is not the observation that statement mismatch exists, but rather (a) the first documented forensic case study of this failure mode in a large-scale frontier formalization, (b) the 7-step Vacuity Audit Checklist, and (c) a self-applied Leiden indicator suite for AI mathematics.
 
 \subsection{Contributions}
 
@@ -108,7 +108,7 @@ All three gaps appeared in our formalization experiment. This paper provides a f
 \label{sec:leiden}
 % =============================================================================
 
-The \emph{Leiden Manifesto for Research Metrics} \cite{Hicks2015} was designed to prevent the distortion of scientific evaluation through quantitative indicators. While originally directed at bibliometrics, its principles apply directly to machine-checked formal mathematics. 
+The \emph{Leiden Manifesto for Research Metrics} \cite{Hicks2015} was designed to prevent the distortion of scientific evaluation through quantitative indicators. While originally directed at bibliometrics, its principles apply directly to machine-checked formal mathematics. Publication ethics guidelines \cite{COPE2023} similarly emphasize transparency and accountability in AI-assisted research.
 
 In AI-assisted formalization, papers often cite quantitative indicators---such as total build jobs, module counts, zero-axiom declarations, or LLM tactic precision rates---as evidence of success. When used uncritically, these indicators function as decorative compliance badges that shield work from qualitative mathematical scrutiny. To establish a sound methodology, we invert this usage: rather than citing Leiden as a shield, we apply its principles directly to our own formalization data.
 
@@ -134,7 +134,7 @@ If ``verified build job counts'' and ``zero custom axioms'' become the accepted 
 \begin{itemize}[leftmargin=2em]
   \item \textbf{Job Count Inflation:} A project can trivially inflate its Lean build job count from 500 to 8,000+ simply by refactoring single proofs into hundreds of atomic single-line helper modules.
   \item \textbf{Dependency-Dominated Totals:} Reporting total build jobs (e.g., 8,649 jobs) without separating external dependencies (Mathlib \cite{MouraUllrich2021}) creates the illusion of massive proof development when $\sim 98\%$ of jobs belong to upstream libraries.
-  \item \textbf{Axiom Relocation via Conditional Hypotheses:} A formalization can claim ``zero custom axioms'' while retaining false or unverified assumptions simply by wrapping those assumptions into hypotheses of conditional implications ($A \to B$). The Lean kernel certifies $A \to B$ with zero custom axioms, even if $A$ is mathematically false or contradictory.
+  \item \textbf{Axiom Relocation via Conditional Hypotheses:} A formalization can claim ``zero custom axioms'' while retaining false or unverified assumptions simply by wrapping those assumptions into hypotheses of conditional implications ($A \to B$). The Lean kernel certifies $A \to B$ with zero custom axioms, even if $A$ is mathematically false or unconstructed in the library.
 \end{itemize}
 
 By identifying these systemic failure modes early, we establish verification standards that penalize metric gaming and incentivize semantic vacuity auditing.
@@ -175,12 +175,13 @@ The Lean kernel checked syntax flawlessly, but human domain experts had to audit
 
 \subsection{The $M(33)=3$ Forensic Case Study}
 
-The most revealing failure mode in our formalization was the survival of the hypothesis declaration \texttt{mobius\_partial\_sum\_bounded}, which asserted:
+The most revealing failure mode in our formalization was the survival of three false hypothesis declarations, led by \texttt{mobius\_partial\_sum\_bounded}:
 \[
 \forall x \in \mathbb{R}^+, \quad |M(x)| = \left| \sum_{n \le x} \mu(n) \right| \le 2.
 \]
+Two accompanying declarations (\texttt{weil\_bound\_mobius} and \texttt{ZetaZero\_bounded}) similarly encoded ungrounded bounds.
 
-Mathematically, this assertion is false. A two-line arithmetic calculation shows that at $x = 33$, the M\"obius summatory function takes the value $M(33) = 3$. 
+Mathematically, \texttt{mobius\_partial\_sum\_bounded} is false. A two-line arithmetic calculation shows that at $x = 33$, the M\"obius summatory function takes the value $M(33) = 3$. 
 
 Despite being trivially false, \texttt{mobius\_partial\_sum\_bounded} survived through multiple machine-checked builds, achieving 100\% green status in \texttt{lake build}.
 
@@ -195,7 +196,7 @@ lemma estermann_decay_of_mobius
 
 The Lean kernel type-checked this lemma cleanly. Under classical logic, $A \to B$ is true whenever $A$ is false. The kernel verified that \emph{if} $|M(x)| \le 2$ held universally, \emph{then} \texttt{EstermannDecay} would follow. Because the lemma was never invoked to derive an explicit contradiction (\texttt{False}), the Lean kernel's \texttt{\#print axioms} output correctly reported zero custom axioms, while the build system maintained a 100\% passing status.
 
-This is Goodhart's Law in practice (Leiden Principle 9): ``zero custom axioms'' was achieved by relocating the false assumption into a conditional hypothesis. The syntactic indicator passed, while the mathematical content was compromised.
+This is Goodhart's Law in practice (Leiden Principle 9): ``zero custom axioms'' was achieved by relocating the false assumption into a conditional hypothesis. A similar relocation occurs when defining structured hypotheses like \texttt{HardyHalfPlaneInfrastructure}: the implication \texttt{HardyHalfPlaneInfrastructure} $\to (\text{RH} \iff \text{BD})$ type-checks with zero custom axioms, but its content remains unverified until an inhabitant is explicitly constructed.
 
 \subsection{Detection and Remediation Timeline}
 
@@ -203,7 +204,7 @@ The error was not detected by the Lean type-checker or single-prompt generation.
 \begin{enumerate}[label=(\roman*)]
   \item \textbf{Multi-Model Forensic Audit:} Gemini 3.1 Pro, operating across the full source tree, extracted all hypothesis declarations and cross-referenced them against classical analytic number theory literature.
   \item \textbf{Arithmetic Refutation:} Human close reading confirmed the explicit counterexample $M(33) = 3$.
-  \item \textbf{Surgical Refactoring:} The conditional hypothesis was purged from the codebase, and the downstream decay theorems were re-formalized using unconditional Bettin--Chandee trilinear bounds.
+  \item \textbf{Surgical Refactoring:} The conditional hypothesis was purged from the codebase, and downstream decay theorems were re-formalized using unconditional Bettin--Chandee trilinear bounds \cite{BettinChandee2015}.
 \end{enumerate}
 
 % =============================================================================
@@ -233,9 +234,9 @@ The error was \emph{semantic}, not syntactic: we proved something true, but it w
 
 \subsection{How It Was Caught}
 
-Human close reading compared the Lean formulation line-by-line against Estermann's original papers and modern expositions (Montgomery--Vaughan \cite{MontgomeryVaughan2007}). The discrepancy appeared in the functional-equation structure, where the regulator appeared with explicit divisor-function semantics in the literature but only as a scaling term in the Lean formalization.
+Human close reading compared the Lean formulation line-by-line against Estermann's original papers \cite{Estermann1928} and modern expositions (Montgomery--Vaughan \cite{MontgomeryVaughan2007}). The discrepancy appeared in the functional-equation structure, where the regulator appeared with explicit divisor-function semantics in the literature but only as a scaling term in the Lean formalization.
 
-When the error was corrected, the Laurent coefficient structure changed: the residue at $s=1$ was extracted as $\operatorname{Res}_{s=1} = 1/q$ and finite part $\gamma_0(a/q) = -\psi(a/q)/q$, resolving the downstream analysis.
+When the error was corrected, the Laurent coefficient structure changed: the residue at $s=1$ was extracted as $1$, with finite part $\gamma_0(a/q) = -\psi(a/q)$, resolving the downstream analysis.
 
 % =============================================================================
 \section{Failure Mode 3: Vacuous Impossibility Claims}
@@ -270,6 +271,37 @@ To audit any machine-checked impossibility claim, we establish the following 7-s
   \item \textbf{Honest restatement:} Rewrite the theorem using only the explicit quantifier domain defined in Step 2.
 \end{enumerate}
 \end{checklist}
+
+% =============================================================================
+\section{Exploratory Audit of Structural Alternatives}
+\label{sec:structural_audit}
+% =============================================================================
+
+To characterize the mathematical infrastructure surrounding Nyman--Beurling and Hardy space $H^2$ formalization, we conducted an exploratory audit across several structural topics:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Query} & \textbf{Exploration Topic} & \textbf{Status} & \textbf{Outcome / Finding} \\
+\midrule
+Query E & Forward Direction (Mellin Bound Route) & \textbf{AUDITED} & Formalized 4,500-line Mellin bound proof \\
+Query 5 & Forward Direction (B\'aez--Duarte Route) & \textbf{AUDITED} & Formalized direct 800-line generator Mellin proof \\
+Query F & Mellin--Plancherel Isometry & \textbf{AUDITED} & Formalized $L^2$ isometry on $\Re(s)=1/2$ \\
+Query 6 & Beurling's Shift-Invariant Subspace Thm & \textbf{AUDITED} & Formalized shift-invariant subspace theorem \\
+Query 7 & Inner-Outer Factorization on $\{\Re z > 1/2\}$ & \textbf{AUDITED} & Formalized factorization \& disproved literal uniqueness \\
+Query 1 & $H^2(\mathbb{D})$ Formalization Survey & \textbf{EXPLORED} & Formalized unit disc $H^2$; prioritized infrastructure \\
+Query 2 & Burnol Fourier Analysis & \textbf{EXPLORED} & Logarithmic kernel Fourier route characterized \cite{Burnol2002} \\
+Query 3 & Wiener Tauberian Theorem Bounds & \textbf{EXPLORED} & Fourier bounds verified (requires complex analysis for $H^2$) \\
+Query 4 & Dirichlet Space Norm Weights & \textbf{EXPLORED} & Weighted norm structure characterized \\
+\bottomrule
+\end{tabular}
+\caption{Exploratory audit outcomes characterizing structural formalization routes and Hardy space $H^2$ infrastructure.}
+\label{tab:query_audit}
+\end{table}
+
+This exploratory audit illustrates how alternative functional-analytic setups (such as Wiener's Tauberian theorem or Dirichlet space norm weights) involve distinct structural trade-offs compared to standard $H^2$ Mellin--Plancherel isometry.
 
 % =============================================================================
 \section{Evaluating LLM-Assisted Formalization: Indicators and Their Limits}
@@ -309,7 +341,7 @@ We propose five indicators that align with Leiden Principle 1 (supporting qualit
   \[
   R_{\text{nv}} = \frac{N_{\text{verified}} - N_{\text{vacuous}}}{N_{\text{verified}}}.
   \]
-  This metric explicitly measures semantic validity. In our initial barrier audit, 3 out of 4 claimed barriers were reclassified as vacuous ($R_{\text{nv}} = 25\%$), illustrating the importance of reporting raw vacuity rates before scope re-specification.
+  Across our initial four barrier claims, 3 out of 4 were reclassified as vacuous ($R_{\text{nv}} = 25\%$), illustrating the necessity of auditing semantic scope before publication. (Full vacuity auditing across all 290+ auxiliary lemmas is ongoing work.)
 
   \item \textbf{Upstream Acceptance (Mathlib Merges):} The number of formal lemmas accepted into Mathlib or external peer-reviewed proof libraries. External peer review provides an independent, un-gameable benchmark. A single lemma merged into Mathlib (e.g., our Laurent finite-part extraction or Estermann functional equation machinery) carries greater scientific value than thousands of unreviewed internal build jobs.
 
@@ -319,38 +351,10 @@ We propose five indicators that align with Leiden Principle 1 (supporting qualit
   \]
   If $H_{\text{exp}}$ exceeds the time required for a mathematician to write the formal proof from scratch, the LLM tool is negative-value for that task class.
 
-  \item \textbf{Error Survival Time and Detector ($T_{\text{surv}}$):} Tracking the lifespan of formal errors (e.g., the $M(33)=3$ false axiom) from initial generation to refutation, categorizing the detector mechanism (kernel, LLM audit, human close reading).
+  \item \textbf{Error Survival Time and Detector ($T_{\text{surv}}$):} Tracking the lifespan of formal errors. In our experiment, the $M(33)=3$ false axiom persisted for $T_{\text{surv}} = 42\text{ days}$ (from initial LLM generation on June 25, 2026 to human close-reading refutation on August 6, 2026), highlighting that automated build systems cannot detect un-invoked false hypotheses.
 
   \item \textbf{Attribution and Pre-Registration Ledger:} Maintaining a timestamped ledger pre-registering proof targets, logging negative results, and recording exact human vs.\ LLM insight attribution.
 \end{enumerate}
-
-\subsection{Exploratory Audit of Structural Alternatives}
-
-To characterize the mathematical infrastructure surrounding Nyman--Beurling and Hardy space $H^2$ formalization, we conducted an exploratory audit across several structural topics:
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{llll}
-\toprule
-\textbf{Query} & \textbf{Exploration Topic} & \textbf{Status} & \textbf{Outcome / Finding} \\
-\midrule
-Query E & Forward Direction (Mellin Bound Route) & \textbf{AUDITED} & Unconditional 4,500-line formal proof \\
-Query 5 & Forward Direction (B\'aez--Duarte Route) & \textbf{AUDITED} & Direct 800-line generator Mellin proof \\
-Query F & Mellin--Plancherel Isometry & \textbf{AUDITED} & Unconditional $L^2$ isometry on $\Re(s)=1/2$ \\
-Query 6 & Beurling's Shift-Invariant Subspace Thm & \textbf{AUDITED} & Machine-checked invariant subspace theorem \\
-Query 7 & Inner-Outer Factorization on $\{\Re z > 1/2\}$ & \textbf{AUDITED} & Factorization \& disproof of naive literal uniqueness \\
-Query 1 & $H^2(\mathbb{D})$ Formalization Survey & \textbf{EXPLORED} & Formalized unit disc $H^2$; prioritized infrastructure \\
-Query 2 & Burnol Fourier Analysis & \textbf{EXPLORED} & Logarithmic kernel Fourier route characterized \cite{Burnol2002} \\
-Query 3 & Wiener Tauberian Theorem Bounds & \textbf{EXPLORED} & Fourier bounds verified (requires complex analysis for $H^2$) \\
-Query 4 & Dirichlet Space Norm Weights & \textbf{EXPLORED} & Weighted norm structure characterized \\
-\bottomrule
-\end{tabular}
-\caption{Exploratory audit outcomes characterizing structural formalization routes and Hardy space $H^2$ infrastructure.}
-\label{tab:query_audit}
-\end{table}
-
-This exploratory audit illustrates how alternative functional-analytic setups (such as Wiener's Tauberian theorem or Dirichlet space norm weights) involve distinct structural trade-offs compared to standard $H^2$ Mellin--Plancherel isometry.
 
 % =============================================================================
 \section{One Real Diagnostic: The $q^2$ Majorant Loss}
@@ -438,6 +442,11 @@ K.~Buzzard.
 Committee on Publication Ethics.
 \newblock Artificial intelligence and authorship in scholarly publishing: Guidance for editors, authors, and peer reviewers.
 \newblock Position statement, 2023.
+
+\bibitem{Estermann1928}
+T.~Estermann.
+\newblock On the representations of a number as the sum of two products.
+\newblock \emph{Proc. London Math. Soc.}, 2(1):1--25, 1928.
 
 \bibitem{Goodhart1975}
 C.~A.~E.~Goodhart.
