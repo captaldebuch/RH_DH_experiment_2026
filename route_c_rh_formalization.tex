@@ -78,24 +78,12 @@
 \end{center}
 \vspace{1em}
 
-{\noindent\color{red}\textbf{[Note pour Gérard]} : Salut Gérard, bon j'avance !! voici le papier qui résume un peu l'expérience de l'été... avec des liens qui donneront sur tous les fichiers que je vais mettre sur github (pas encore prêt). Là je mets à jour ce fichier au fur et à mesure car je vais voir si ça converge vers H15... mais bon, même si c'est pas le cas je me dis que c'est quand même intéressant comme expérience ? Non ? (j'ai essayé d'etre hyper transparent sur les LLMs, les maths etc. tu verras dans les annexes à la fin)\par\vspace{1.5em}}
-
 \begin{abstract}
-From a Digital Humanities and computational epistemology perspective, we present an AI-assisted formalization study and machine-checked conditional reduction of the 167-year Riemann Hypothesis (RH) literature, mapping 498 peer-reviewed papers (21,994 knowledge graph nodes, 12,912 relations) directly into Lean~4 formal proof code. Rather than claiming an unconditional proof of RH, this work constructs a fully audited, kernel-verified conditional reduction of RH to an explicit frontier problem with three coupled limits, formalized in Lean~4 with \textbf{8,626 verified build jobs} and \textbf{zero custom axioms} in the active umbrella (\texttt{NBMellinTools}). The reduction chain spans 15 intermediate hypotheses ($H_1$--$H_{15}$) across 9 formal reduction stages, each kernel-certified, isolating the exact unproven arithmetic boundary ($H_{15}$) without introducing speculative or black-box assumptions.
+From a Digital Humanities and computational epistemology perspective, we present an AI-assisted formalization study and machine-checked reduction of the Nyman--Beurling criterion for the Riemann Hypothesis (RH). Mapping 498 peer-reviewed papers (21,942 knowledge graph nodes, 12,859 relations) into Lean~4, this work constructs a fully audited, kernel-verified reduction of the Nyman--Beurling criterion and B\'aez-Duarte generator approximation to the zero-free region of the Riemann zeta function. The reduction is complete with \textbf{8,649 verified Lean jobs} and \textbf{zero custom axioms} in the active umbrella (\texttt{NBMellinTools}), relying strictly on standard Lean/Mathlib foundations (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}). 
 
-Over 99\% of the mathematical architecture is grounded in established published literature; Large Language Models (Claude Sonnet 5, GPT-5.6 Sol, Gemini 3.1, Mistral Medium 3.5, DeepSeek-v4, Kimi K3) serve exclusively as formalization compilers and adversarial auditors under Lean~4 kernel supervision.
+The mathematical architecture translates published literature; Large Language Models (Claude Sonnet 5, GPT-5.6 Sol, Gemini 3.1 Pro, Mistral Medium 3.5, DeepSeek-v4, Kimi K3) serve as formalization compilers and adversarial auditors under Lean~4 kernel supervision. We document: (i) a multi-model validation protocol; (ii) the remediation of legacy false assumptions ($M(33)=3$); (iii) the ten-stage reduction chain; (iv) an analysis of explored proof routes; and (v) reproducible verification artifacts.
 
-The paper documents: (i) the Digital Humanities multi-agent parliament framework; (ii) the five-layer verification architecture and remediation of legacy false axioms; (iii) complete H1--H15 reduction chain with exact status; (iv) systematic analysis of explored and failed proof routes (Chowla, DFI/Kloosterman, Large Sieve); (v) the corrected frontier: frequency split at $K_N(\eta)=\lceil N^{3/4+\eta}\rceil$ with correction ledger on low side, pure Bettin--Chandee on high side; and (vi) reproducible verification artifacts.
-
-\textbf{Key result:} NymanBeurlingCriterion $\Rightarrow$ RiemannHypothesis is proved unconditionally in Lean with a complete audit trail; the exact frontier is reduced to three coupled limits: (i) norm imbalance decay, (ii) collision mismatch decay, (iii) signed weighted off-diagonal ledger decay. No single one suffices in isolation; all three must decay together. The H15 frontier is now \textbf{completely characterized and transparent}.
-
-\textbf{All Algebraic Frontiers Closed:} (i) Fiber-cardinality method yields exponent $+2$ (fiber cardinality bound); progression-density sharpening via $L \mid u$ reduces to exponent $+1$ (progression density sharpening); the arithmetic wall is load-bearing. (ii) Complete nested Abel decomposition with zero-extension, exact signed transpose, and correction preservation proves all smooth variation layers controlled by prefix bounds $P_1=o(1)$, $P_2=o(1)$ (nested Abel decomposition). (iii) Final superperiod boundary audit shows zero-mode test is definitively negative: no third algebraic cancellation exists (superperiod boundary audit).
-
-\textbf{All Elementary Analytic Frontiers Closed:} (i) Fourier representation of boundary yields correction-preserving pointwise finite sum (Fourier representation). (ii) Endpoint collision control proves every folded residue fiber contains at most 2 points; Parseval bounds yield Σ$_r |F_q(r)|^2 \le 4q(q+1)U^{-4}$ (Parseval bound). (iii) Even-modulus aliasing introduces only constant factors; unified bound Σ$_r |F_q(r)|^2 \le 8q(q+1)U^{-4}$ (even-modulus aliasing bound). \textbf{Critical finding:} Single-modulus harmonic analysis CANNOT produce decay. Parseval alone is insufficient.
-
-\textbf{The Minimal RH-Strength Interface (Formalized):} H15 closure is reduced to \textbf{three coupled limits} (all must decay simultaneously):
-$$D_N^{\mathrm{norm}} \to 0, \quad R_N^{\mathrm{collision}} \to 0, \quad O_N^{\mathrm{signed}} \to 0 \text{ as } N \to \infty$$
-with the exact relation $E_N = D_N^{\mathrm{norm}} + 2(R_N^{\mathrm{collision}} + O_N^{\mathrm{signed}})$ where collision matching is \textbf{not automatic} and endpoint incidence alone does not force collision. Collision is classified exactly into eight signed product-modulus congruences via LCM analysis; odd moduli have no doubled-frequency alias beyond the diagonal; modulus $2k$ retains precise modulo-$k$ ambiguity. Critical insight: none of the three limits can be proved independently; they form a coupled system where cancellation requires RH-strength transcendental input. The frontier is now precisely characterized with all sectors explicitly tracked. The exact unconditional requirement is transparent: prove simultaneous decay of all three, or identify the RH-strength theorem that enables it. No approximation, no abstraction, no hidden assumption remains.
+\textbf{Main result:} The equivalences $\text{\texttt{NymanBeurlingCriterion}} \iff \text{\texttt{RiemannHypothesis}}$ and $\text{\texttt{LogTaperL2Decay}} \iff \text{\texttt{RiemannHypothesis}}$ are kernel-verified in Lean~4 with 0 custom axioms and 0 sorries. The frontier reduction isolates the signed bilinear dispersion problem (H15) as the remaining open analytic target.
 \end{abstract}
 
 \paragraph{Keywords:} Riemann Hypothesis; Nyman--Beurling Criterion; Formal Verification; Lean 4; Estermann Dirichlet Series; Hurwitz Zeta Function; Digital Humanities; Autoformalization; Kernel Verification; Epistemic Traceability; AI-Assisted Mathematics.
@@ -109,55 +97,43 @@ with the exact relation $E_N = D_N^{\mathrm{norm}} + 2(R_N^{\mathrm{collision}} 
 \label{sec:intro}
 % =============================================================================
 
-The Riemann Hypothesis (RH), formulated by Bernhard Riemann in 1859 \cite{Riemann1859}, states that all non-trivial zeros of $\zeta(s)$ satisfy $\Re(s) = 1/2$. Despite 167+ years of research across analytic number theory, spectral theory, and random matrix theory \cite{IwaniecKowalski2004,MontgomeryVaughan2007,Titenko2015}, it remains unproven.
+The Riemann Hypothesis (RH), formulated by Bernhard Riemann in 1859 \cite{Riemann1859}, states that all non-trivial zeros of $\zeta(s)$ satisfy $\Re(s) = 1/2$. Despite 167+ years of research across analytic number theory, spectral theory, and random matrix theory \cite{IwaniecKowalski2004,MontgomeryVaughan2007,Tenenbaum2015}, no unconditional proof exists.
 
 Recent advances in interactive theorem proving (Lean~4) \cite{MouraUllrich2021} and large-scale mathematical corpus curation have enabled structured investigation of frontier problems. We present a complete, machine-certified conditional reduction of RH to an explicit arithmetic frontier condition.
 
 \subsection{Core Commitments}
 \begin{enumerate}[label=\textbf{\arabic*.}]
-  \item \textbf{Unconditional reduction:} We prove RH $\Leftrightarrow$ H15CenteredAggregateEstimate. Every step is kernel-verified with zero custom axioms.
-  \item \textbf{Mathematical honesty:} H15 remains open. We do not claim an RH proof; we clarify the exact frontier and its mathematical character.
-  \item \textbf{Literature grounding (Leiden principles):} Over 99\% of our mathematics is drawn from 498 peer-reviewed papers indexed in a knowledge graph. LLMs serve as compilers and auditors, not mathematical creators.
-  \item \textbf{Transparent governance:} Every error from early prototypes is documented, every vacuous axiom is purged, every session is logged. The framework is openly reproducible.
+  \item \textbf{Unconditional Lean equivalence:} We verify $\text{\texttt{NymanBeurlingCriterion}} \iff \text{\texttt{RiemannHypothesis}}$ in Lean~4 with 8,649 verified build jobs and 0 custom axioms.
+  \item \textbf{Mathematical honesty:} The frontier condition (H15) remains an open problem in analytic number theory. We clarify the exact formal structure of the Nyman--Beurling reduction without overclaiming.
+  \item \textbf{Literature grounding (Leiden principles):} Our formalization maps mathematics from 498 peer-reviewed papers indexed in a knowledge graph. LLMs serve as compilers and auditors, not mathematical creators.
+  \item \textbf{Transparent governance:} Every error from early prototypes is documented, every vacuous assumption is purged, and every session is logged.
   \item \textbf{Digital Humanities paradigm:} We treat 167 years of RH literature as a semantic ecosystem, using computational methods to bridge corpus to formalization.
 \end{enumerate}
 
-\subsection{A Digital Humanities Frame: The Music of the Corpus}
 
-For digital humanists accustomed to uncovering latent patterns in vast text archives, the Riemann Zeta Function serves as the ultimate macro-analytic algorithm---a mathematical \emph{distant reading} lens that transforms the infinite dataset of natural numbers into an underlying network of irreducible building blocks: the prime numbers. While the additive series of the zeta function acts like a weighted corpus filter and its Euler product exposes the primary sources driving the system, its \textbf{non-trivial zeros} are the fundamental harmonic frequencies---the critical ``silences'' or wave interference points---that dictate precisely how primes are distributed. These zeros matter immensely because, through Riemann's Explicit Formula, they act as the exact acoustic wave correction terms that convert broad statistical estimates into the true, pinpoint locations of prime numbers; if any zero were to stray off the critical line ($\Re(s) = 1/2$), it would introduce rogue frequencies, causing wild structural fluctuations in prime density that could dismantle modern cryptography. The \textbf{Riemann Hypothesis} posits that all non-trivial zeros align with perfect symmetry along this single axis of equilibrium, asserting that the universe of numbers is governed not by random chaos, but by a universal law of optimal balance and minimal noise.
-
-In this work, we apply the digital humanities toolkit---corpus analysis, semantic knowledge graphs, multi-agent interpretation, and machine certification---to render 167+ years of RH literature into a transparent, formally audited mathematical architecture. The result is not a proof, but a rigorous clarification of what remains unknown and why.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.88\textwidth]{data/dataviz/08_dh_thematic_clusters.png}
-\caption{Digital Humanities thematic clusters across the 21,942-node knowledge graph, highlighting the multi-disciplinary convergence of Nyman--Beurling equivalence, Estermann functional equations, Bettin--Chandee trilinear forms, and Lean~4 machine certification.}
-\label{fig:dh_themes}
-\end{figure}
 
 % =============================================================================
 \section{Methodology: Multi-Agent Parliament and Five-Layer Verification}
 \label{sec:methodology}
 % =============================================================================
 
-\subsection{The Deliberative Parliament}
+\subsection{Multi-Model Ensemble}
 
 Three specialized model families collaborate under human oversight:
 
 \begin{itemize}[leftmargin=2em]
   \item \textbf{Claude Sonnet 5 (Interpreter):} Synthesizes 498-paper corpus, identifies proof paths, designs roadmaps.
   \item \textbf{GPT-5.6 Sol (Implementer):} Translates blueprints to idiomatic Lean~4, handles type-checking and proof search.
-  \item \textbf{Gemini 3.1, Mistral Medium 3.5, DeepSeek-v4, Kimi K3 (Auditors):} Conduct adversarial audits, inspect axioms, challenge validity claims via multi-model consensus.
+  \item \textbf{Gemini 3.1 Pro, Mistral Medium 3.5, DeepSeek-v4, Kimi K3 (Auditors):} Conduct adversarial audits, inspect axioms, challenge validity claims via multi-model consensus.
 \end{itemize}
 
-\subsection{Five-Layer Verification Architecture}
+\subsection{Four-Gate Verification Architecture}
 
 \begin{enumerate}[leftmargin=2em]
-  \item \textbf{Kernel Verification:} Every declaration certified by Lean~4 kernel. Active build: 8,617 jobs, zero custom axioms. PENDING COMPREHENSIVE AUDIT.
+  \item \textbf{Kernel Verification:} Every declaration certified by Lean~4 kernel. Active build: 8,649 jobs, zero custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
   \item \textbf{Close Reading:} Every theorem cross-examined against source literature to catch misinterpretation.
   \item \textbf{Axiom Audit Trails:} Automated tracking of proved vs. conditional hypotheses.
-  \item \textbf{Audit & Verification Documentation:} Detailed logs linking each formalization to literature, milestones, and line ranges.
-  \item \textbf{Intellectual Honesty:} Explicit naming of frontier (H15) and realistic probability assessment.
+  \item \textbf{Audit \& Verification Documentation:} Detailed logs linking each formalization to literature, milestones, and line ranges.
 \end{enumerate}
 
 \subsection{Error Remediation: The Case for Adversarial Audit}
@@ -177,8 +153,7 @@ All legacy modules were quarantined; \texttt{NBMellinTools} was reconstructed fr
 Addressing contemporary concerns about ``LLM-generated mathematics,'' our framework anchors all content in 498 peer-reviewed papers (21,994 knowledge graph nodes, 12,912 relations):
 
 \begin{itemize}[leftmargin=2em]
-  \item \textbf{Over 99\% literature-grounded:} 514 of 518 Lean files are direct translations of published human mathematics.
-  \item \textbf{Complete provenance:} Every declaration traces to DOI-indexed literature via the knowledge graph.
+  \item \textbf{Literature-grounded:} Formal declarations in \texttt{NBMellinTools} translate published human mathematics.
   \item \textbf{LLMs as tools:} Claude Sonnet 5, GPT-5.6 Sol, Gemini 3.1, Mistral Medium 3.5, DeepSeek-v4, and Kimi K3 serve as compilers, auditors, narrative synthesizers---not mathematical originators.
   \item \textbf{Open-science foundation:} All data, code, audit records are publicly available.
 \end{itemize}
@@ -220,20 +195,6 @@ $H_{15}$ & Signed Bilinear Dispersion Decay & \textbf{🔑 FRONTIER (Bettin-Chan
 \caption{Complete inventory of reduction hypotheses through the complete reduction chain.}
 \label{tab:h_inventory}
 \end{table}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{data/dataviz/07_h1_h15_historical_timeline.png}
-\caption{The 167-year historical and conceptual lineage of Hypotheses $H_1 \to H_{15}$ (1859--2026), tracing mathematical discoveries from Göttingen, Uppsala, London, Princeton, and St. Petersburg to modern Bettin--Chandee trilinear forms and Lean~4 kernel verification.}
-\label{fig:h_timeline}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.92\textwidth]{data/dataviz/09_mathematician_network.png}
-\caption{Intellectual and spatial network connecting global research hubs (Göttingen, Uppsala, Princeton, London, St. Petersburg, Genoa, Austin) with key mathematicians and the AI Parliament agents supervising kernel certification.}
-\label{fig:mathematician_network}
-\end{figure}
 
 \subsection{Stages 1--8: Algebraic and Initial Analytic Reductions ($H_1$--$H_{12.10}$)}
 
@@ -367,13 +328,6 @@ Specialized the generic contour machinery to exact H15 data and isolated the exa
 % =============================================================================
 \section{Frontier: H15 Signed Bilinear Dispersion}
 \label{sec:frontier}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.92\textwidth]{data/dataviz/04_lean_network_graph.png}
-\caption{Bipartite network mapping Lean formalization proof routes to their respective mathematical domains across the formal corpus.}
-\label{fig:lean_network}
-\end{figure}
 
 \subsection{Formal Statement}
 
@@ -591,9 +545,9 @@ All Lean 4 source code, documentation, and knowledge graph data are publicly ava
 Critical papers cited in formalization:
 
 \begin{itemize}[leftmargin=2em]
-  \item \textbf{Bettin \& Chandee (2015):} ``Trilinear forms with Kloosterman fractions.'' \emph{J. Eur. Math. Soc.} 20(5):1235--1272. \url{https://arxiv.org/abs/1502.00769}
-  \item \textbf{Nyman (1950):} Original $L^2$-completeness criterion. \url{https://arxiv.org/abs/math/0206018}
-  \item \textbf{Vasyunin:} Spectral methods and explicit formulas. Inferred from Baez-Duarte \cite{BaezDuarte2003}.
+  \item \textbf{Bettin \& Chandee (2018):} ``Trilinear forms with Kloosterman fractions.'' \emph{J. Eur. Math. Soc.} 20(5):1235--1272. \url{https://arxiv.org/abs/1502.00769}
+  \item \textbf{Nyman (1950):} Original $L^2$-completeness criterion. PhD thesis, Uppsala University, 1950.
+  \item \textbf{Vasyunin (1995):} On a biorthogonal system related to the Riemann Hypothesis. \emph{Algebra i Analiz}, 7(3):118--135, 1995.
   \item \textbf{Estermann (1928):} Product regulator and functional equations. \cite{Estermann1928}
 \end{itemize}
 
