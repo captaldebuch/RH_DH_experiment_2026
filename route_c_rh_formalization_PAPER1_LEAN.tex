@@ -243,7 +243,19 @@ and
 All statements are kernel-certified with 0 sorry and depend strictly on standard Mathlib axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}).
 \end{lemma}
 
-All seven lemmas are Lean-verified with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
+\subsection{Hardy Space $H^2$ Structured Hypothesis (\texttt{NB15HardySpaceAxioms.lean})}
+
+While the forward direction ($\text{\texttt{NymanBeurlingCriterion}} \implies \text{\texttt{RiemannHypothesis}}$) and B\'aez-Duarte converse ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$) are kernel-verified unconditionally, full half-plane Hardy space equivalence ($\text{\texttt{RiemannHypothesis}} \iff \text{\texttt{BaezDuarteCriterion}}$) is formalized relative to a 5-field structured hypothesis \texttt{HardyHalfPlaneInfrastructure} (\texttt{NB15HardySpaceAxioms.lean} and \texttt{NB15RHEquivalenceConditional.lean}):
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Mellin--Plancherel isometry:} Maps $L^2(1/2 + i\mathbb{R})$ to $H^2(\Re(z) > 1/2)$.
+  \item \textbf{Beurling's shift-invariant subspace theorem:} Characterizes closed invariant subspaces in $H^2$.
+  \item \textbf{Inner-outer factorization:} Factorizes non-zero analytic functions on $\Re(z) > 1/2$.
+  \item \textbf{Reproducing kernel property:} Pointwise evaluation functionals via Cauchy kernels.
+  \item \textbf{Zeta-zero orthogonality:} Orthogonality between evaluation kernels and log-taper generators.
+\end{enumerate}
+This structured hypothesis decouples the unconditional core from functional-analysis infrastructure currently absent in Mathlib, providing a clean target for parallel Mathlib developments.
+
+All seven primary analytic lemmas are Lean-verified with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
 
 % =============================================================================
 \section{Stages 1--8: Complete Reduction Chain}
