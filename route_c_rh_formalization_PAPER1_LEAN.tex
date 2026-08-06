@@ -224,9 +224,26 @@ For the first-order Riesz mean of the M\"obius function $R(y) = \sum_{n \le y} \
 \int_{0}^{\infty} R(y) y^{-s-1} \,\diff y = \frac{1}{s(s+1)\zeta(s)}.
 \]
 Consequently, the Mellin--Plancherel isometry maps $L^2$ convergence statements about M\"obius Riesz means on $(0,\infty)$ to $L^2$ bounds on $\frac{1}{s(s+1)\zeta(s)}$ along vertical lines $\Re(s) = 1/2$.
+\begin{lemma}[Fractional-Part Mellin Transform, \texttt{NB17ZetaFract.lean}]
+For $0 < \Re(s) < 1$, the fractional part integral identity is Lean-verified without custom axioms:
+\[
+\int_{0}^{\infty} \left\{ \frac{1}{x} \right\} x^{s-1} \,\diff x = -\frac{\zeta(s)}{s}.
+\]
 \end{lemma}
 
-All five lemmas are Lean-verified with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
+\begin{lemma}[Nyman--Beurling Equivalence, \texttt{NB18LogTaperRH.lean} \& \texttt{NB19NymanBeurling.lean}]
+The equivalence between the Nyman--Beurling $L^2((0,\infty))$ approximation criterion, the B\'aez-Duarte generator approximation, log-taper $L^2$ decay, and the zero-free region of the Riemann zeta function is fully formalized:
+\[
+\text{\texttt{LogTaperL2Decay}} \iff \text{\texttt{RiemannHypothesis}}
+\]
+and
+\[
+\text{\texttt{NymanBeurlingCriterion}} \iff \text{\texttt{RiemannHypothesis}}.
+\]
+All statements are kernel-certified with 0 sorry and depend strictly on standard Mathlib axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}).
+\end{lemma}
+
+All seven lemmas are Lean-verified with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only).
 
 % =============================================================================
 \section{Stages 1--8: Complete Reduction Chain}
@@ -246,6 +263,7 @@ $H_{12}$--$H_{12.10}$ & BBLS, Estermann, Hurwitz, Laurent & $\checkmark$ & 8,512
 $H_{12.11}$--$H_{12.13}$ & Dual Collapse, Vertical Bounds & $\checkmark$ & 8,515 \\
 $H_{12.14}$--$H_{12.26}$ & Reflected Contour, Pole Subtraction & $\checkmark$ & 8,529 \\
 $H_{16}$--$H_{17}$ (\texttt{NB17}) & Mellin--Plancherel Isometry \& Riesz Means & $\checkmark$ & 8,630 \\
+$H_{18}$--$H_{19}$ (\texttt{NB18}--\texttt{NB19}) & Nyman--Beurling \& Log-Taper RH Equivalence & $\checkmark$ & 8,649 \\
 \midrule
 $H_{15}$ & Signed Bilinear Dispersion Decay & \textbf{🔑 FRONTIER} & --- \\
 \bottomrule
