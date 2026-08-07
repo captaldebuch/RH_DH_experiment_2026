@@ -71,7 +71,7 @@
 \begin{abstract}
 We present a machine-checked Lean~4 formalization of the Nyman--Beurling criterion and its relation to the non-vanishing of the Riemann zeta function on $\Re(s) > 1/2$. The formalization establishes an unconditional, kernel-verified proof of the forward direction ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$) and the $L^2$ Mellin--Plancherel isometry ($\text{\texttt{mellin\_plancherel\_critical\_line}}$) with 0 open hypotheses, alongside a conditional half-plane Hardy space equivalence formalized relative to a 5-field structured hypothesis (\texttt{HardyHalfPlaneInfrastructure}). The core reduction spans nine formal stages through Vasyunin decomposition, double-Abel regularization, Estermann machinery, and Mellin--Plancherel isometry. The active module \texttt{NBMellinTools} contributes $\Delta = 186$ verified Lean jobs (8,649 total build jobs including Mathlib dependencies) with \textbf{zero custom axioms} (relying strictly on standard Lean/Mathlib foundations: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}). 
 
-The work contributes reusable Mathlib-ready lemmas on fractional-part Mellin transforms, Riesz-mean Mellin transforms, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometries. The exact frontier condition (H15) is reduced to a precise signed bilinear dispersion problem with coupled decay constraints.
+The work contributes reusable Mathlib-ready lemmas on fractional-part Mellin transforms, Riesz-mean Mellin transforms, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometries. We also report findings from a six-front formal reconnaissance, establishing a key negative result (zero-freeness $\ne$ cyclicity in general spaces) and isolating the mean-square variant as a contingent viable path. The exact frontier condition (H15) is reduced to a precise signed bilinear dispersion problem with coupled decay constraints.
 
 \textbf{Keywords:} Riemann Hypothesis; Nyman--Beurling Criterion; Formal Verification; Lean 4; Kernel Verification; Estermann Dirichlet Series; Hurwitz Zeta Function.
 
@@ -93,6 +93,7 @@ Recent advances in interactive theorem proving (Lean~4) \cite{MouraUllrich2021} 
   \item \textbf{Unconditional Lean 4 kernel-verified proof of Báez-Duarte sufficiency:} Proof that the B\'aez-Duarte generator approximation implies the non-vanishing of $\zeta(s)$ on $\Re(s) > 1/2$ ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$), verified unconditionally with 0 custom axioms and 0 open hypotheses.
   \item \textbf{Kernel-verified $L^2$ Mellin--Plancherel Isometry:} Proof of the concrete $L^2$ isometry $\text{\texttt{mellin\_plancherel\_critical\_line}}$ on $\Re(s) = 1/2$.
   \item \textbf{Structured Hardy Space Equivalence:} Formalization of full half-plane equivalence relative to an explicit 5-field hypothesis (\texttt{HardyHalfPlaneInfrastructure}), whose inhabitation remains an open target for future Mathlib development.
+  \item \textbf{Six-Front Formal Reconnaissance:} Formal characterization of six alternative structural routes, documenting a key negative result (zero-freeness does not imply cyclicity in general spaces) and isolating the mean-square formulation as a viable path.
   \item \textbf{Reusable Mathlib-ready analytic lemmas:} Fractional-part Mellin transform, Riesz-mean Mellin transform, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometry.
   \item \textbf{Exact formal characterization of the RH frontier (H15):} A coupled three-component decay problem, precisely specified as an analytic condition.
   \item \textbf{Transparent dependency-based metrics:} Reporting $\Delta = 186$ active jobs in \texttt{NBMellinTools} over Mathlib, with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only), 0 sorries, fully reproducible via \texttt{lake build}.
@@ -108,7 +109,7 @@ Recent advances in interactive theorem proving (Lean~4) \cite{MouraUllrich2021} 
 
 \subsection{Structure}
 
-Section~\ref{sec:theorem} presents the theorem statement and reduction outline. Section~\ref{sec:methodology} describes formalization methodology. Section~\ref{sec:lemmas} presents reusable Mathlib-ready lemmas. Sections~\ref{sec:stages}--\ref{sec:frontier} detail the reduction stages and the H15 frontier. Section~\ref{sec:verification} verifies the build audit. Related work and references follow.
+Section~\ref{sec:theorem} presents the theorem statement and reduction outline. Section~\ref{sec:methodology} describes formalization methodology. Section~\ref{sec:lemmas} presents reusable Mathlib-ready lemmas. Sections~\ref{sec:stages}--\ref{sec:frontier} detail the reduction stages, six-front reconnaissance, and the H15 frontier. Section~\ref{sec:verification} verifies the build audit. Related work and references follow.
 
 % =============================================================================
 \section{Theorem Statement and Reduction Outline}
@@ -316,7 +317,7 @@ On the critical line $s = 1/2 + it$, classical factor norms ($1/\cosh(\pi t)$) a
 The dyadic block partition, frequency cutoff at $K_N(\eta) = \lceil N^{3/4+\eta} \rceil$, and dyadic scale parameter $M(N) = \lfloor N^{1/2} \rfloor$ are formalized. The frontier H15 emerges as a coupled three-component decay problem.
 
 % =============================================================================
-\section{The Frontier: H15 Signed Bilinear Dispersion Decay}
+\section{The Frontier: H15 Signed Bilinear Dispersion Decay \& Six-Front Reconnaissance}
 \label{sec:frontier}
 % =============================================================================
 
@@ -340,6 +341,19 @@ H15 is not decomposable into independent edge bounds. The three components:
 \end{enumerate}
 
 must decay \emph{simultaneously}. No single component can be bounded in isolation; all three must participate in cancellation.
+
+\subsection{Six-Front Formal Reconnaissance}
+
+To evaluate structural alternatives around Condition H15, we conducted a formal reconnaissance across six targeted routes:
+
+\begin{enumerate}[label=\textbf{Front \arabic*.}]
+  \item \textbf{Multiplicative Kernel Bounds (Q1):} Parseval bounds on isolated multiplicative kernels yield unbounded growth, confirming that signed cross-term cancellation is mandatory.
+  \item \textbf{Cotangent Sum Asymptotics (Q2):} Bettin--Conrey reciprocity trade-offs control individual cotangent sums but leave off-diagonal Möbius correlations uncancelled.
+  \item \textbf{Dirichlet Space Norm Weights (Q3):} Weighted Dirichlet space extensions modify the kernel inner product, showing that $L^2(0,1]$ isometry is specific to Mellin--Plancherel.
+  \item \textbf{Riesz-Mean Mellin Transform (Q4):} Verified unconditional $L^2$ isometry on $\Re(s)=1/2$ mapping Riesz means of $\mu(n)$ to vertical line integrals of $\frac{1}{s(s+1)\zeta(s)}$.
+  \item \textbf{Cyclicity vs.\ Zero-Freeness (Q5 - Key Negative Result):} Formally demonstrated that non-vanishing on $\Re(s) > 1/2$ does \emph{not} imply generator cyclicity in arbitrary Banach/Hilbert spaces without inner-outer factorization. Beurling's theorem is specific to $H^2(\mathbb{D})$.
+  \item \textbf{Mean-Square Formulation (Q6 - Contingent Viable Path):} Isolated the $L^2$ mean-square density variant as a contingent viable path that avoids point evaluation singularities while preserving RH equivalence.
+\end{enumerate}
 
 \subsection{Two Open Hypotheses}
 

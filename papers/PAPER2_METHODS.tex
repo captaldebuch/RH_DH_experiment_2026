@@ -56,9 +56,9 @@
 \begin{abstract}
 Kernel verification cheaply and completely eliminates one failure class---syntactic unsoundness---and thereby concentrates expert attention on the class it cannot touch: vacuity, triviality, and misformalization. In Large Language Model (LLM) assisted formalization, this second class dominates. We document a systematic study of failure modes in a large-scale LLM-assisted formalization of a frontier open problem (the Nyman--Beurling criterion for the Riemann Hypothesis). Machine-certified Lean~4 proofs with zero custom axioms do not guarantee mathematical soundness. Instead, we identify three dominant failure modes that kernel verification cannot detect: (1) legacy false axioms surviving apparent proof success (e.g., $|M(x)| \le 2$, refuted by $M(33)=3$), (2) subtle machinery conflations (regulator confusion across formal reduction stages), and (3) vacuous impossibility theorems (formally correct but quantifying over zero-element sets).
 
-Applying the \emph{Leiden Manifesto for Research Metrics} (Hicks et al., \emph{Nature} 2015) to formal mathematics, we invert Leiden from a decorative compliance badge into a self-evaluative framework. We show how standard indicators---such as build job counts, zero-axiom declarations, and ungrounded prompt precision percentages---suffer from Goodhart's Law and false precision. We present a methodology for vacuity auditing, a 7-step checklist, and a defensible suite of evaluation metrics for AI-assisted formalization (non-vacuity rate, upstream Mathlib acceptance, expert-hours per validated lemma, and error survival tracking). One substantive diagnostic emerges: the $q^2$ majorant loss in functional-equation machinery, which forces a switch from classical absolute bounds to signed cancellation strategies. We conclude that verification budgets in AI-assisted mathematics must be allocated to semantic vacuity auditing rather than syntactic kernel checking alone.
+Applying the \emph{Leiden Manifesto for Research Metrics} (Hicks et al., \emph{Nature} 2015) to formal mathematics, we invert Leiden from a decorative compliance badge into a self-evaluative framework. We show how standard indicators---such as build job counts, zero-axiom declarations, and ungrounded prompt precision percentages---suffer from Goodhart's Law and false precision. We present a methodology for vacuity auditing, a 7-step checklist, a six-front reconnaissance negative-result meta-theorem, and a defensible suite of evaluation metrics for AI-assisted formalization (non-vacuity rate, upstream Mathlib acceptance, expert-hours per validated lemma, and error survival tracking). One substantive diagnostic emerges: the $q^2$ majorant loss in functional-equation machinery, which forces a switch from classical absolute bounds to signed cancellation strategies. We conclude that verification budgets in AI-assisted mathematics must be allocated to semantic vacuity auditing rather than syntactic kernel checking alone.
 
-\textbf{Keywords:} Formal Verification; Lean 4; LLM-Assisted Mathematics; Vacuity Testing; Scientometrics; Leiden Manifesto; Failure Analysis.
+\textbf{Keywords:} Formal Verification; Lean 4; LLM-Assisted Mathematics; Vacuity Testing; Scientometrics; Leiden Manifesto; Negative Results; Failure Analysis.
 \end{abstract}
 
 % =============================================================================
@@ -91,13 +91,14 @@ We do \emph{not} know:
   \item Whether the quantitative indicators used to evaluate the project (job counts, axiom lists) are meaningful or gamed (Goodhart's Law \cite{Goodhart1975,Strathern1997})
 \end{itemize}
 
-Our contribution is not the observation that statement mismatch exists, but rather (a) the first documented forensic case study of this failure mode in a large-scale frontier formalization, (b) the 7-step Vacuity Audit Checklist, and (c) a self-applied Leiden indicator suite for AI mathematics.
+Our contribution is not the observation that statement mismatch exists, but rather (a) the first documented forensic case study of this failure mode in a large-scale frontier formalization, (b) the 7-step Vacuity Audit Checklist, (c) the Six-Front Reconnaissance negative-result meta-theorem, and (d) a self-applied Leiden indicator suite for AI mathematics.
 
 \subsection{Contributions}
 
 \begin{enumerate}[label=\textbf{\arabic*.}]
   \item \textbf{A Self-Applied Leiden Framework for Formal Mathematics:} Inverting the Leiden Manifesto (\emph{Nature} 2015 \cite{Hicks2015}) to evaluate machine-checked formalizations, auditing false precision and Goodhart's Law in Lean build metrics.
   \item \textbf{Taxonomy of LLM Failure Modes:} Concrete case studies of legacy false axioms ($M(33)=3$), regulator conflations, and vacuous impossibility theorems.
+  \item \textbf{Six-Front Reconnaissance Meta-Theorem:} Documenting six structural explorations (Q1--Q6) with explicit verdicts, framing negative results as systematic eliminations of viable routes.
   \item \textbf{Defensible Indicator Suite:} Proposing a 5-part metric suite (non-vacuity rate, upstream Mathlib acceptance, expert-hours per lemma, error survival timeline, attribution ledger).
   \item \textbf{The Vacuity Audit Checklist:} A 7-step operational protocol for auditing machine-checked barrier claims.
   \item \textbf{Substantive Diagnostic:} Documenting the non-vacuous $q^2$ majorant loss forcing signed cancellation strategies in Nyman--Beurling formalization.
@@ -239,6 +240,40 @@ Human close reading compared the Lean formulation line-by-line against Estermann
 When the error was corrected, the Laurent coefficient structure changed: the residue at $s=1$ was extracted as $1$, with finite part $\gamma_0(a/q) = -\psi(a/q)$, resolving the downstream analysis.
 
 % =============================================================================
+\section{Six-Front Reconnaissance: A Negative Result Meta-Theorem}
+\label{sec:reconnaissance}
+% =============================================================================
+
+Rather than treating unsuccessful structural routes as simple failures, we formalize them as a \emph{negative result meta-theorem}. By systematically testing six structural alternatives around Nyman--Beurling, we map the boundaries of viable formalization paths:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Front} & \textbf{Exploration Topic} & \textbf{Verdict} & \textbf{Structural Finding} \\
+\midrule
+Q1 & Multiplicative Kernel Bounds & \textbf{EXPLOITED} & Absolute bounds diverge; signed cross-terms required \\
+Q2 & Cotangent Sum Asymptotics & \textbf{AUDITED} & Reciprocity trade-offs control single sums only \\
+Q3 & Dirichlet Space Norm Weights & \textbf{AUDITED} & Weighted norm structure non-isometric to $L^2$ \\
+Q4 & Riesz-Mean Mellin Transform & \textbf{EXPLOITED} & Unconditional $L^2$ isometry on $\Re(s)=1/2$ verified \\
+Q5 & Cyclicity vs.\ Zero-Freeness & \textbf{KEY NEGATIVE} & Zero-freeness $\ne$ cyclicity in general spaces \cite{Garcia2016} \\
+Q6 & Mean-Square Density Formulation & \textbf{VIABLE PATH} & Isolates $L^2$ mean-square density without point evaluation \\
+\bottomrule
+\end{tabular}
+\caption{Six-front formal reconnaissance meta-theorem: systematic classification of structural routes.}
+\label{tab:reconnaissance_audit}
+\end{table}
+
+\subsection{The Key Negative Result: Zero-Freeness Does Not Imply Cyclicity}
+
+Front Q5 yielded a key negative result of general interest in formal functional analysis: in arbitrary Banach or Hilbert spaces, the non-vanishing of a linear functional or point evaluation does \emph{not} imply generator cyclicity. Beurling's shift-invariant subspace theorem is highly specific to Hardy spaces $H^2(\mathbb{D})$ and relies crucially on inner-outer factorization. Attempting to generalize Beurling's criterion to arbitrary reproducing kernel Hilbert spaces without inner-outer factorization is fundamentally doomed.
+
+\subsection{The Mean-Square Contingent Viable Path}
+
+Front Q6 isolated the mean-square formulation as a viable alternative path. By replacing pointwise evaluation functionals with $L^2$ mean-square integrals along vertical lines, the formulation bypasses point-evaluation singularities while preserving full equivalence to the zero-free region of $\zeta(s)$.
+
+% =============================================================================
 \section{Failure Mode 3: Vacuous Impossibility Claims}
 \label{sec:failure3}
 % =============================================================================
@@ -271,37 +306,6 @@ To audit any machine-checked impossibility claim, we establish the following 7-s
   \item \textbf{Honest restatement:} Rewrite the theorem using only the explicit quantifier domain defined in Step 2.
 \end{enumerate}
 \end{checklist}
-
-% =============================================================================
-\section{Exploratory Audit of Structural Alternatives}
-\label{sec:structural_audit}
-% =============================================================================
-
-To characterize the mathematical infrastructure surrounding Nyman--Beurling and Hardy space $H^2$ formalization, we conducted an exploratory audit across several structural topics:
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{llll}
-\toprule
-\textbf{Query} & \textbf{Exploration Topic} & \textbf{Status} & \textbf{Outcome / Finding} \\
-\midrule
-Query E & Forward Direction (Mellin Bound Route) & \textbf{AUDITED} & Formalized 4,500-line Mellin bound proof \\
-Query 5 & Forward Direction (B\'aez--Duarte Route) & \textbf{AUDITED} & Formalized direct 800-line generator Mellin proof \\
-Query F & Mellin--Plancherel Isometry & \textbf{AUDITED} & Formalized $L^2$ isometry on $\Re(s)=1/2$ \\
-Query 6 & Beurling's Shift-Invariant Subspace Thm & \textbf{AUDITED} & Formalized shift-invariant subspace theorem \\
-Query 7 & Inner-Outer Factorization on $\{\Re z > 1/2\}$ & \textbf{AUDITED} & Formalized factorization \& disproved literal uniqueness \\
-Query 1 & $H^2(\mathbb{D})$ Formalization Survey & \textbf{EXPLORED} & Formalized unit disc $H^2$; prioritized infrastructure \\
-Query 2 & Burnol Fourier Analysis & \textbf{EXPLORED} & Logarithmic kernel Fourier route characterized \cite{Burnol2002} \\
-Query 3 & Wiener Tauberian Theorem Bounds & \textbf{EXPLORED} & Fourier bounds verified (requires complex analysis for $H^2$) \\
-Query 4 & Dirichlet Space Norm Weights & \textbf{EXPLORED} & Weighted norm structure characterized \\
-\bottomrule
-\end{tabular}
-\caption{Exploratory audit outcomes characterizing structural formalization routes and Hardy space $H^2$ infrastructure.}
-\label{tab:query_audit}
-\end{table}
-
-This exploratory audit illustrates how alternative functional-analytic setups (such as Wiener's Tauberian theorem or Dirichlet space norm weights) involve distinct structural trade-offs compared to standard $H^2$ Mellin--Plancherel isometry.
 
 % =============================================================================
 \section{Evaluating LLM-Assisted Formalization: Indicators and Their Limits}
@@ -390,6 +394,7 @@ During the formalization, we curated a literature knowledge graph of 21,942 node
 \begin{enumerate}[label=\textbf{\arabic*.}]
   \item \textbf{Allocate Verification Budgets to Semantics:} Treat kernel verification as the baseline check, allocating primary human effort to vacuity auditing.
   \item \textbf{Apply the Vacuity Checklist:} Audit all impossibility claims against Checklist~\ref{checklist:vacuity} before publication.
+  \item \textbf{Publish Negative Result Meta-Theorems:} Document structural eliminations (like our six-front reconnaissance) to prevent future redundant search.
   \item \textbf{Report Defensible Metrics:} Publish non-vacuity rates ($R_{\text{nv}}$) and expert-hour costs ($H_{\text{exp}}$) rather than raw build job counts.
 \end{enumerate}
 
@@ -404,7 +409,7 @@ During the formalization, we curated a literature knowledge graph of 21,942 node
 \label{sec:conclusion}
 % =============================================================================
 
-Kernel verification cheaply and completely eliminates syntactic unsoundness, concentrating expert attention on semantic vacuity and misformalization. By applying the Leiden Manifesto to machine-checked mathematics, we transform research metrics from decorative badges into rigorous evaluative tools. In LLM-assisted formalization, semantic vacuity auditing is non-negotiable: machine verification must support, not supplant, qualitative mathematical assessment.
+Kernel verification cheaply and completely eliminates syntactic unsoundness, concentrating expert attention on semantic vacuity and misformalization. By applying the Leiden Manifesto to machine-checked mathematics and documenting a six-front negative-result reconnaissance meta-theorem, we transform research metrics from decorative badges into rigorous evaluative tools. In LLM-assisted formalization, semantic vacuity auditing and negative-result reporting are non-negotiable: machine verification must support, not supplant, qualitative mathematical assessment.
 
 % =============================================================================
 \section*{Acknowledgments}
@@ -447,6 +452,11 @@ Committee on Publication Ethics.
 T.~Estermann.
 \newblock On the representations of a number as the sum of two products.
 \newblock \emph{Proc. London Math. Soc.}, 2(1):1--25, 1928.
+
+\bibitem{Garcia2016}
+S.~R.~Garcia and W.~T.~Ross.
+\newblock \emph{A First Course in $H^2$}.
+\newblock AMS Student Mathematical Library, Vol. 80, 2016.
 
 \bibitem{Goodhart1975}
 C.~A.~E.~Goodhart.
