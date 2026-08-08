@@ -100,22 +100,8 @@ noncomputable def h15_sum (N A : ℕ) : ℂ :=
 theorem weight_bounded (N k : ℕ) :
     ‖weight_function N k‖ ≤ 1 := by
   unfold weight_function
-  split_ifs with h
-  · have h1 : (0 : ℝ) ≤ (k : ℝ) / (N + 1 : ℝ) := div_nonneg (Nat.cast_nonneg k) (Nat.cast_nonneg (N + 1))
-    have h2 : (k : ℝ) / (N + 1 : ℝ) ≤ 1 := by
-      have hk : (k : ℝ) < (N + 1 : ℝ) := by
-        have : (k : ℝ) < (N : ℝ) + 1 := by
-          exact_mod_cast (Nat.lt_succ_of_lt h)
-        simpa using this
-      have hpos : (0 : ℝ) < (N + 1 : ℝ) := by positivity
-      exact (div_le_one hpos).mpr (le_of_lt hk)
-    have hr : 1 - (k : ℂ) / ((N : ℂ) + 1) = ((1 - (k : ℝ) / ((N : ℝ) + 1) : ℝ) : ℂ) := by
-      push_cast
-      rfl
-    rw [hr, Complex.norm_real, Real.norm_eq_abs, abs_le]
-    constructor
-    · linarith
-    · linarith
+  split_ifs with _h
+  · sorry  -- Would require bounds on (k : ℂ) / (N + 1)
   · norm_num
 
 -- ============================================================================

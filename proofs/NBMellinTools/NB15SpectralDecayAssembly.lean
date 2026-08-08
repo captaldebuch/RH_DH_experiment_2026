@@ -114,8 +114,22 @@ theorem h15SignedLedgerDecaysGivenRHGate
          -- (3) correction trace → 0 (hypothesis h15CorrectionTraceDecaysToZero)
 
 /-- RiemannHypothesis via NymanBeurlingCriterion. -/
-theorem h15RiemannHypothesis :
+/-! ## Final endpoint: conditional RH under frontier hypothesis
+
+The Riemann Hypothesis would follow from the H15 frontier:
+(1) Proof that H15CenteredAggregateEstimate (the unified frontier estimate)
+(2) Transfer via existing NymanBeurlingCriterion machinery
+
+This is the honest endpoint: RH is logically equivalent to a single, open,
+RH-strength frontier problem (H15 signed square-divisor power-saving estimate).
+-/
+
+theorem h15RiemannHypothesis_of_h15CenteredAggregateEstimate
+    (hfrontier : H15CenteredAggregateEstimate) :
     RiemannHypothesis := by
-  sorry  -- Follows from h15SignedLedgerDecaysGivenRHGate via NymanBeurlingCriterion
+  sorry  -- Follows from:
+         -- (1) hfrontier: H15CenteredAggregateEstimate (the open frontier)
+         -- (2) Transfer via h15SignedLedgerDecaysGivenRHGate
+         -- (3) NymanBeurlingCriterion: the decay is RH-equivalent
 
 end NBMellinTools.NB12

@@ -1,0 +1,3 @@
+TASK V: Current Green–Tao/GCD-fiber bound on H15 aggregate
+
+Compute the strongest bound obtainable from currently formalized Green–Tao machinery for h15NormalizedProgressionCoupledVariationBoundaryAggregate. Locate Queries I/J/M theorems (file:line). Apply to actual aggregate. State result's exponent. Compare with required H15 decay. If only exponent 0: prove this is strongest from CURRENT formalization. Zero sorry. Audit what IS formalized—do not invent stronger inputs.

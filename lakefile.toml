@@ -1,20 +1,19 @@
-name = "riemann-hypothesis"
-version = "0.1.0"
-keywords = ["math", "riemann-hypothesis", "hardy-space", "beurling", "formal-verification"]
-defaultTargets = ["Beurling", "RiemannHypothesis", "NBMellinTools"]
+import Lake
+open Lake DSL
 
-[[lean_lib]]
-name = "Beurling"
-srcDir = "proofs"
+package «riemann-hypothesis» where
+  version := "0.1.0"
+  keywords := #["math", "riemann-hypothesis", "hardy-space", "beurling", "formal-verification"]
 
-[[lean_lib]]
-name = "RiemannHypothesis"
-srcDir = "proofs"
+require mathlib from git
+  "https://github.com/leanprover-community/mathlib4.git"
 
-[[lean_lib]]
-name = "NBMellinTools"
-srcDir = "proofs"
+@[default_target]
+lean_lib Beurling where
+  srcDir := "proofs"
 
-[[require]]
-name = "mathlib"
-git = "https://github.com/leanprover-community/mathlib4.git"
+lean_lib RiemannHypothesis where
+  srcDir := "proofs"
+
+lean_lib NBMellinTools where
+  srcDir := "proofs"

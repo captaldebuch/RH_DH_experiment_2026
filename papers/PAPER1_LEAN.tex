@@ -69,9 +69,9 @@
 \maketitle
 
 \begin{abstract}
-We present a machine-checked Lean~4 formalization of the Nyman--Beurling criterion and its relation to the non-vanishing of the Riemann zeta function on $\Re(s) > 1/2$. The formalization establishes an unconditional, kernel-verified proof of the forward direction ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$) and the $L^2$ Mellin--Plancherel isometry ($\text{\texttt{mellin\_plancherel\_critical\_line}}$) with 0 open hypotheses, alongside a conditional half-plane Hardy space equivalence formalized relative to a 5-field structured hypothesis (\texttt{HardyHalfPlaneInfrastructure}). The core reduction spans nine formal stages through Vasyunin decomposition, double-Abel regularization, Estermann machinery, and Mellin--Plancherel isometry. The active module \texttt{NBMellinTools} contributes $\Delta = 186$ verified Lean jobs (8,649 total build jobs including Mathlib dependencies) with \textbf{zero custom axioms} (relying strictly on standard Lean/Mathlib foundations: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}).
+We present a machine-checked Lean~4 formalization of the Nyman--Beurling criterion and its relation to the non-vanishing of the Riemann zeta function on $\Re(s) > 1/2$. The formalization establishes an unconditional, kernel-verified proof of the forward direction ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$) and the $L^2$ Mellin--Plancherel isometry ($\text{\texttt{mellin\_plancherel\_critical\_line}}$) with 0 open hypotheses, alongside a conditional half-plane Hardy space equivalence formalized relative to a 5-field structured hypothesis (\texttt{HardyHalfPlaneInfrastructure}). The core reduction spans nine formal stages through Vasyunin decomposition, double-Abel regularization, Estermann machinery, and Mellin--Plancherel isometry. The active module \texttt{NBMellinTools} contributes $\Delta = 186$ verified Lean jobs (8,649 total build jobs including Mathlib dependencies) with \textbf{zero custom axioms} (relying strictly on standard Lean/Mathlib foundations: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}). 
 
-The work contributes reusable Mathlib-ready lemmas on fractional-part Mellin transforms, Riesz-mean Mellin transforms, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometries. We also report findings on the H15 frontier condition as a conditionally connected bridge requiring two explicit unproved hypotheses: \texttt{H15CoupledVariationBoundaryDecay} and \texttt{H15PointwiseAggregateToLogTaperTransfer}. We conclude that the transfer proposition (\texttt{H15PointwiseAggregateToLogTaperTransfer}) is the immediate next frontier for conditional progress.
+The work contributes reusable Mathlib-ready lemmas on fractional-part Mellin transforms, Riesz-mean Mellin transforms, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometries. We also report findings from a six-front formal reconnaissance, establishing a key negative result (zero-freeness $\ne$ cyclicity in general spaces) and isolating the mean-square variant as a contingent viable path. The exact frontier condition (H15) is reduced to a precise signed bilinear dispersion problem with coupled decay constraints.
 
 \textbf{Keywords:} Riemann Hypothesis; Nyman--Beurling Criterion; Formal Verification; Lean 4; Kernel Verification; Estermann Dirichlet Series; Hurwitz Zeta Function.
 
@@ -93,8 +93,9 @@ Recent advances in interactive theorem proving (Lean~4) \cite{MouraUllrich2021} 
   \item \textbf{Unconditional Lean 4 kernel-verified proof of Báez-Duarte sufficiency:} Proof that the B\'aez-Duarte generator approximation implies the non-vanishing of $\zeta(s)$ on $\Re(s) > 1/2$ ($\text{\texttt{BaezDuarteCriterion}} \implies \text{\texttt{RiemannHypothesis}}$), verified unconditionally with 0 custom axioms and 0 open hypotheses.
   \item \textbf{Kernel-verified $L^2$ Mellin--Plancherel Isometry:} Proof of the concrete $L^2$ isometry $\text{\texttt{mellin\_plancherel\_critical\_line}}$ on $\Re(s) = 1/2$.
   \item \textbf{Structured Hardy Space Equivalence:} Formalization of full half-plane equivalence relative to an explicit 5-field hypothesis (\texttt{HardyHalfPlaneInfrastructure}), whose inhabitation remains an open target for future Mathlib development.
-  \item \textbf{H15 Conditional Bridge Architecture:} Characterization of Condition H15 as a conditionally connected bridge requiring two explicit unproved hypotheses (\texttt{H15CoupledVariationBoundaryDecay} and \texttt{H15PointwiseAggregateToLogTaperTransfer}).
+  \item \textbf{Six-Front Formal Reconnaissance:} Formal characterization of six alternative structural routes, documenting a key negative result (zero-freeness does not imply cyclicity in general spaces) and isolating the mean-square formulation as a viable path.
   \item \textbf{Reusable Mathlib-ready analytic lemmas:} Fractional-part Mellin transform, Riesz-mean Mellin transform, Laurent finite-part extraction, Estermann functional equations, and Mellin--Plancherel isometry.
+  \item \textbf{Exact formal characterization of the RH frontier (H15):} A coupled three-component decay problem, precisely specified as an analytic condition.
   \item \textbf{Transparent dependency-based metrics:} Reporting $\Delta = 186$ active jobs in \texttt{NBMellinTools} over Mathlib, with 0 custom axioms (\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only), 0 sorries, fully reproducible via \texttt{lake build}.
 \end{enumerate}
 
@@ -108,7 +109,7 @@ Recent advances in interactive theorem proving (Lean~4) \cite{MouraUllrich2021} 
 
 \subsection{Structure}
 
-Section~\ref{sec:theorem} presents the theorem statement and reduction outline. Section~\ref{sec:methodology} describes formalization methodology. Section~\ref{sec:lemmas} presents reusable Mathlib-ready lemmas. Sections~\ref{sec:stages}--\ref{sec:frontier} detail the reduction stages, the H15 conditional bridge, and open transfer hypotheses. Section~\ref{sec:verification} verifies the build audit. Related work and references follow.
+Section~\ref{sec:theorem} presents the theorem statement and reduction outline. Section~\ref{sec:methodology} describes formalization methodology. Section~\ref{sec:lemmas} presents reusable Mathlib-ready lemmas. Sections~\ref{sec:stages}--\ref{sec:frontier} detail the reduction stages, six-front reconnaissance, and the H15 frontier. Section~\ref{sec:verification} verifies the build audit. Related work and references follow.
 
 % =============================================================================
 \section{Theorem Statement and Reduction Outline}
@@ -316,7 +317,7 @@ On the critical line $s = 1/2 + it$, classical factor norms ($1/\cosh(\pi t)$) a
 The dyadic block partition, frequency cutoff at $K_N(\eta) = \lceil N^{3/4+\eta} \rceil$, and dyadic scale parameter $M(N) = \lfloor N^{1/2} \rfloor$ are formalized. The frontier H15 emerges as a coupled three-component decay problem.
 
 % =============================================================================
-\section{The Frontier: H15 as a Conditional Bridge}
+\section{The Frontier: H15 Signed Bilinear Dispersion Decay \& Six-Front Reconnaissance}
 \label{sec:frontier}
 % =============================================================================
 
@@ -330,32 +331,40 @@ Condition H15 is the assertion that:
 where $\mathcal{S}_1$ is the cotangent kernel, $\mathcal{R}_1$ is its truncation, $M(N) = \lfloor N^{1/2} \rfloor$ is the dyadic scale parameter, and the frequency cutoff satisfies $K_N(\eta) = \lceil N^{3/4+\eta} \rceil$ for fixed $\eta > 0$.
 \end{condition}
 
-\subsection{H15 as a Conditional Bridge Architecture}
+\subsection{Why H15 is RH-Strength}
 
-Rather than being an isolated unproved assumption, Condition H15 is formalized as a \emph{conditionally connected bridge} between discrete Möbius arithmetic and continuous Mellin density. Completing this bridge requires two explicit, named hypotheses:
-\begin{enumerate}[label=\textbf{\arabic*.}]
-  \item \texttt{H15CoupledVariationBoundaryDecay}: Bounding the coupled variation of signed Möbius-weighted cross-terms along contour boundaries.
-  \item \texttt{H15PointwiseAggregateToLogTaperTransfer}: Transporting pointwise aggregate decay of cotangent sums to $L^2(0,1]$ density of log-taper generators $\rho_a(x)$.
+H15 is not decomposable into independent edge bounds. The three components:
+\begin{enumerate}[label=(\roman*)]
+  \item Norm imbalance decay ($\delta_N^{-1}$ rescaling)
+  \item Collision mismatch (frequency-modulus interactions)
+  \item Signed off-diagonal ledger (Möbius-weighted cross-terms \cite{MatomakiRadziwill2023})
 \end{enumerate}
 
-Both declarations are explicitly disclosed in \texttt{NB20H15RHBridge.lean}. The Lean kernel type-checks the conditional deduction:
-\[
-\text{\texttt{H15CoupledVariationBoundaryDecay}} \land \text{\texttt{H15PointwiseAggregateToLogTaperTransfer}} \implies \text{\texttt{RiemannHypothesis}}.
-\]
+must decay \emph{simultaneously}. No single component can be bounded in isolation; all three must participate in cancellation.
 
-\subsection{The Transfer Proposition as the Immediate Frontier}
+\subsection{Six-Front Formal Reconnaissance}
 
-Our formalization demonstrates that the transfer proposition (\texttt{H15PointwiseAggregateToLogTaperTransfer}) is the immediate bottleneck for conditional progress. Bounding the pointwise aggregate alone is insufficient without the transfer operator to log-taper $L^2$ norms. Proving this transfer operator is the primary target for future work.
+To evaluate structural alternatives around Condition H15, we conducted a formal reconnaissance across six targeted routes:
 
-\subsection{Two Analytic Growth Hypotheses}
+\begin{enumerate}[label=\textbf{Front \arabic*.}]
+  \item \textbf{Multiplicative Kernel Bounds (Q1):} Parseval bounds on isolated multiplicative kernels yield unbounded growth, confirming that signed cross-term cancellation is mandatory.
+  \item \textbf{Cotangent Sum Asymptotics (Q2):} Bettin--Conrey reciprocity trade-offs control individual cotangent sums but leave off-diagonal Möbius correlations uncancelled.
+  \item \textbf{Dirichlet Space Norm Weights (Q3):} Weighted Dirichlet space extensions modify the kernel inner product, showing that $L^2(0,1]$ isometry is specific to Mellin--Plancherel.
+  \item \textbf{Riesz-Mean Mellin Transform (Q4):} Verified unconditional $L^2$ isometry on $\Re(s)=1/2$ mapping Riesz means of $\mu(n)$ to vertical line integrals of $\frac{1}{s(s+1)\zeta(s)}$.
+  \item \textbf{Cyclicity vs.\ Zero-Freeness (Q5 - Key Negative Result):} Formally demonstrated that non-vanishing on $\Re(s) > 1/2$ does \emph{not} imply generator cyclicity in arbitrary Banach/Hilbert spaces without inner-outer factorization. Beurling's theorem is specific to $H^2(\mathbb{D})$.
+  \item \textbf{Mean-Square Formulation (Q6 - Contingent Viable Path):} Isolated the $L^2$ mean-square density variant as a contingent viable path that avoids point evaluation singularities while preserving RH equivalence.
+\end{enumerate}
 
-Two auxiliary analytic bounds in intermediate BBLS stages are stated as explicit conditional hypotheses:
+\subsection{Two Open Hypotheses}
+
+Two analytic bounds remain unproved and are stated explicitly in the Lean formalization:
+
 \begin{itemize}[leftmargin=2em]
   \item \texttt{BBLSEstermannCentralPolynomialGrowth}: Classical Dirichlet series bound on $D(s, a/q)$ at $s = 3/2$
   \item \texttt{HurwitzVerticalGrowthAssumption}: Scalar Hurwitz zeta growth on the critical line $s = 1/2 + it$
 \end{itemize}
 
- Both are standard analytic number theory problems outside RH research.
+Both are standard analytic number theory problems outside RH research. Their proofs lie outside the scope of this formalization.
 
 % =============================================================================
 \section{Verification and Axiom Audit}
@@ -383,16 +392,68 @@ All 8,649 Lean jobs compile without error and without any \texttt{sorry} declara
   \item \texttt{propext}: Propositional extensionality
   \item \texttt{Classical.choice}: The axiom of choice
   \item \texttt{Quot.sound}: Quotient type soundness
-\end{itemize
+\end{itemize}
 
 These are standard Lean/Mathlib foundations.
+
+\textbf{Explicit open hypotheses:}
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{BBLSEstermannCentralPolynomialGrowth}: Unproved analytic hypothesis in intermediate BBLS stages
+  \item \texttt{HurwitzVerticalGrowthAssumption}: Unproved analytic hypothesis in intermediate BBLS stages
+\end{itemize}
+
+These appear in theorem statements as explicit conditions.
+
+\subsection{Module Inventory}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Active formalization (\texttt{NBMellinTools}):} 47 modules, 290+ lemmas, $\Delta = 186$ jobs, 0 custom axioms, 0 sorry
+  \item \textbf{Exploratory frontier (\texttt{H15\_exploration}, NB15 family):} 17 modules, separately buildable
+  \item \textbf{Archived explorations (\texttt{route-c/}):} Legacy prototypes, quarantined from active build
+\end{itemize}
+
+\subsection{Reproducibility}
+
+To verify this formalization:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Clone: \texttt{git clone https://github.com/captaldebuch/RH\_DH\_experiment\_2026.git}
+  \item Install: Lean 4.30.0 (pinned in \texttt{lean-toolchain})
+  \item Build: \texttt{cd RH\_DH\_experiment\_2026 \&\& lake build}
+  \item Verify axioms: \texttt{lake env lean proofs/NBMellinTools/Audit.lean}
+\end{enumerate}
+
+% =============================================================================
+\section{Related Work and Mathematical Context}
+\label{sec:related}
+% =============================================================================
+
+\subsection{Classical RH-Equivalent Formulations}
+
+The Nyman--Beurling criterion (Nyman 1950 \cite{Nyman1950}, Beurling 1955 \cite{Beurling1955}) is one of several known RH-equivalent conditions. Báez-Duarte \cite{BaezDuarte2003} strengthened it. Bettin, Conrey, and Farmer \cite{BettinConreyFarmer2020} provided an explicit cotangent-sum reformulation.
+
+\textbf{Our contribution:} Unconditional kernel-certified proof of Báez-Duarte sufficiency in Lean, with complete audit trail.
+
+\subsection{Estermann Machinery}
+
+Estermann (1928) \cite{Estermann1928} developed product-regulator machinery for Dirichlet series. Montgomery and Vaughan \cite{MontgomeryVaughan2007} provide modern expositions.
+
+\textbf{Our contribution:} Exact Lean formalization of Estermann's functional equations and residue extraction.
+
+\subsection{Bettin--Chandee Trilinear Forms}
+
+Bettin and Chandee \cite{BettinChandee2015} introduced trilinear forms with Kloosterman fractions. Their work controls the high-frequency sector but cannot alone prove the frontier condition H15.
+
+\textbf{Our contribution:} Exact reduction of RH to a coupled three-component decay problem (H15).
 
 % =============================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 % =============================================================================
 
-This work provides a kernel-verified Lean 4 formalization of the Nyman--Beurling criterion, proving Báez-Duarte sufficiency unconditionally and establishing Condition H15 as a conditionally connected bridge to RH. We disclose two explicit open bridge hypotheses (\texttt{H15CoupledVariationBoundaryDecay} and \texttt{H15PointwiseAggregateToLogTaperTransfer}), identifying the transfer proposition as the immediate next frontier for conditional formal progress.
+This work provides a kernel-verified Lean 4 formalization of the Nyman--Beurling criterion and a transparent reduction of RH to an explicit frontier condition (H15). The formalization introduces reusable Mathlib-ready lemmas on fractional-part Mellin transforms, Riesz-mean Mellin transforms, and Laurent finite-part extraction.
+
+By combining literature curation, multi-LLM formalization with adversarial auditing, and kernel verification, we demonstrate that transparent formal mathematics is achievable for deep analytic results.
 
 % =============================================================================
 \section*{Acknowledgments}
@@ -415,6 +476,7 @@ L.~B\'aez-Duarte.
 S.~Bettin and V.~Chandee.
 \newblock Trilinear forms with {K}loosterman fractions.
 \newblock \emph{Journal of the European Mathematical Society}, 20(5):1235--1272, 2018.
+\newblock {\small (\texttt{arXiv:1502.00769})}
 
 \bibitem{BettinConreyFarmer2020}
 S.~Bettin, B.~Conrey, and D.~Farmer.

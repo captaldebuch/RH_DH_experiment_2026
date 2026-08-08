@@ -1,0 +1,143 @@
+MISSING/NEW FILES TO INTEGRATE INTO RIEMANN-GITHUB
+==================================================
+Date: August 8, 2026
+Source: Aristotle Downloads (aristotle_downloads/ directory)
+
+TOTAL: 12 files to copy/create
+
+================================================================================
+CATEGORY 1: NEW AUDIT MODULES (Task R & S)
+================================================================================
+
+1. NB12BBLSH15CoupledVariationBoundaryDecay.lean
+   Source: aristotle_downloads/riemann-github_aristotle/proofs/NBMellinTools/
+   Target: riemann-github/proofs/NBMellinTools/
+   Size: ~500 lines | Status: ✅ sorry-free
+   Description: Task R audit — proves coupled variation ≡ H15 signed square-divisor
+
+2. NB20H15PointwiseAggregateTransferAudit.lean
+   Source: aristotle_downloads/riemann-github_aristotle/proofs/NBMellinTools/
+   Target: riemann-github/proofs/NBMellinTools/
+   Size: ~300 lines | Status: ✅ sorry-free
+   Description: Task S audit — proves transfer requires schedule + new machinery
+
+================================================================================
+CATEGORY 2: HARDY SPACE INNER-OUTER (Query 7) [6 NEW MODULES]
+================================================================================
+
+Directory to create: riemann-github/proofs/RiemannHypothesis/HardySpace/
+
+3. BlaschkeFactor.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~11KB | Status: ✅ sorry-free
+
+4. BlaschkeProduct.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~10KB | Status: ✅ sorry-free
+
+5. BlaschkeZeros.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~8KB | Status: ✅ sorry-free
+
+6. HardyDisc.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~15KB | Status: ✅ sorry-free
+
+7. InnerOuterDisc.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~5KB | Status: ✅ sorry-free
+
+8. InnerOuterHalfPlane.lean
+   Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+   Size: ~22KB | Status: ✅ sorry-free
+
+================================================================================
+CATEGORY 3: DOCUMENTATION FILES (Gap Reports + README)
+================================================================================
+
+9. COUPLED_VARIATION_GAP_REPORT.md
+   Source: aristotle_downloads/riemann-github_aristotle/
+   Target: riemann-github/ (root)
+   Size: ~18KB
+   Description: Detailed gap analysis from Task R
+
+10. TRANSFER_GAP_REPORT.md
+    Source: aristotle_downloads/riemann-github_aristotle/
+    Target: riemann-github/ (root)
+    Size: ~24KB
+    Description: Detailed gap analysis from Task S
+
+11. HardySpace/README.md
+    Source: aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/
+    Target: riemann-github/proofs/RiemannHypothesis/HardySpace/
+    Size: ~3KB
+    Description: Overview of what is/isn't proved in Hardy space
+
+================================================================================
+CATEGORY 4: VERIFY/POTENTIALLY UPDATE (Existing in Repo)
+================================================================================
+
+12. Beurling module (4 files)
+    Path: riemann-github/proofs/Beurling/
+    Files: Basic.lean, DiscExtension.lean, FourierUniqueness.lean, Main.lean
+    Action: VERIFY versions match Aristotle versions
+    Source: aristotle_downloads/project_aristotle/proofs/Beurling/
+    If different: REPLACE with Aristotle versions
+
+    Beurling/README.md (may also need update)
+    Source: aristotle_downloads/project_aristotle/proofs/Beurling/README.md
+
+================================================================================
+COPY COMMANDS (For Direct Integration)
+================================================================================
+
+# Create Hardy Space directory
+mkdir -p /Users/xavierfresquet/Documents/Musicologie/CAPTAL-LAB/4-MISC/math/riemann/riemann-github/proofs/RiemannHypothesis/HardySpace
+
+# Copy new audit modules
+cp aristotle_downloads/riemann-github_aristotle/proofs/NBMellinTools/NB12BBLSH15CoupledVariationBoundaryDecay.lean \
+   riemann-github/proofs/NBMellinTools/
+
+cp aristotle_downloads/riemann-github_aristotle/proofs/NBMellinTools/NB20H15PointwiseAggregateTransferAudit.lean \
+   riemann-github/proofs/NBMellinTools/
+
+# Copy Hardy Space modules
+cp aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/*.lean \
+   riemann-github/proofs/RiemannHypothesis/HardySpace/
+
+cp aristotle_downloads/project_aristotle/proofs/RiemannHypothesis/HardySpace/README.md \
+   riemann-github/proofs/RiemannHypothesis/HardySpace/
+
+# Copy gap reports to root
+cp aristotle_downloads/riemann-github_aristotle/COUPLED_VARIATION_GAP_REPORT.md \
+   riemann-github/
+
+cp aristotle_downloads/riemann-github_aristotle/TRANSFER_GAP_REPORT.md \
+   riemann-github/
+
+# Verify Beurling versions
+diff -u riemann-github/proofs/Beurling/Basic.lean \
+         aristotle_downloads/project_aristotle/proofs/Beurling/Basic.lean
+
+================================================================================
+SUMMARY
+================================================================================
+
+NEW LEAN MODULES: 8
+  - 2 audit modules (Task R & S)
+  - 6 Hardy space modules (Query 7)
+
+DOCUMENTATION: 3
+  - 2 gap reports
+  - 1 Hardy space README
+
+VERIFICATION NEEDED: 4 Beurling files + 1 Beurling README
+
+TOTAL FILES: 12 + 5 (verify) = 17 files to handle
+
+STATUS: ✅ All source files present in aristotle_downloads/
+        ✅ All sorry-free
+        ✅ All axiom-clean
+        ✅ Ready to integrate
+
+================================================================================

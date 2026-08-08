@@ -1,0 +1,3 @@
+TASK U: Audit H15 frontier formulation relationships
+
+Audit whether h15NormalizedProgressionSmoothPointwiseAggregate, h15NormalizedProgressionCoupledVariationBoundaryAggregate, and NB8.logTaperL2Decay are equivalent. Use only actual code definitions (file:line). If equivalence fails, produce gap report naming missing theorem and gap type. Zero sorry. Report what IS/IS NOT connected—do not reconstruct missing objects.

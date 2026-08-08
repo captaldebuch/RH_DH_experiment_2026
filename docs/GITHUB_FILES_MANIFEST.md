@@ -63,7 +63,6 @@ riemann-github/proofs/NBMellinTools/
 ├── NB17RieszMeanZeta.lean ............... Riesz mean bounds on 1/ζ(s)
 ├── NB18NymanBeurlingCriterion.lean ...... Nyman–Beurling criterion formulation
 ├── NB19LogTaperRHEquivalence.lean ....... Log-taper equivalent to RH
-├── NB20H15RHBridge.lean ................. H15 conditional bridge architecture
 ├── Audit.lean ........................... Final axiom and error audit
 ├── FourierCompatibility.lean ............ Fourier signal processing compatibility
 ├── LogPullback.lean ..................... Log pullback machinery
